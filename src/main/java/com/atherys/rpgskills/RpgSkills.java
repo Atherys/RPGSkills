@@ -1,5 +1,6 @@
 package com.atherys.rpgskills;
 
+import com.atherys.skills.AtherysSkills;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.plugin.Dependency;
@@ -16,12 +17,22 @@ import org.spongepowered.api.plugin.Plugin;
 )
 public class RpgSkills {
 
-    private void registerSkills() {
+    private static RpgSkills instance;
 
+    public static RpgSkills getInstance() {
+        return instance;
+    }
+
+    private void registerSkills() {
+        AtherysSkills.getInstance().getSkillService().registerSkills(
+                new RagingBlow(),
+                new MysticMissile()
+        );
     }
 
     @Listener
     public void onInit(GameInitializationEvent event) {
+        instance = this;
         registerSkills();
     }
 }
