@@ -8,7 +8,9 @@ import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.projectile.EyeOfEnder;
 import org.spongepowered.api.entity.projectile.Projectile;
+import org.spongepowered.api.entity.projectile.Snowball;
 import org.spongepowered.api.entity.projectile.explosive.fireball.Fireball;
 import org.spongepowered.api.scheduler.Task;
 
@@ -46,8 +48,8 @@ public class MysticMissile extends RPGSkill {
         missile.setShooter(user);
         missile.offer(Keys.ATTACK_DAMAGE, asDouble(user, getProperty("damage", String.class, DEFAULT_DAMAGE_EXPRESSION)));
 
-        double yaw = (user.getRotation().getY() + 90)  % 360;
-        double pitch = user.getRotation().getX() * -1;
+        double yaw = (user.getHeadRotation().getY() + 90)  % 360;
+        double pitch = user.getHeadRotation().getX() * -1;
         double rotYCos = Math.cos(Math.toRadians(pitch));
         double rotYSin = Math.sin(Math.toRadians(pitch));
         double rotXCos = Math.cos(Math.toRadians(yaw));
