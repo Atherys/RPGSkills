@@ -2,7 +2,7 @@ package com.atherys.rpgskills;
 
 import com.atherys.skills.event.SkillRegistrationEvent;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.game.state.GameInitializationEvent;
+import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 
@@ -24,7 +24,7 @@ public class RpgSkills {
     }
 
     @Listener
-    public void onInit(GameInitializationEvent event) {
+    public void onPreInit(GamePreInitializationEvent event) {
         instance = this;
     }
 
