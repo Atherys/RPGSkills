@@ -39,7 +39,8 @@ public class RpgSkills {
         event.registerSkills(
                 new RagingBlow(),
                 new MysticMissile(),
-                new Hamstring()
+                new Hamstring(),
+                new LightHeal()
         );
     }
 
