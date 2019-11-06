@@ -3,18 +3,19 @@ package com.atherys.rpgskills;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.skills.AtherysSkills;
+import com.atherys.skills.api.effect.TemporaryPotionEffect;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.google.common.collect.ImmutableMap;
-import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.effect.potion.PotionEffect;
+import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
-import org.spongepowered.api.text.channel.MessageReceiver;
 
 public class Hamstring extends TargetedRPGSkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_STRENGTH * 1.5, 0.5, 10.0)";
-    private static final double DEFAULT_SLOW_TIME = 5.0;
+    private static final String DEFAULT_SLOW_TIME = "60";
 
     protected Hamstring() {
         super(
@@ -31,15 +32,26 @@ public class Hamstring extends TargetedRPGSkill {
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         double damage = asDouble(user, target, getProperty("damage", String.class, DEFAULT_DAMAGE_EXPRESSION));
-        target.damage(damage, EntityDamageSource.builder().entity(user).type(DamageTypes.ATTACK).build());
+        int slowTime = (int) Math.round(asDouble(user, target, getProperty("slow-time", String.class, DEFAULT_SLOW_TIME)));
 
-        try {
-            AtherysSkills.getInstance().getEffectFacade().applyEffect(target, "slow");
-        } catch (CommandException e) {
-            if (user instanceof MessageReceiver) {
-                ((MessageReceiver) user).sendMessage(e.getText());
-            }
-        }
+        target.damage(damage, EntityDamageSource.builder().entity(user).type(DamageTypes.ATTACK).build());
+        AtherysSkills.getInstance().getEffectService().applyEffect(target, new HamstringEffect(slowTime));
+
         return CastResult.success();
+    }
+
+    private static class HamstringEffect extends TemporaryPotionEffect {
+        private HamstringEffect(int duration) {
+            super(
+                    "hamstring-effect",
+                    "Hamstring",
+                    PotionEffect.builder()
+                            .potionType(PotionEffectTypes.SLOWNESS)
+                            .amplifier(1)
+                            .duration(duration)
+                            .particles(true)
+                            .build()
+            );
+        }
     }
 }

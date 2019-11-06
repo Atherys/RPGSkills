@@ -8,43 +8,28 @@ import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.entity.projectile.Projectile;
-import org.spongepowered.api.entity.projectile.explosive.fireball.Fireball;
-import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.entity.projectile.Snowball;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
-public class MysticMissile extends RPGSkill {
+public class FireballSkill extends RPGSkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_WISDOM * 1.5, 0.5, 10.0)";
 
-    private static final Map<Projectile, Vector3d> missiles = new WeakHashMap<>();
-
-    protected MysticMissile() {
+    protected FireballSkill() {
         super(
                 SkillSpec.create()
                 .id("mystic-missile")
                 .name("Mystic Missile")
-                .descriptionTemplate("Fires a magic missile to destroy your foes.")
+                .descriptionTemplate("Fires a fireball to destroy your foes.")
                 .resourceCost("0")
                 .cooldown("0")
         );
-
-        Task.builder()
-                .execute(() -> {
-                    missiles.forEach((missile, velocity) -> {
-                        missile.offer(Keys.VELOCITY, velocity);
-                    });
-                })
-                .intervalTicks(1)
-                .submit(RpgSkills.getInstance());
     }
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        Fireball missile = (Fireball) user.getWorld().createEntity(EntityTypes.FIREBALL, user.getLocation().getBlockPosition());
-        missile.setShooter(user);
-        missile.offer(Keys.ATTACK_DAMAGE, asDouble(user, getProperty("damage", String.class, DEFAULT_DAMAGE_EXPRESSION)));
+        Snowball fireball = (Snowball) user.getWorld().createEntity(EntityTypes.FIREBALL, user.getLocation().getBlockPosition());
+        fireball.setShooter(user);
+        fireball.offer(Keys.ATTACK_DAMAGE, asDouble(user, getProperty("damage", String.class, DEFAULT_DAMAGE_EXPRESSION)));
+        fireball.offer(Keys.FIRE_TICKS, Integer.MAX_VALUE);
 
         double yaw = (user.getHeadRotation().getY() + 90)  % 360;
         double pitch = user.getHeadRotation().getX() * -1;
@@ -56,9 +41,8 @@ public class MysticMissile extends RPGSkill {
         Vector3d velocity = Vector3d.from(1 * rotYCos * rotXCos, 1 * rotYSin, 1 * rotYCos * rotXSin);
 
         // TODO: Set cause stack?
-        missile.offer(Keys.VELOCITY, velocity);
-        user.getWorld().spawnEntity(missile);
-        missiles.put(missile, velocity);
+        fireball.offer(Keys.VELOCITY, velocity);
+        user.getWorld().spawnEntity(fireball);
 
         return CastResult.success();
     }

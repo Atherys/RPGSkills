@@ -1,12 +1,7 @@
 package com.atherys.rpgskills;
 
-import com.atherys.skills.api.effect.TemporaryPotionEffect;
 import com.atherys.skills.event.EffectRegistrationEvent;
 import com.atherys.skills.event.SkillRegistrationEvent;
-import org.spongepowered.api.effect.particle.ParticleEffect;
-import org.spongepowered.api.effect.particle.ParticleTypes;
-import org.spongepowered.api.effect.potion.PotionEffect;
-import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Dependency;
@@ -38,25 +33,14 @@ public class RpgSkills {
     public void onRegisterSkills(SkillRegistrationEvent event) {
         event.registerSkills(
                 new RagingBlow(),
-                new MysticMissile(),
+                new FireballSkill(),
                 new Hamstring(),
-                new LightHeal()
+                new LightHeal(),
+                new Shield()
         );
     }
 
     @Listener
     public void onRegisterEffects(EffectRegistrationEvent event) {
-        event.registerEffects(
-                new TemporaryPotionEffect(
-                        "slow",
-                        "Slow",
-                        PotionEffect.builder()
-                                .potionType(PotionEffectTypes.SLOWNESS)
-                                .amplifier(1)
-                                .particles(true)
-                                .duration(100)
-                                .build()
-                )
-        );
     }
 }
