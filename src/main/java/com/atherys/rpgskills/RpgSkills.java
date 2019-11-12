@@ -42,5 +42,8 @@ public class RpgSkills {
 
     @Listener
     public void onRegisterEffects(EffectRegistrationEvent event) {
+        event.registerEffects(
+                new BlankEffect("hamstring-user-effect", "Hamstring User")
+        );
     }
 }

@@ -26,7 +26,7 @@ public class FireballSkill extends RPGSkill {
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        Snowball fireball = (Snowball) user.getWorld().createEntity(EntityTypes.FIREBALL, user.getLocation().getBlockPosition());
+        Snowball fireball = (Snowball) user.getWorld().createEntity(EntityTypes.SNOWBALL, user.getLocation().getBlockPosition());
         fireball.setShooter(user);
         fireball.offer(Keys.ATTACK_DAMAGE, asDouble(user, getProperty("damage", String.class, DEFAULT_DAMAGE_EXPRESSION)));
         fireball.offer(Keys.FIRE_TICKS, Integer.MAX_VALUE);
