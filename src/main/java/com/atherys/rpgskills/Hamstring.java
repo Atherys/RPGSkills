@@ -36,7 +36,6 @@ public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
         return CastResult.success();
     }
 
-    @Listener
     public void meleeAttack(Living user, Living target) {
         int slowTime = (int) Math.round(asDouble(user, target, getProperty("slow-time", String.class, DEFAULT_SLOW_TIME)));
 
