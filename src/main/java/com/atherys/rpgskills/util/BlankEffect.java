@@ -1,4 +1,4 @@
-package com.atherys.rpgskills;
+package com.atherys.rpgskills.util;
 
 import com.atherys.skills.api.effect.AbstractEffect;
 import com.atherys.skills.api.effect.ApplyableCarrier;
