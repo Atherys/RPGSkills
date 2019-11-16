@@ -2,6 +2,7 @@ package com.atherys.rpgskills;
 
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
+import com.atherys.rpgskills.util.MeleeAttackSkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.TemporaryPotionEffect;
 import com.atherys.skills.api.exception.CastException;
@@ -11,14 +12,8 @@ import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
-import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
-import org.spongepowered.api.event.cause.entity.damage.source.IndirectEntityDamageSource;
-import org.spongepowered.api.event.entity.DamageEntityEvent;
-import org.spongepowered.api.event.filter.cause.Root;
 
-public class Hamstring extends TargetedRPGSkill {
-    private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_STRENGTH * 1.5, 0.5, 10.0)";
+public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
     private static final String DEFAULT_SLOW_TIME = "60";
     private static final String USER_EFFECT = "hamstring-user-effect";
 
@@ -36,28 +31,18 @@ public class Hamstring extends TargetedRPGSkill {
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
-        double damage = asDouble(user, target, getProperty("damage", String.class, DEFAULT_DAMAGE_EXPRESSION));
-
-        target.damage(damage, EntityDamageSource.builder().entity(user).type(DamageTypes.ATTACK).build());
         AtherysSkills.getInstance().getEffectService().applyEffect(user, USER_EFFECT);
 
         return CastResult.success();
     }
 
     @Listener
-    public void onDamage(DamageEntityEvent event, @Root EntityDamageSource source) {
-        if (event instanceof IndirectEntityDamageSource) return;
+    public void meleeAttack(Living user, Living target) {
+        int slowTime = (int) Math.round(asDouble(user, target, getProperty("slow-time", String.class, DEFAULT_SLOW_TIME)));
 
-        if (source.getSource() instanceof Living && event.getTargetEntity() instanceof Living) {
-            Living user = (Living) source.getSource();
-
-            if (AtherysSkills.getInstance().getEffectService().hasEffect(user, USER_EFFECT)) {
-                Living target = (Living) event.getTargetEntity();
-                int slowTime = (int) Math.round(asDouble(user, target, getProperty("slow-time", String.class, DEFAULT_SLOW_TIME)));
-
-                AtherysSkills.getInstance().getEffectService().applyEffect(target, new HamstringEffect(slowTime));
-                AtherysSkills.getInstance().getEffectService().removeEffect(user, USER_EFFECT);
-            }
+        if (AtherysSkills.getInstance().getEffectService().hasEffect(user, USER_EFFECT)) {
+            AtherysSkills.getInstance().getEffectService().applyEffect(target, new HamstringEffect(slowTime));
+            AtherysSkills.getInstance().getEffectService().removeEffect(user, USER_EFFECT);
         }
     }
 
