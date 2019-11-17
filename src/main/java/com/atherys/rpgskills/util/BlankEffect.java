@@ -7,7 +7,7 @@ import com.atherys.skills.api.effect.ApplyableCarrier;
  * An effect that does nothing.
  */
 public class BlankEffect extends AbstractEffect {
-    protected BlankEffect(String id, String name) {
+    public BlankEffect(String id, String name) {
         super(id, name);
     }
 
