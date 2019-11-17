@@ -11,7 +11,6 @@ import com.google.common.collect.ImmutableMap;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.event.Listener;
 
 public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
     private static final String DEFAULT_SLOW_TIME = "60";
@@ -22,7 +21,7 @@ public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
                 SkillSpec.create()
                 .id("hamstring")
                 .name("Hamstring")
-                .descriptionTemplate("Attacks and slows your target.")
+                .descriptionTemplate("Your next melee attack will slow the target.")
                 .cooldown("0")
                 .resourceCost("0")
                 .properties(ImmutableMap.of(MAX_RANGE_PROPERTY, "5.0"))
@@ -37,9 +36,9 @@ public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
     }
 
     public void meleeAttack(Living user, Living target) {
-        int slowTime = (int) Math.round(asDouble(user, target, getProperty("slow-time", String.class, DEFAULT_SLOW_TIME)));
-
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, USER_EFFECT)) {
+            int slowTime = (int) Math.round(asDouble(user, target, getProperty("slow-time", String.class, DEFAULT_SLOW_TIME)));
+
             AtherysSkills.getInstance().getEffectService().applyEffect(target, new HamstringEffect(slowTime));
             AtherysSkills.getInstance().getEffectService().removeEffect(user, USER_EFFECT);
         }

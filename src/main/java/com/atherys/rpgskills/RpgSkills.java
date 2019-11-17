@@ -1,5 +1,6 @@
 package com.atherys.rpgskills;
 
+import com.atherys.rpgskills.util.BlankEffect;
 import com.atherys.skills.event.EffectRegistrationEvent;
 import com.atherys.skills.event.SkillRegistrationEvent;
 import org.spongepowered.api.event.Listener;
@@ -36,14 +37,16 @@ public class RpgSkills {
                 new FireballSkill(),
                 new Hamstring(),
                 new LightHeal(),
-                new Shield()
+                new Shield(),
+                new Poison()
         );
     }
 
     @Listener
     public void onRegisterEffects(EffectRegistrationEvent event) {
         event.registerEffects(
-                new BlankEffect("hamstring-user-effect", "Hamstring User")
+                new BlankEffect("hamstring-user-effect", "Hamstring User"),
+                new BlankEffect("poison-user-effect", "Poison User")
         );
     }
 }
