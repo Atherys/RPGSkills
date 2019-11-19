@@ -16,8 +16,8 @@ public class FireballSkill extends RPGSkill {
     protected FireballSkill() {
         super(
                 SkillSpec.create()
-                .id("mystic-missile")
-                .name("Mystic Missile")
+                .id("fireball")
+                .name("Fireball")
                 .descriptionTemplate("Fires a fireball to destroy your foes.")
                 .resourceCost("0")
                 .cooldown("0")

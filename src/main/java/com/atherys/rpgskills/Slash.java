@@ -9,14 +9,14 @@ import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 
-public class RagingBlow extends TargetedRPGSkill {
+public class Slash extends TargetedRPGSkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_STRENGTH * 1.5, 0.5, 10.0)";
 
-    public RagingBlow() {
+    public Slash() {
         super(
                 SkillSpec.create()
-                        .id("raging-blow")
-                        .name("Raging Blow")
+                        .id("slash")
+                        .name("Slash")
                         .cooldown("0")
                         .descriptionTemplate("Strikes the target with a powerful blow.")
                         .resourceCost("0")

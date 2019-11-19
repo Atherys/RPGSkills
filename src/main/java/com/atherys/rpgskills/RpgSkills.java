@@ -33,7 +33,7 @@ public class RpgSkills {
     @Listener
     public void onRegisterSkills(SkillRegistrationEvent event) {
         event.registerSkills(
-                new RagingBlow(),
+                new Slash(),
                 new FireballSkill(),
                 new Hamstring(),
                 new LightHeal(),
