@@ -16,6 +16,7 @@ public class Poison extends RPGSkill implements AttackSkill {
     public static final String POISON_EFFECT = "poison-effect-user";
 
     private static final String DEFAULT_POISON_TIME = "60";
+    private static final String DEFAULT_POISON_AMPLIFIER = "1";
 
     public Poison() {
         super(
@@ -37,21 +38,22 @@ public class Poison extends RPGSkill implements AttackSkill {
     @Override
     public void attack(Living user, Living target) {
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, POISON_EFFECT)) {
+            int poisonAmplifier = (int) Math.round(asDouble(user, target, getProperty(CommonProperties.AMPLIFIER, String.class, DEFAULT_POISON_AMPLIFIER)));
             int poisonTime = (int) Math.round(asDouble(user, target, getProperty(CommonProperties.TIME, String.class, DEFAULT_POISON_TIME)));
 
-            AtherysSkills.getInstance().getEffectService().applyEffect(target, new PoisonEffect(poisonTime));
+            AtherysSkills.getInstance().getEffectService().applyEffect(target, new PoisonEffect(poisonTime, poisonAmplifier));
             AtherysSkills.getInstance().getEffectService().removeEffect(user, POISON_EFFECT);
         }
     }
 
     private static class PoisonEffect extends TemporaryPotionEffect {
-        private PoisonEffect(int duration) {
+        private PoisonEffect(int duration, int amplifier) {
             super(
                     "poison-effect",
                     "Poison",
                     PotionEffect.builder()
                             .potionType(PotionEffectTypes.POISON)
-                            .amplifier(1)
+                            .amplifier(amplifier)
                             .duration(duration)
                             .particles(true)
                             .build()
