@@ -1,5 +1,6 @@
 package com.atherys.rpgskills;
 
+import com.atherys.rpgskills.t1.*;
 import com.atherys.rpgskills.util.BlankEffect;
 import com.atherys.skills.event.EffectRegistrationEvent;
 import com.atherys.skills.event.SkillRegistrationEvent;
@@ -45,8 +46,8 @@ public class RpgSkills {
     @Listener
     public void onRegisterEffects(EffectRegistrationEvent event) {
         event.registerEffects(
-                new BlankEffect("hamstring-user-effect", "Hamstring User"),
-                new BlankEffect("poison-user-effect", "Poison User")
+                new BlankEffect(Hamstring.HAMSTRING_EFFECT, "Hamstring User"),
+                new BlankEffect(Poison.POISON_EFFECT, "Poison User")
         );
     }
 }

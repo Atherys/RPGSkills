@@ -1,8 +1,9 @@
-package com.atherys.rpgskills;
+package com.atherys.rpgskills.t1;
 
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.AttackSkill;
+import com.atherys.rpgskills.util.CommonProperties;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.TemporaryPotionEffect;
 import com.atherys.skills.api.exception.CastException;
@@ -12,10 +13,11 @@ import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.Living;
 
 public class Poison extends RPGSkill implements AttackSkill {
-    private static final String USER_EFFECT = "poison-effect-user";
+    public static final String POISON_EFFECT = "poison-effect-user";
+
     private static final String DEFAULT_POISON_TIME = "60";
 
-    protected Poison() {
+    public Poison() {
         super(
                 SkillSpec.create()
                 .id("poison")
@@ -28,17 +30,17 @@ public class Poison extends RPGSkill implements AttackSkill {
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        AtherysSkills.getInstance().getEffectService().applyEffect(user, USER_EFFECT);
+        AtherysSkills.getInstance().getEffectService().applyEffect(user, POISON_EFFECT);
         return CastResult.success();
     }
 
     @Override
     public void attack(Living user, Living target) {
-        if (AtherysSkills.getInstance().getEffectService().hasEffect(user, USER_EFFECT)) {
-            int poisonTime = (int) Math.round(asDouble(user, target, getProperty("poison-time", String.class, DEFAULT_POISON_TIME)));
+        if (AtherysSkills.getInstance().getEffectService().hasEffect(user, POISON_EFFECT)) {
+            int poisonTime = (int) Math.round(asDouble(user, target, getProperty(CommonProperties.TIME, String.class, DEFAULT_POISON_TIME)));
 
             AtherysSkills.getInstance().getEffectService().applyEffect(target, new PoisonEffect(poisonTime));
-            AtherysSkills.getInstance().getEffectService().removeEffect(user, USER_EFFECT);
+            AtherysSkills.getInstance().getEffectService().removeEffect(user, POISON_EFFECT);
         }
     }
 

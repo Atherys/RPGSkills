@@ -1,7 +1,8 @@
-package com.atherys.rpgskills;
+package com.atherys.rpgskills.t1;
 
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
+import com.atherys.rpgskills.util.CommonProperties;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.TemporaryPotionEffect;
 import com.atherys.skills.api.exception.CastException;
@@ -14,7 +15,7 @@ public class Shield extends RPGSkill {
     private static final String DEFAULT_SHIELD_TIME = "500";
     private static final String DEFAULT_SHIELD_AMOUNT = "2";
 
-    protected Shield() {
+    public Shield() {
         super(
                 SkillSpec.create()
                 .id("shield")
@@ -27,8 +28,8 @@ public class Shield extends RPGSkill {
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        int time = (int) Math.round(asDouble(user, getProperty("shield-time", String.class, DEFAULT_SHIELD_TIME)));
-        int level = (int) Math.round(asDouble(user, getProperty("shield-time", String.class, DEFAULT_SHIELD_AMOUNT)));
+        int time = (int) Math.round(asDouble(user, getProperty(CommonProperties.TIME, String.class, DEFAULT_SHIELD_TIME)));
+        int level = (int) Math.round(asDouble(user, getProperty(CommonProperties.AMPLIFIER, String.class, DEFAULT_SHIELD_AMOUNT)));
 
         AtherysSkills.getInstance().getEffectService().applyEffect(user, new ShieldEffect(time, level));
 

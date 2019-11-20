@@ -1,7 +1,8 @@
-package com.atherys.rpgskills;
+package com.atherys.rpgskills.t1;
 
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
+import com.atherys.rpgskills.util.CommonProperties;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
@@ -13,7 +14,7 @@ import org.spongepowered.api.entity.projectile.Snowball;
 public class FireballSkill extends RPGSkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_WISDOM * 1.5, 0.5, 10.0)";
 
-    protected FireballSkill() {
+    public FireballSkill() {
         super(
                 SkillSpec.create()
                 .id("fireball")
@@ -28,7 +29,7 @@ public class FireballSkill extends RPGSkill {
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         Snowball fireball = (Snowball) user.getWorld().createEntity(EntityTypes.SNOWBALL, user.getLocation().getBlockPosition());
         fireball.setShooter(user);
-        fireball.offer(Keys.ATTACK_DAMAGE, asDouble(user, getProperty("damage", String.class, DEFAULT_DAMAGE_EXPRESSION)));
+        fireball.offer(Keys.ATTACK_DAMAGE, asDouble(user, getProperty(CommonProperties.DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION)));
         fireball.offer(Keys.FIRE_TICKS, Integer.MAX_VALUE);
 
         double yaw = (user.getHeadRotation().getY() + 90)  % 360;
