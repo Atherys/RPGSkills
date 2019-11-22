@@ -12,7 +12,6 @@ import org.spongepowered.api.event.filter.cause.Root;
  */
 public interface AttackSkill {
 
-    @Listener
     default void onDamage(DamageEntityEvent event, @Root EntityDamageSource source) {
         if (!(event.getTargetEntity() instanceof Living)) return;
 

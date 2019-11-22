@@ -8,9 +8,14 @@ import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.TemporaryPotionEffect;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
+import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.event.filter.cause.Root;
 
 public class Poison extends RPGSkill implements AttackSkill {
     public static final String POISON_EFFECT = "poison-effect-user";
@@ -44,6 +49,11 @@ public class Poison extends RPGSkill implements AttackSkill {
             AtherysSkills.getInstance().getEffectService().applyEffect(target, new PoisonEffect(poisonTime, poisonAmplifier));
             AtherysSkills.getInstance().getEffectService().removeEffect(user, POISON_EFFECT);
         }
+    }
+
+    @Listener
+    public void onAttack(DamageEntityEvent event, @Root EntityDamageSource source) {
+        onDamage(event, source);
     }
 
     private static class PoisonEffect extends TemporaryPotionEffect {

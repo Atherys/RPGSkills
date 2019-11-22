@@ -12,6 +12,10 @@ import com.google.common.collect.ImmutableMap;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
+import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.event.filter.cause.Root;
 
 public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
     public static final String HAMSTRING_EFFECT = "hamstring-user-effect";
@@ -38,6 +42,7 @@ public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
         return CastResult.success();
     }
 
+    @Override
     public void meleeAttack(Living user, Living target) {
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, HAMSTRING_EFFECT)) {
             int slowTime = (int) Math.round(asDouble(user, target, getProperty(CommonProperties.TIME, String.class, DEFAULT_SLOW_TIME)));
@@ -46,6 +51,11 @@ public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
             AtherysSkills.getInstance().getEffectService().applyEffect(target, new HamstringEffect(slowTime, slowAmplifier));
             AtherysSkills.getInstance().getEffectService().removeEffect(user, HAMSTRING_EFFECT);
         }
+    }
+
+    @Listener
+    public void onMeleeAttack(DamageEntityEvent event, @Root EntityDamageSource source) {
+        onDamage(event, source);
     }
 
     private static class HamstringEffect extends TemporaryPotionEffect {
