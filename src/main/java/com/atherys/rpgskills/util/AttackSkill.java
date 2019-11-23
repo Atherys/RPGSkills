@@ -1,7 +1,6 @@
 package com.atherys.rpgskills.util;
 
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.cause.entity.damage.source.IndirectEntityDamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;

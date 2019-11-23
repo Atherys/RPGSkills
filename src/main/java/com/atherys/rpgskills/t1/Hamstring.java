@@ -16,6 +16,12 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.text.TextTemplate;
+import org.spongepowered.api.util.Tuple;
+
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpgskills.util.CommonProperties.*;
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
     public static final String HAMSTRING_EFFECT = "hamstring-user-effect";
@@ -28,10 +34,19 @@ public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
                 SkillSpec.create()
                 .id("hamstring")
                 .name("Hamstring")
-                .descriptionTemplate("Your next melee attack will slow the target.")
+                .descriptionTemplate(TextTemplate.of(
+                        "Your next melee attack to hit an enemy will cripple them, dealing ", arg(DAMAGE),
+                        " physical damage and reducing their movement speed by ", arg(AMPLIFIER), " for ", arg(TIME), " seconds."
+                ))
                 .cooldown("0")
                 .resourceCost("0")
                 .properties(ImmutableMap.of(MAX_RANGE_PROPERTY, "5.0"))
+        );
+
+        setDescriptionArguments(
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "5.0")),
+                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_SLOW_AMPLIFIER)),
+                Tuple.of(TIME, ofProperty(this, AMPLIFIER, DEFAULT_SLOW_TIME))
         );
     }
 
