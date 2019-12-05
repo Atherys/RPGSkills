@@ -1,16 +1,15 @@
 package com.atherys.rpgskills.t1;
 
+import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
-import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.CommonProperties;
+import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.MeleeAttackSkill;
 import com.atherys.skills.AtherysSkills;
-import com.atherys.skills.api.effect.TemporaryPotionEffect;
+import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.google.common.collect.ImmutableMap;
-import org.spongepowered.api.effect.potion.PotionEffect;
-import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
@@ -20,14 +19,15 @@ import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpg.api.skill.TargetedRPGSkill.MAX_RANGE_PROPERTY;
 import static com.atherys.rpgskills.util.CommonProperties.*;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
-public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
+public class Hamstring extends RPGSkill implements MeleeAttackSkill {
     public static final String HAMSTRING_EFFECT = "hamstring-user-effect";
 
     private static final String DEFAULT_SLOW_TIME = "60";
-    private static final String DEFAULT_SLOW_AMPLIFIER= "1";
+    private static final String DEFAULT_SLOW_AMPLIFIER= "50";
 
     public Hamstring() {
         super(
@@ -36,7 +36,7 @@ public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
                 .name("Hamstring")
                 .descriptionTemplate(TextTemplate.of(
                         "Your next melee attack to hit an enemy will cripple them, dealing ", arg(DAMAGE),
-                        " physical damage and reducing their movement speed by ", arg(AMPLIFIER), " for ", arg(TIME), " seconds."
+                        " physical damage and reducing their movement speed by ", arg(AMPLIFIER), "% for ", arg(TIME), " seconds."
                 ))
                 .cooldown("0")
                 .resourceCost("0")
@@ -51,7 +51,7 @@ public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
     }
 
     @Override
-    public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
+    public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         AtherysSkills.getInstance().getEffectService().applyEffect(user, HAMSTRING_EFFECT);
 
         return CastResult.success();
@@ -63,7 +63,9 @@ public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
             int slowTime = (int) Math.round(asDouble(user, target, getProperty(CommonProperties.TIME, String.class, DEFAULT_SLOW_TIME)));
             int slowAmplifier = (int) Math.round(asDouble(user, target, getProperty(CommonProperties.AMPLIFIER, String.class, DEFAULT_SLOW_AMPLIFIER)));
 
-            AtherysSkills.getInstance().getEffectService().applyEffect(target, new HamstringEffect(slowTime, slowAmplifier));
+            Applyable hamstring = Effects.ofSlowness("hamstring", "Hamstring", slowTime, slowAmplifier);
+            AtherysSkills.getInstance().getEffectService().applyEffect(target, hamstring);
+
             AtherysSkills.getInstance().getEffectService().removeEffect(user, HAMSTRING_EFFECT);
         }
     }
@@ -71,20 +73,5 @@ public class Hamstring extends TargetedRPGSkill implements MeleeAttackSkill {
     @Listener
     public void onMeleeAttack(DamageEntityEvent event, @Root EntityDamageSource source) {
         onDamage(event, source);
-    }
-
-    private static class HamstringEffect extends TemporaryPotionEffect {
-        private HamstringEffect(int duration, int amplifier) {
-            super(
-                    "hamstring-effect",
-                    "Hamstring",
-                    PotionEffect.builder()
-                            .potionType(PotionEffectTypes.SLOWNESS)
-                            .amplifier(amplifier)
-                            .duration(duration)
-                            .particles(true)
-                            .build()
-            );
-        }
     }
 }

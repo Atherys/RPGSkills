@@ -1,6 +1,7 @@
 package com.atherys.rpgskills;
 
 import com.atherys.rpgskills.t1.*;
+import com.atherys.rpgskills.t2.Poison;
 import com.atherys.rpgskills.util.BlankEffect;
 import com.atherys.skills.event.EffectRegistrationEvent;
 import com.atherys.skills.event.SkillRegistrationEvent;
@@ -39,7 +40,7 @@ public class RpgSkills {
                 new Hamstring(),
                 new LightHeal(),
                 new Shield(),
-                new Poison()
+                new Enfeeble()
         );
     }
 
