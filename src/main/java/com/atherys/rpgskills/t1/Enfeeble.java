@@ -49,7 +49,7 @@ public class Enfeeble extends TargetedRPGSkill {
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "5.0")),
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_RESISTANCE_LOSS)),
-                Tuple.of(TIME, ofProperty(this, AMPLIFIER, DEFAULT_DURATION))
+                Tuple.of(TIME, ofProperty(this, TIME, DEFAULT_DURATION))
         );
     }
 
