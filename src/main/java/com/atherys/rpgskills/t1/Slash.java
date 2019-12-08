@@ -15,7 +15,7 @@ import org.spongepowered.api.util.Tuple;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
 
 public class Slash extends TargetedRPGSkill {
-    private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_STRENGTH * 1.5, 0.5, 10.0)";
+    private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_STR * 1.5, 0.5, 10.0)";
 
     public Slash() {
         super(

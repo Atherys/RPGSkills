@@ -16,7 +16,7 @@ import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
 
 public class FireballSkill extends RPGSkill {
-    private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_WISDOM * 1.5, 0.5, 10.0)";
+    private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_WIS * 1.5, 0.5, 10.0)";
 
     public FireballSkill() {
         super(
