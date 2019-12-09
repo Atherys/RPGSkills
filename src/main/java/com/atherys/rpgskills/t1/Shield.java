@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
-import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.CommonProperties.TIME;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Shield extends RPGSkill {

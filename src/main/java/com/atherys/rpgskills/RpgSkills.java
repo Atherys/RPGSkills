@@ -1,7 +1,7 @@
 package com.atherys.rpgskills;
 
 import com.atherys.rpgskills.t1.*;
-import com.atherys.rpgskills.t2.Poison;
+import com.atherys.rpgskills.t2.*;
 import com.atherys.rpgskills.util.BlankEffect;
 import com.atherys.skills.event.EffectRegistrationEvent;
 import com.atherys.skills.event.SkillRegistrationEvent;
@@ -35,12 +35,26 @@ public class RpgSkills {
     @Listener
     public void onRegisterSkills(SkillRegistrationEvent event) {
         event.registerSkills(
-                new Slash(),
+                // Tier 1
+                new Enfeeble(),
                 new FireballSkill(),
                 new Hamstring(),
                 new LightHeal(),
+                new Slash(),
                 new Shield(),
-                new Enfeeble()
+
+                // Tier 2
+                new BoulderToss(),
+                new Cleanse(),
+                new Counterattack(),
+                new Disarm(),
+                new Envenom(),
+                new Invigorate(),
+                new Leap(),
+                new Lightning(),
+                new Pulsewave(),
+                new Siphon(),
+                new Sweep()
         );
     }
 
@@ -48,7 +62,7 @@ public class RpgSkills {
     public void onRegisterEffects(EffectRegistrationEvent event) {
         event.registerEffects(
                 new BlankEffect(Hamstring.HAMSTRING_EFFECT, "Hamstring User"),
-                new BlankEffect(Poison.POISON_EFFECT, "Poison User")
+                new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User")
         );
     }
 }

@@ -1,9 +1,11 @@
 package com.atherys.rpgskills.util;
 
-import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.effect.TemporaryAttributesEffect;
 import com.atherys.rpg.api.stat.AttributeType;
-import com.atherys.skills.api.effect.*;
+import com.atherys.skills.api.effect.Applyable;
+import com.atherys.skills.api.effect.ApplyableCarrier;
+import com.atherys.skills.api.effect.PeriodicEffect;
+import com.atherys.skills.api.effect.TemporaryPotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;

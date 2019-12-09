@@ -1,15 +1,11 @@
 package com.atherys.rpgskills.t1;
 
-import com.atherys.rpg.AtherysRPG;
-import com.atherys.rpg.api.effect.TemporaryAttributesEffect;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpg.api.stat.AttributeType;
 import com.atherys.rpg.api.stat.AttributeTypes;
-import com.atherys.rpgskills.RpgSkills;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.skills.AtherysSkills;
-import com.atherys.skills.api.effect.AbstractEffect;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
