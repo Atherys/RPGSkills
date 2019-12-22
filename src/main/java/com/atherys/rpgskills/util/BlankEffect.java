@@ -7,8 +7,10 @@ import com.atherys.skills.api.effect.ApplyableCarrier;
  * An effect that does nothing.
  */
 public class BlankEffect extends AbstractEffect {
-    public BlankEffect(String id, String name) {
-        super(id, name);
+    private boolean canRemove;
+    public BlankEffect(String id, String name, boolean isPositive) {
+        super(id, name, isPositive);
+        canRemove = false;
     }
 
     @Override
@@ -23,11 +25,16 @@ public class BlankEffect extends AbstractEffect {
 
     @Override
     public boolean canRemove(long timestamp, ApplyableCarrier<?> character) {
-        return false;
+        return canRemove;
     }
 
     @Override
     public boolean remove(long timestamp, ApplyableCarrier<?> character) {
         return true;
+    }
+
+    @Override
+    public void setRemoved() {
+        canRemove = true;
     }
 }

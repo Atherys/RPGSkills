@@ -7,8 +7,8 @@ import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.text.TextTemplate;
 
-public class Lightning extends RPGSkill {
-    public Lightning() {
+public class Blindbolt extends RPGSkill {
+    public Blindbolt() {
         super(
                 SkillSpec.create()
                         .id("lightning")

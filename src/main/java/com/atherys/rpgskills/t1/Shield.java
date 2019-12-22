@@ -58,7 +58,7 @@ public class Shield extends RPGSkill {
         Map<AttributeType, Double> attributes = new HashMap<>(2);
         attributes.put(AttributeTypes.PHYSICAL_RESISTANCE, physicalAmount);
         attributes.put(AttributeTypes.MAGICAL_RESISTANCE, magicAmount);
-        Applyable resistanceEffect = Effects.ofAttributes(SHIELD_EFFECT, "Shield", duration, attributes);
+        Applyable resistanceEffect = Effects.ofAttributes(SHIELD_EFFECT, "Shield", duration, attributes, true);
 
         AtherysSkills.getInstance().getEffectService().applyEffect(user, resistanceEffect);
 

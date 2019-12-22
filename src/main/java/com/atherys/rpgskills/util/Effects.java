@@ -2,20 +2,30 @@ package com.atherys.rpgskills.util;
 
 import com.atherys.rpg.api.effect.TemporaryAttributesEffect;
 import com.atherys.rpg.api.stat.AttributeType;
+import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.effect.ApplyableCarrier;
 import com.atherys.skills.api.effect.PeriodicEffect;
 import com.atherys.skills.api.effect.TemporaryPotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.Order;
+import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
+import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
+import org.spongepowered.api.event.cause.entity.damage.source.IndirectEntityDamageSource;
+import org.spongepowered.api.event.entity.AttackEntityEvent;
+import org.spongepowered.api.event.entity.projectile.LaunchProjectileEvent;
+import org.spongepowered.api.event.filter.cause.Root;
 
 import java.util.Map;
 
 public final class Effects {
 
-    public static Applyable ofAttributes(String id, String name, long duration, Map<AttributeType, Double> buffs) {
-        return new TemporaryAttributesEffect(id, name, duration, buffs);
+    public static Applyable ofAttributes(String id, String name, long duration, Map<AttributeType, Double> buffs, boolean isPositive) {
+        return new TemporaryAttributesEffect(id, name, duration, buffs, isPositive);
     }
 
     public static Applyable damageOverTime(String id, String name, long duration, double damage) {
@@ -30,12 +40,16 @@ public final class Effects {
         return new SlowEffect(id, name, duration, modifier);
     }
 
+    public static Applyable disarm(int duration) {
+        return new DisarmEffect(duration);
+    }
+
     private static class DamageOverTimeEffect extends PeriodicEffect {
 
         private double damagePerTick;
 
         private DamageOverTimeEffect(String id, String name, long duration, double totalDamage) {
-            super(id, name, 1000, (int) (duration / 1000));
+            super(id, name, 1000, (int) (duration / 1000), false);
             this.damagePerTick = totalDamage / duration * 1000;
         }
 
@@ -68,7 +82,8 @@ public final class Effects {
                     builder
                         .amplifier(amplifier)
                         .duration(duration)
-                        .build()
+                        .build(),
+                    false
             );
         }
     }
@@ -85,10 +100,48 @@ public final class Effects {
                     id,
                     name,
                     builder
-                            .amplifier(amplifier)
-                            .duration(duration)
-                            .build()
+                        .amplifier(amplifier)
+                        .duration(duration)
+                        .build(),
+                    true
             );
         }
     }
+
+    /**
+     * An effect which prevents the target from attacking with melee or ranged.
+     */
+    private static class DisarmEffect extends TemporaryPotionEffect {
+        private static PotionEffect.Builder builder = PotionEffect.builder()
+                .potionType(PotionEffectTypes.MINING_FATIGUE);
+
+        public DisarmEffect(int duration) {
+            super(
+                    "disarm",
+                    "Disarm",
+                    builder
+                        .amplifier(200)
+                        .duration(duration)
+                        .build(),
+                    false
+            );
+        }
+    }
+
+    /*
+    @Listener(order = Order.FIRST)
+    public void onAttack(AttackEntityEvent event, @Root EntityDamageSource source) {
+        if (source instanceof IndirectEntityDamageSource) {
+            if (((IndirectEntityDamageSource) source).getIndirectSource() instanceof Living) {
+            }
+        }
+
+        if (source.getSource() instanceof Living) {
+
+        }
+        if (AtherysSkills.getInstance().getEffectService().hasEffect(living, "disarm")) {
+            event.setCancelled(true);
+        }
+    }
+     */
 }

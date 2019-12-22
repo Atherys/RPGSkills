@@ -3,8 +3,10 @@ package com.atherys.rpgskills;
 import com.atherys.rpgskills.t1.*;
 import com.atherys.rpgskills.t2.*;
 import com.atherys.rpgskills.util.BlankEffect;
+import com.atherys.rpgskills.util.Effects;
 import com.atherys.skills.event.EffectRegistrationEvent;
 import com.atherys.skills.event.SkillRegistrationEvent;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Dependency;
@@ -30,6 +32,7 @@ public class RpgSkills {
     @Listener
     public void onPreInit(GamePreInitializationEvent event) {
         instance = this;
+        Sponge.getEventManager().registerListeners(this, new Effects());
     }
 
     @Listener
@@ -51,7 +54,7 @@ public class RpgSkills {
                 new Envenom(),
                 new Invigorate(),
                 new Leap(),
-                new Lightning(),
+                new Blindbolt(),
                 new Pulsewave(),
                 new Siphon(),
                 new Sweep()
@@ -61,8 +64,8 @@ public class RpgSkills {
     @Listener
     public void onRegisterEffects(EffectRegistrationEvent event) {
         event.registerEffects(
-                new BlankEffect(Hamstring.HAMSTRING_EFFECT, "Hamstring User"),
-                new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User")
+                new BlankEffect(Hamstring.HAMSTRING_EFFECT, "Hamstring User", true),
+                new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User", true)
         );
     }
 }

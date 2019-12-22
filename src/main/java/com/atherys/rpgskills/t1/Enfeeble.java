@@ -58,7 +58,7 @@ public class Enfeeble extends TargetedRPGSkill {
         Map<AttributeType, Double> attributes = new HashMap<>(2);
         attributes.put(AttributeTypes.MAGICAL_RESISTANCE, resistancesLost);
         attributes.put(AttributeTypes.PHYSICAL_RESISTANCE, resistancesLost);
-        Applyable resistanceEffect = Effects.ofAttributes(ENFEEBLE_RESISTANCE_EFFECT, "Enfeeble", duration, attributes);
+        Applyable resistanceEffect = Effects.ofAttributes(ENFEEBLE_RESISTANCE_EFFECT, "Enfeeble", duration, attributes, false);
 
         Applyable damageEffect = Effects.damageOverTime(ENFEEBLE_DOT_EFFECT, "Enfeeble", duration, damage);
 
