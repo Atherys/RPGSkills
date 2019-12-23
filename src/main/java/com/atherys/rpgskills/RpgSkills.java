@@ -3,6 +3,7 @@ package com.atherys.rpgskills;
 import com.atherys.rpgskills.t1.*;
 import com.atherys.rpgskills.t2.*;
 import com.atherys.rpgskills.util.BlankEffect;
+import com.atherys.rpgskills.util.BlankSkill;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.skills.event.EffectRegistrationEvent;
 import com.atherys.skills.event.SkillRegistrationEvent;
@@ -57,7 +58,10 @@ public class RpgSkills {
                 new Blindbolt(),
                 new Pulsewave(),
                 new Siphon(),
-                new Sweep()
+                new Sweep(),
+
+                // For tree root
+                new BlankSkill("root-skill", "RootSkill")
         );
     }
 
