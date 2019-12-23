@@ -42,9 +42,9 @@ public class RpgSkills {
                 new Enfeeble(),
                 new FireballSkill(),
                 new Hamstring(),
-                new LightHeal(),
+                new Recover(),
                 new Slash(),
-                new Shield(),
+                new Bolster(),
 
                 // Tier 2
                 new BoulderToss(),

@@ -2,23 +2,14 @@ package com.atherys.rpgskills.util;
 
 import com.atherys.rpg.api.effect.TemporaryAttributesEffect;
 import com.atherys.rpg.api.stat.AttributeType;
-import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.effect.ApplyableCarrier;
 import com.atherys.skills.api.effect.PeriodicEffect;
 import com.atherys.skills.api.effect.TemporaryPotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
-import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.Order;
-import org.spongepowered.api.event.block.InteractBlockEvent;
+import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
-import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
-import org.spongepowered.api.event.cause.entity.damage.source.IndirectEntityDamageSource;
-import org.spongepowered.api.event.entity.AttackEntityEvent;
-import org.spongepowered.api.event.entity.projectile.LaunchProjectileEvent;
-import org.spongepowered.api.event.filter.cause.Root;
 
 import java.util.Map;
 
@@ -28,8 +19,12 @@ public final class Effects {
         return new TemporaryAttributesEffect(id, name, duration, buffs, isPositive);
     }
 
+    public static Applyable damageOverTime(String id, String name, long duration, double damage, DamageSource source) {
+        return new DamageOverTimeEffect(id, name, duration, damage, source);
+    }
+
     public static Applyable damageOverTime(String id, String name, long duration, double damage) {
-        return new DamageOverTimeEffect(id, name, duration, damage);
+        return new DamageOverTimeEffect(id, name, duration, damage, DamageSources.VOID);
     }
 
     public static Applyable ofSlowness(String id, String name, int duration, int modifier) {
@@ -47,16 +42,18 @@ public final class Effects {
     private static class DamageOverTimeEffect extends PeriodicEffect {
 
         private double damagePerTick;
+        private DamageSource damageSource;
 
-        private DamageOverTimeEffect(String id, String name, long duration, double totalDamage) {
+        private DamageOverTimeEffect(String id, String name, long duration, double totalDamage, DamageSource damageSource) {
             super(id, name, 1000, (int) (duration / 1000), false);
             this.damagePerTick = totalDamage / duration * 1000;
+            this.damageSource = damageSource;
         }
 
         @Override
         protected boolean apply(ApplyableCarrier<?> character) {
             character.getLiving().ifPresent(living -> {
-                living.damage(damagePerTick, DamageSources.VOID);
+                living.damage(damagePerTick, damageSource);
             });
             return true;
         }

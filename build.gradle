@@ -7,7 +7,8 @@ group 'com.atherys'
 version '1.0-SNAPSHOT'
 
 dependencies {
-    shadow 'com.github.Atherys-Horizons:AtherysRPG:master-SNAPSHOT'
+    shadow 'com.github.Atherys-Horizons:AtherysRPG:1.1-SNAPSHOT'
     shadow 'com.github.Atherys-Horizons:AtherysSkills:master-SNAPSHOT'
+    shadow 'com.github.Atherys-Horizons:AtherysParties:master-SNAPSHOT'
     shadow 'org.spongepowered:spongeapi:7.2.0-SNAPSHOT'
 }

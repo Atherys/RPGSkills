@@ -12,13 +12,13 @@ import org.spongepowered.api.util.Tuple;
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.HEALING;
 
-public class LightHeal extends RPGSkill {
+public class Recover extends RPGSkill {
     private static String DEFAULT_HEAL_EXPRESSION = "5.0";
 
-    public LightHeal() {
+    public Recover() {
         super(
                 SkillSpec.create()
-                .id("light-heal")
+                .id("recover")
                 .name("Recover")
                 .descriptionTemplate(TextTemplate.of(
                         "Recover some strength, healing yourself for ", TextTemplate.arg(HEALING), "."

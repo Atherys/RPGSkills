@@ -38,7 +38,7 @@ public class Pulsewave extends RPGSkill {
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         Collection<Entity> inRadius = user.getNearbyEntities(asDouble(user, getProperty(AMPLIFIER, String.class, DEFAULT_RADIUS)));
         String damageExpression = getProperty(DAMAGE, String.class, DEFAULT_DAMAGE);
-        DamageSource damageSource = DamageUtils.directSource(user);
+        DamageSource damageSource = DamageUtils.directPhysical(user);
         Vector3d userPosition = user.getLocation().getPosition();
 
         inRadius.forEach(entity -> {

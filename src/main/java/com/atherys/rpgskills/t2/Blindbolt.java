@@ -11,8 +11,8 @@ public class Blindbolt extends RPGSkill {
     public Blindbolt() {
         super(
                 SkillSpec.create()
-                        .id("lightning")
-                        .name("Lightning")
+                        .id("blindbolt")
+                        .name("Blindbolt")
                         .descriptionTemplate(TextTemplate.of(
                                 ""
                         ))

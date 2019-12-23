@@ -2,6 +2,7 @@ package com.atherys.rpgskills.t2;
 
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
+import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
@@ -78,7 +79,7 @@ public class BoulderToss extends RPGSkill {
 
             if (!target.equals(user)) {
                 double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
-                target.damage(damage, DamageSources.VOID);
+                target.damage(damage, DamageUtils.directMagical(user));
                 Vector3d normalized = boulder.getVelocity().normalize();
                 target.setVelocity(Vector3d.from(normalized.getX() * 1.5, 0.6, normalized.getZ() * 1.5));
                 boulder.remove();

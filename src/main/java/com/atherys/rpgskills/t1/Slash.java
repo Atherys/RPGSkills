@@ -3,6 +3,7 @@ package com.atherys.rpgskills.t1;
 import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
+import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.google.common.collect.ImmutableMap;
@@ -38,7 +39,7 @@ public class Slash extends TargetedRPGSkill {
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
 
-        target.damage(damage, EntityDamageSource.builder().entity(user).type(DamageTypes.ATTACK).build());
+        target.damage(damage, DamageUtils.directPhysical(user));
 
         return CastResult.success();
     }

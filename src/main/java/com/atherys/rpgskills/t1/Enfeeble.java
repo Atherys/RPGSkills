@@ -4,6 +4,7 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpg.api.stat.AttributeType;
 import com.atherys.rpg.api.stat.AttributeTypes;
+import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
@@ -60,7 +61,13 @@ public class Enfeeble extends TargetedRPGSkill {
         attributes.put(AttributeTypes.PHYSICAL_RESISTANCE, resistancesLost);
         Applyable resistanceEffect = Effects.ofAttributes(ENFEEBLE_RESISTANCE_EFFECT, "Enfeeble", duration, attributes, false);
 
-        Applyable damageEffect = Effects.damageOverTime(ENFEEBLE_DOT_EFFECT, "Enfeeble", duration, damage);
+        Applyable damageEffect = Effects.damageOverTime(
+                ENFEEBLE_DOT_EFFECT,
+                "Enfeeble",
+                duration,
+                DamageUtils.magicDamage(target, damage),
+                DamageUtils.directMagical(user)
+        );
 
         AtherysSkills.getInstance().getEffectService().applyEffect(target, resistanceEffect);
         AtherysSkills.getInstance().getEffectService().applyEffect(target, damageEffect);

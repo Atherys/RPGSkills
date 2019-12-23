@@ -3,6 +3,7 @@ package com.atherys.rpgskills.t1;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.CommonProperties;
+import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.MeleeAttackSkill;
 import com.atherys.skills.AtherysSkills;
@@ -28,6 +29,7 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill {
 
     private static final String DEFAULT_SLOW_TIME = "60";
     private static final String DEFAULT_SLOW_AMPLIFIER= "50";
+    private static final String DEFAULT_DAMAGE = "5.0";
 
     public Hamstring() {
         super(
@@ -60,9 +62,11 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill {
     @Override
     public void meleeAttack(Living user, Living target) {
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, HAMSTRING_EFFECT)) {
-            int slowTime = (int) Math.round(asDouble(user, target, getProperty(CommonProperties.TIME, String.class, DEFAULT_SLOW_TIME)));
-            int slowAmplifier = (int) Math.round(asDouble(user, target, getProperty(CommonProperties.AMPLIFIER, String.class, DEFAULT_SLOW_AMPLIFIER)));
+            int slowTime = (int) Math.round(asDouble(user, getProperty(TIME, String.class, DEFAULT_SLOW_TIME)));
+            int slowAmplifier = (int) Math.round(asDouble(user, getProperty(AMPLIFIER, String.class, DEFAULT_SLOW_AMPLIFIER)));
+            double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
 
+            target.damage(damage, DamageUtils.directPhysical(user));
             Applyable hamstring = Effects.ofSlowness("hamstring", "Hamstring", slowTime, slowAmplifier);
             AtherysSkills.getInstance().getEffectService().applyEffect(target, hamstring);
 

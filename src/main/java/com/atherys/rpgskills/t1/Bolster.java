@@ -20,7 +20,7 @@ import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.TIME;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
-public class Shield extends RPGSkill {
+public class Bolster extends RPGSkill {
     public static final String SHIELD_EFFECT = "shield-effect";
 
     private static final String MAG_PROP = "magic";
@@ -29,11 +29,11 @@ public class Shield extends RPGSkill {
     private static final String DEFAULT_PHYS = "5.0";
     private static final String DEFAULT_MAG = "5.0";
 
-    public Shield() {
+    public Bolster() {
         super(
                 SkillSpec.create()
-                        .id("shield")
-                        .name("Shield")
+                        .id("bolster")
+                        .name("Bolster")
                         .cooldown("0")
                         .resourceCost("0")
                         .descriptionTemplate(TextTemplate.of(
