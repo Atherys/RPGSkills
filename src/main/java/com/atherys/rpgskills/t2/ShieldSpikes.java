@@ -7,12 +7,12 @@ import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.text.TextTemplate;
 
-public class Counterattack extends RPGSkill {
-    public Counterattack() {
+public class ShieldSpikes extends RPGSkill {
+    public ShieldSpikes() {
         super(
                 SkillSpec.create()
-                        .id("counterattack")
-                        .name("Counterattack")
+                        .id("shield-spikes")
+                        .name("ShieldSpikes")
                         .descriptionTemplate(TextTemplate.of(
                                 ""
                         ))

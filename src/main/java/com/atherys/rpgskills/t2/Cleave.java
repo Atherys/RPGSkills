@@ -7,12 +7,12 @@ import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.text.TextTemplate;
 
-public class Sweep extends RPGSkill {
-    public Sweep() {
+public class Cleave extends RPGSkill {
+    public Cleave() {
         super(
                 SkillSpec.create()
-                        .id("sweep")
-                        .name("Sweep")
+                        .id("cleave")
+                        .name("Cleave")
                         .descriptionTemplate(TextTemplate.of(
                                 ""
                         ))

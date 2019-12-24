@@ -3,6 +3,7 @@ package com.atherys.rpgskills.t2;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.Effects;
+import com.atherys.rpgskills.util.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
@@ -12,10 +13,9 @@ import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
-import static com.atherys.rpgskills.util.CommonProperties.AMPLIFIER;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
-public class Disarm extends TargetedRPGSkill {
+public class Disarm extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_DISARM_TIME = "5000";
     private static final String DEFAULT_DISARM_DAMAGE = "5000";
 
@@ -40,8 +40,12 @@ public class Disarm extends TargetedRPGSkill {
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
-        int disarmTime = (int) asDouble(user, getProperty(TIME, String.class, DEFAULT_DISARM_TIME));
-        AtherysSkills.getInstance().getEffectService().applyEffect(target, Effects.disarm(disarmTime));
-        return CastResult.success();
+        if (!arePlayersInParty(user, target)) {
+            int disarmTime = (int) asDouble(user, getProperty(TIME, String.class, DEFAULT_DISARM_TIME));
+            AtherysSkills.getInstance().getEffectService().applyEffect(target, Effects.disarm(disarmTime));
+            return CastResult.success();
+        }
+
+        return CastResult.empty();
     }
 }

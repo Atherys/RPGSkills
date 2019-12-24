@@ -8,8 +8,6 @@ import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.google.common.collect.ImmutableMap;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
-import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.util.Tuple;
 

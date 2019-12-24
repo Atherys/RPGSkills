@@ -18,8 +18,8 @@ public class Recover extends RPGSkill {
     public Recover() {
         super(
                 SkillSpec.create()
-                .id("recover")
-                .name("Recover")
+                .id("recovery")
+                .name("Recovery")
                 .descriptionTemplate(TextTemplate.of(
                         "Recover some strength, healing yourself for ", TextTemplate.arg(HEALING), "."
                 ))

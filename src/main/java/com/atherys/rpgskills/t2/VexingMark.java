@@ -8,7 +8,7 @@ import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.text.TextTemplate;
 
 public class VexingMark extends RPGSkill {
-    protected VexingMark() {
+    public VexingMark() {
         super(
                 SkillSpec.create()
                         .id("vexing-mark")

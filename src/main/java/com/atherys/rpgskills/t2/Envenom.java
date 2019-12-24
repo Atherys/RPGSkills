@@ -6,6 +6,7 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.AttackSkill;
 import com.atherys.rpgskills.util.CommonProperties;
 import com.atherys.rpgskills.util.Effects;
+import com.atherys.rpgskills.util.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
@@ -22,7 +23,7 @@ import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
 import static com.atherys.rpgskills.util.CommonProperties.TIME;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
-public class Envenom extends RPGSkill implements AttackSkill {
+public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
     public static final String POISON_EFFECT_USER = "poison-effect-user";
 
     private static final String DEFAULT_POISON_TIME = "10000";
@@ -56,6 +57,8 @@ public class Envenom extends RPGSkill implements AttackSkill {
     @Override
     public void attack(Living user, Living target) {
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, POISON_EFFECT_USER)) {
+            if (arePlayersInParty(user, target)) return;
+
             int poisonDamage = (int) Math.round(asDouble(user, target, getProperty(CommonProperties.AMPLIFIER, String.class, DEFAULT_POISON_DAMAGE)));
             int poisonTime = (int) Math.round(asDouble(user, target, getProperty(TIME, String.class, DEFAULT_POISON_TIME)));
 

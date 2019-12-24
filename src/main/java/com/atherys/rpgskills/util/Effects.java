@@ -1,15 +1,21 @@
 package com.atherys.rpgskills.util;
 
+import com.atherys.core.utils.EntityUtils;
 import com.atherys.rpg.api.effect.TemporaryAttributesEffect;
 import com.atherys.rpg.api.stat.AttributeType;
-import com.atherys.skills.api.effect.Applyable;
-import com.atherys.skills.api.effect.ApplyableCarrier;
-import com.atherys.skills.api.effect.PeriodicEffect;
-import com.atherys.skills.api.effect.TemporaryPotionEffect;
+import com.atherys.skills.AtherysSkills;
+import com.atherys.skills.api.effect.*;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
+import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
+import org.spongepowered.api.event.entity.AttackEntityEvent;
+import org.spongepowered.api.event.filter.cause.Root;
 
 import java.util.Map;
 
@@ -33,6 +39,10 @@ public final class Effects {
 
     public static Applyable ofSpeed(String id, String name, int duration, int modifier) {
         return new SlowEffect(id, name, duration, modifier);
+    }
+
+    public static Applyable ofBlindness(String id, String name, int duration, int modifier) {
+        return new BlindEffect(id, name, duration, false);
     }
 
     public static Applyable disarm(int duration) {
@@ -60,7 +70,6 @@ public final class Effects {
 
         @Override
         protected boolean remove(ApplyableCarrier<?> character) {
-            character.removeEffect(this);
             return true;
         }
     }
@@ -105,40 +114,55 @@ public final class Effects {
         }
     }
 
-    /**
-     * An effect which prevents the target from attacking with melee or ranged.
-     */
-    private static class DisarmEffect extends TemporaryPotionEffect {
+    private static class BlindEffect extends TemporaryPotionEffect {
         private static PotionEffect.Builder builder = PotionEffect.builder()
-                .potionType(PotionEffectTypes.MINING_FATIGUE);
+                .particles(true)
+                .potionType(PotionEffectTypes.BLINDNESS)
+                .ambience(true);
 
-        public DisarmEffect(int duration) {
+        public BlindEffect(String id, String name, int duration, boolean isPositive) {
             super(
-                    "disarm",
-                    "Disarm",
+                    id,
+                    name,
                     builder
-                        .amplifier(200)
                         .duration(duration)
+                        .amplifier(1)
                         .build(),
-                    false
+                    isPositive
             );
         }
     }
 
-    /*
+    /**
+     * An effect which prevents the target from attacking with melee or ranged.
+     */
+    private static class DisarmEffect extends TemporaryEffect {
+        public static final String DISARM_ID = "disarm";
+
+        public DisarmEffect(int duration) {
+            super(
+                    DISARM_ID,
+                    "Disarm",
+                    duration,
+                    false
+            );
+        }
+
+        @Override
+        protected boolean apply(ApplyableCarrier<?> character) { return true; }
+
+        @Override
+        protected boolean remove(ApplyableCarrier<?> character) { return true; }
+    }
+
     @Listener(order = Order.FIRST)
     public void onAttack(AttackEntityEvent event, @Root EntityDamageSource source) {
-        if (source instanceof IndirectEntityDamageSource) {
-            if (((IndirectEntityDamageSource) source).getIndirectSource() instanceof Living) {
+        Entity root = EntityUtils.getRootEntity(source);
+
+        if (root instanceof Living) {
+            if (AtherysSkills.getInstance().getEffectService().hasEffect((Living) root,DisarmEffect.DISARM_ID)) {
+                event.setCancelled(true);
             }
         }
-
-        if (source.getSource() instanceof Living) {
-
-        }
-        if (AtherysSkills.getInstance().getEffectService().hasEffect(living, "disarm")) {
-            event.setCancelled(true);
-        }
     }
-     */
 }

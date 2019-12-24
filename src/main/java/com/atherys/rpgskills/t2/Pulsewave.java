@@ -5,7 +5,6 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
-import com.atherys.skills.api.util.LivingUtils;
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
@@ -13,7 +12,6 @@ import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.text.TextTemplate;
 
 import java.util.Collection;
-import java.util.List;
 
 import static com.atherys.rpgskills.util.CommonProperties.AMPLIFIER;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;

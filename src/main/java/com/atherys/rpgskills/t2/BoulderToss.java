@@ -3,6 +3,7 @@ package com.atherys.rpgskills.t2;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.PartySkill;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
@@ -15,7 +16,6 @@ import org.spongepowered.api.entity.FallingBlock;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.CollideBlockEvent;
-import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.text.TextTemplate;
@@ -29,7 +29,7 @@ import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
-public class BoulderToss extends RPGSkill {
+public class BoulderToss extends RPGSkill implements PartySkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "5.0";
 
     private Map<UUID, Living> boulders = new WeakHashMap<>();
@@ -76,6 +76,8 @@ public class BoulderToss extends RPGSkill {
 
         if (user != null && event.getEntities().get(0) instanceof Living) {
             Living target = (Living) event.getEntities().get(0);
+
+            if (arePlayersInParty(user, target)) return;
 
             if (!target.equals(user)) {
                 double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));

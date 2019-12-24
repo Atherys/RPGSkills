@@ -50,7 +50,7 @@ public class RpgSkills {
                 // Tier 2
                 new BoulderToss(),
                 new Cleanse(),
-                new Counterattack(),
+                new ShieldSpikes(),
                 new Disarm(),
                 new Envenom(),
                 new Invigorate(),
@@ -58,7 +58,8 @@ public class RpgSkills {
                 new Blindbolt(),
                 new Pulsewave(),
                 new Siphon(),
-                new Sweep(),
+                new Cleave(),
+                new VexingMark(),
 
                 // For tree root
                 new BlankSkill("root-skill", "RootSkill")
