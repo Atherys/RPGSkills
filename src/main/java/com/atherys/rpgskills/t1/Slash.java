@@ -4,6 +4,7 @@ import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.PartySkill;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.google.common.collect.ImmutableMap;
@@ -13,7 +14,7 @@ import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
 
-public class Slash extends TargetedRPGSkill {
+public class Slash extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_STR * 1.5, 0.5, 10.0)";
 
     public Slash() {
@@ -35,6 +36,8 @@ public class Slash extends TargetedRPGSkill {
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
+        if (arePlayersInParty(user, target)) throw isInParty();
+
         double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
 
         target.damage(damage, DamageUtils.directPhysical(user));

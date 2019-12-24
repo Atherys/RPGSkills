@@ -70,7 +70,8 @@ public class RpgSkills {
     public void onRegisterEffects(EffectRegistrationEvent event) {
         event.registerEffects(
                 new BlankEffect(Hamstring.HAMSTRING_EFFECT, "Hamstring User", true),
-                new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User", true)
+                new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User", true),
+                new BlankEffect(VexingMark.VEXING_MARK_EFFECT, "Vexing Mark", false)
         );
     }
 }

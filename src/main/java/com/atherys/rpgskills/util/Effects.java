@@ -9,12 +9,14 @@ import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.projectile.Projectile;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
-import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.AttackEntityEvent;
+import org.spongepowered.api.event.entity.ConstructEntityEvent;
+import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.Root;
 
 import java.util.Map;
@@ -25,12 +27,8 @@ public final class Effects {
         return new TemporaryAttributesEffect(id, name, duration, buffs, isPositive);
     }
 
-    public static Applyable damageOverTime(String id, String name, long duration, double damage, DamageSource source) {
-        return new DamageOverTimeEffect(id, name, duration, damage, source);
-    }
-
     public static Applyable damageOverTime(String id, String name, long duration, double damage) {
-        return new DamageOverTimeEffect(id, name, duration, damage, DamageSources.VOID);
+        return new DamageOverTimeEffect(id, name, duration, damage);
     }
 
     public static Applyable ofSlowness(String id, String name, int duration, int modifier) {
@@ -52,18 +50,16 @@ public final class Effects {
     private static class DamageOverTimeEffect extends PeriodicEffect {
 
         private double damagePerTick;
-        private DamageSource damageSource;
 
-        private DamageOverTimeEffect(String id, String name, long duration, double totalDamage, DamageSource damageSource) {
+        private DamageOverTimeEffect(String id, String name, long duration, double totalDamage) {
             super(id, name, 1000, (int) (duration / 1000), false);
             this.damagePerTick = totalDamage / duration * 1000;
-            this.damageSource = damageSource;
         }
 
         @Override
         protected boolean apply(ApplyableCarrier<?> character) {
             character.getLiving().ifPresent(living -> {
-                living.damage(damagePerTick, damageSource);
+                living.damage(damagePerTick, DamageSources.POISON);
             });
             return true;
         }
@@ -160,9 +156,16 @@ public final class Effects {
         Entity root = EntityUtils.getRootEntity(source);
 
         if (root instanceof Living) {
-            if (AtherysSkills.getInstance().getEffectService().hasEffect((Living) root,DisarmEffect.DISARM_ID)) {
+            if (AtherysSkills.getInstance().getEffectService().hasEffect((Living) root, DisarmEffect.DISARM_ID)) {
                 event.setCancelled(true);
             }
+        }
+    }
+
+    @Listener(order = Order.FIRST)
+    public void onShoot(ConstructEntityEvent.Post event, @Root Living source, @Getter("getTargetEntity") Projectile projectile) {
+        if (AtherysSkills.getInstance().getEffectService().hasEffect(source, DisarmEffect.DISARM_ID)) {
+            projectile.remove();
         }
     }
 }

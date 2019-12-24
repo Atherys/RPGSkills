@@ -56,9 +56,9 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
 
     @Override
     public void attack(Living user, Living target) {
-        if (AtherysSkills.getInstance().getEffectService().hasEffect(user, POISON_EFFECT_USER)) {
-            if (arePlayersInParty(user, target)) return;
+        if (arePlayersInParty(user, target)) return;
 
+        if (AtherysSkills.getInstance().getEffectService().hasEffect(user, POISON_EFFECT_USER)) {
             int poisonDamage = (int) Math.round(asDouble(user, target, getProperty(CommonProperties.AMPLIFIER, String.class, DEFAULT_POISON_DAMAGE)));
             int poisonTime = (int) Math.round(asDouble(user, target, getProperty(TIME, String.class, DEFAULT_POISON_TIME)));
 

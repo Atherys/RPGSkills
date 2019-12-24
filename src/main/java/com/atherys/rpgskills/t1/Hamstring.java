@@ -5,6 +5,7 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.MeleeAttackSkill;
+import com.atherys.rpgskills.util.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
@@ -23,7 +24,7 @@ import static com.atherys.rpg.api.skill.TargetedRPGSkill.MAX_RANGE_PROPERTY;
 import static com.atherys.rpgskills.util.CommonProperties.*;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
-public class Hamstring extends RPGSkill implements MeleeAttackSkill {
+public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill {
     public static final String HAMSTRING_EFFECT = "hamstring-user-effect";
 
     private static final String DEFAULT_SLOW_TIME = "60";
@@ -60,7 +61,11 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill {
 
     @Override
     public void meleeAttack(Living user, Living target) {
+        if (arePlayersInParty(user, target)) return;
+
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, HAMSTRING_EFFECT)) {
+            AtherysSkills.getInstance().getEffectService().removeEffect(user, HAMSTRING_EFFECT);
+
             int slowTime = (int) Math.round(asDouble(user, getProperty(TIME, String.class, DEFAULT_SLOW_TIME)));
             int slowAmplifier = (int) Math.round(asDouble(user, getProperty(AMPLIFIER, String.class, DEFAULT_SLOW_AMPLIFIER)));
             double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
@@ -68,8 +73,6 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill {
             target.damage(damage, DamageUtils.directPhysical(user));
             Applyable hamstring = Effects.ofSlowness("hamstring", "Hamstring", slowTime, slowAmplifier);
             AtherysSkills.getInstance().getEffectService().applyEffect(target, hamstring);
-
-            AtherysSkills.getInstance().getEffectService().removeEffect(user, HAMSTRING_EFFECT);
         }
     }
 

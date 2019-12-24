@@ -6,6 +6,7 @@ import com.atherys.rpg.api.stat.AttributeType;
 import com.atherys.rpg.api.stat.AttributeTypes;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.Effects;
+import com.atherys.rpgskills.util.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
@@ -21,7 +22,7 @@ import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
-public class Enfeeble extends TargetedRPGSkill {
+public class Enfeeble extends TargetedRPGSkill implements PartySkill {
     public static final String ENFEEBLE_RESISTANCE_EFFECT = "enfeeble-effect";
     public static final String ENFEEBLE_DOT_EFFECT = "enfeeble-dot-effect";
 
@@ -52,6 +53,8 @@ public class Enfeeble extends TargetedRPGSkill {
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
+        if (arePlayersInParty(user, target)) throw isInParty();
+
         double resistancesLost = -1 * asDouble(user, target, getProperty(AMPLIFIER, String.class, DEFAULT_RESISTANCE_LOSS));
         long duration = (long) asDouble(user, getProperty(TIME, String.class, DEFAULT_DURATION));
         double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
@@ -65,8 +68,7 @@ public class Enfeeble extends TargetedRPGSkill {
                 ENFEEBLE_DOT_EFFECT,
                 "Enfeeble",
                 duration,
-                DamageUtils.magicDamage(target, damage),
-                DamageUtils.directMagical(user)
+                DamageUtils.magicDamage(target, damage)
         );
 
         AtherysSkills.getInstance().getEffectService().applyEffect(target, resistanceEffect);

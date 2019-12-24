@@ -16,8 +16,8 @@ import static com.atherys.rpgskills.util.CommonProperties.*;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Disarm extends TargetedRPGSkill implements PartySkill {
-    private static final String DEFAULT_DISARM_TIME = "5000";
-    private static final String DEFAULT_DISARM_DAMAGE = "5000";
+    private static final String DEFAULT_DISARM_TIME = "15000";
+    private static final String DEFAULT_DISARM_DAMAGE = "5.0";
 
     public Disarm() {
         super(
@@ -40,12 +40,10 @@ public class Disarm extends TargetedRPGSkill implements PartySkill {
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
-        if (!arePlayersInParty(user, target)) {
-            int disarmTime = (int) asDouble(user, getProperty(TIME, String.class, DEFAULT_DISARM_TIME));
-            AtherysSkills.getInstance().getEffectService().applyEffect(target, Effects.disarm(disarmTime));
-            return CastResult.success();
-        }
+        if (arePlayersInParty(user, target)) throw isInParty();
 
-        return CastResult.empty();
+        int disarmTime = (int) asDouble(user, getProperty(TIME, String.class, DEFAULT_DISARM_TIME));
+        AtherysSkills.getInstance().getEffectService().applyEffect(target, Effects.disarm(disarmTime));
+        return CastResult.success();
     }
 }

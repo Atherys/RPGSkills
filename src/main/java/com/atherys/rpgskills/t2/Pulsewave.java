@@ -44,8 +44,6 @@ public class Pulsewave extends RPGSkill {
                 Living target = (Living) entity;
                 double damage = asDouble(user, target, damageExpression);
                 target.damage(damage, damageSource);
-                Vector3d between = target.getLocation().getPosition().sub(userPosition).normalize();
-                target.setVelocity(Vector3d.from(between.getX() * 0.5, 0.2, between.getZ() * 0.5));
             }
         });
         return CastResult.success();
