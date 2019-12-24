@@ -2,7 +2,7 @@ package com.atherys.rpgskills.t2;
 
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
-import com.atherys.rpgskills.util.PartySkill;
+import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;

@@ -3,7 +3,7 @@ package com.atherys.rpgskills.t2;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.DamageUtils;
-import com.atherys.rpgskills.util.PartySkill;
+import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
@@ -32,7 +32,7 @@ public class Blindbolt extends TargetedRPGSkill implements PartySkill {
         if (arePlayersInParty(user, target)) throw isInParty();
 
         double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
-        target.damage(damage, DamageUtils.directMagical(user, target));
+        target.damage(damage, DamageUtils.directMagical(user));
         return CastResult.success();
     }
 }

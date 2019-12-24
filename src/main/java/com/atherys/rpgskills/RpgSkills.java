@@ -3,7 +3,7 @@ package com.atherys.rpgskills;
 import com.atherys.rpgskills.t1.*;
 import com.atherys.rpgskills.t2.*;
 import com.atherys.rpgskills.util.BlankEffect;
-import com.atherys.rpgskills.util.BlankSkill;
+import com.atherys.rpgskills.util.skill.BlankSkill;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.skills.event.EffectRegistrationEvent;
 import com.atherys.skills.event.SkillRegistrationEvent;
@@ -70,8 +70,7 @@ public class RpgSkills {
     public void onRegisterEffects(EffectRegistrationEvent event) {
         event.registerEffects(
                 new BlankEffect(Hamstring.HAMSTRING_EFFECT, "Hamstring User", true),
-                new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User", true),
-                new BlankEffect(VexingMark.VEXING_MARK_EFFECT, "Vexing Mark", false)
+                new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User", true)
         );
     }
 }

@@ -1,4 +1,4 @@
-package com.atherys.rpgskills.util;
+package com.atherys.rpgskills.util.skill;
 
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.skills.api.skill.TargetedCastable;

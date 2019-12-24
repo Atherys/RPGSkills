@@ -3,10 +3,10 @@ package com.atherys.rpgskills.t2;
 import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
-import com.atherys.rpgskills.util.AttackSkill;
+import com.atherys.rpgskills.util.skill.AttackSkill;
 import com.atherys.rpgskills.util.CommonProperties;
 import com.atherys.rpgskills.util.Effects;
-import com.atherys.rpgskills.util.PartySkill;
+import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
@@ -55,12 +55,12 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
     }
 
     @Override
-    public void attack(Living user, Living target) {
-        if (arePlayersInParty(user, target)) return;
+    public boolean attack(Living user, Living target) {
+        if (arePlayersInParty(user, target)) return true;
 
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, POISON_EFFECT_USER)) {
-            int poisonDamage = (int) Math.round(asDouble(user, target, getProperty(CommonProperties.AMPLIFIER, String.class, DEFAULT_POISON_DAMAGE)));
-            int poisonTime = (int) Math.round(asDouble(user, target, getProperty(TIME, String.class, DEFAULT_POISON_TIME)));
+            int poisonDamage = asInt(user, target, getProperty(CommonProperties.AMPLIFIER, String.class, DEFAULT_POISON_DAMAGE));
+            int poisonTime = asInt(user, target, getProperty(TIME, String.class, DEFAULT_POISON_TIME));
 
             Applyable poisonEffect = Effects.damageOverTime(
                     "poison",
@@ -72,6 +72,8 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
             AtherysSkills.getInstance().getEffectService().applyEffect(target, poisonEffect);
             AtherysSkills.getInstance().getEffectService().removeEffect(user, POISON_EFFECT_USER);
         }
+
+        return false;
     }
 
     @Listener

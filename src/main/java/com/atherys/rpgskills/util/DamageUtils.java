@@ -16,10 +16,6 @@ public final class DamageUtils {
             .absolute()
             .bypassesArmor();
 
-    private static final IndirectEntityDamageSource.Builder commonIndirect = IndirectEntityDamageSource.builder()
-            .absolute()
-            .bypassesArmor();
-
     public static EntityDamageSource directPhysical(Entity user) {
         return common
                 .entity(user)
@@ -27,10 +23,9 @@ public final class DamageUtils {
                 .build();
     }
 
-    public static EntityDamageSource directMagical(Entity user, Entity source) {
-        return commonIndirect
-                .entity(source)
-                .proxySource(user)
+    public static EntityDamageSource directMagical(Entity user) {
+        return common
+                .entity(user)
                 .type(DamageTypes.MAGIC)
                 .build();
     }

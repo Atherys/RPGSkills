@@ -9,6 +9,10 @@ import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.text.TextTemplate;
 
+import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
+import static com.atherys.rpgskills.util.CommonProperties.TIME;
+import static org.spongepowered.api.text.TextTemplate.arg;
+
 public class Siphon extends RPGSkill {
     public Siphon() {
         super(
@@ -16,7 +20,8 @@ public class Siphon extends RPGSkill {
                         .id("siphon")
                         .name("Siphon")
                         .descriptionTemplate(TextTemplate.of(
-                                ""
+                                "Siphon life from target enemy, dealing ", arg(DAMAGE), " magical damage to them and healing yourself for ",
+                                arg(DAMAGE), " over ", arg(TIME), " seconds."
                         ))
                         .cooldown("0")
                         .resourceCost("0")

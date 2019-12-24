@@ -2,8 +2,9 @@ package com.atherys.rpgskills.t2;
 
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
+import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.Effects;
-import com.atherys.rpgskills.util.PartySkill;
+import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
@@ -42,8 +43,12 @@ public class Disarm extends TargetedRPGSkill implements PartySkill {
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         if (arePlayersInParty(user, target)) throw isInParty();
 
-        int disarmTime = (int) asDouble(user, getProperty(TIME, String.class, DEFAULT_DISARM_TIME));
+        int disarmTime = asInt(user, getProperty(TIME, String.class, DEFAULT_DISARM_TIME));
+        double disarmDamage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DISARM_DAMAGE));
+
         AtherysSkills.getInstance().getEffectService().applyEffect(target, Effects.disarm(disarmTime));
+        target.damage(disarmDamage, DamageUtils.directPhysical(user));
+
         return CastResult.success();
     }
 }

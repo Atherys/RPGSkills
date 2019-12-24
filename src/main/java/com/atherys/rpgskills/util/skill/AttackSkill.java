@@ -1,4 +1,4 @@
-package com.atherys.rpgskills.util;
+package com.atherys.rpgskills.util.skill;
 
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
@@ -17,18 +17,18 @@ public interface AttackSkill {
         Living target = (Living) event.getTargetEntity();
 
         if (source.getSource() instanceof Living) {
-            attack((Living) source.getSource(), target);
+            event.setCancelled(attack((Living) source.getSource(), target));
             return;
         }
 
         if (source instanceof IndirectEntityDamageSource) {
             IndirectEntityDamageSource indirectSource = (IndirectEntityDamageSource)  source;
             if (indirectSource.getIndirectSource() instanceof Living)  {
-                attack((Living) indirectSource.getIndirectSource(), target);
+                event.setCancelled(attack((Living) indirectSource.getIndirectSource(), target));
             }
         }
     }
 
-    void attack(Living user, Living target);
+    boolean attack(Living user, Living target);
 
 }

@@ -51,7 +51,7 @@ public class Bolster extends RPGSkill {
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        int duration = (int) Math.round(asDouble(user, getProperty(TIME, String.class, DEFAULT_SHIELD_TIME)));
+        int duration = asInt(user, getProperty(TIME, String.class, DEFAULT_SHIELD_TIME));
         double physicalAmount = asDouble(user, getProperty(PHYS_PROP, String.class, DEFAULT_PHYS));
         double magicAmount = asDouble(user, getProperty(MAG_PROP, String.class, DEFAULT_MAG));
 

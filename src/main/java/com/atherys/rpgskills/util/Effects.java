@@ -15,7 +15,7 @@ import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.AttackEntityEvent;
-import org.spongepowered.api.event.entity.ConstructEntityEvent;
+import org.spongepowered.api.event.entity.SpawnEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.Root;
 
@@ -29,6 +29,10 @@ public final class Effects {
 
     public static Applyable damageOverTime(String id, String name, long duration, double damage) {
         return new DamageOverTimeEffect(id, name, duration, damage);
+    }
+
+    public static Applyable blankTemporary(String id, String name, int duration, boolean isPositive) {
+        return new BlankTemporaryEffect(id, name, duration, isPositive);
     }
 
     public static Applyable ofSlowness(String id, String name, int duration, int modifier) {
@@ -129,6 +133,23 @@ public final class Effects {
         }
     }
 
+    private static class BlankTemporaryEffect extends TemporaryEffect {
+
+        protected BlankTemporaryEffect(String id, String name, long duration, boolean isPositive) {
+            super(id, name, duration, isPositive);
+        }
+
+        @Override
+        protected boolean apply(ApplyableCarrier<?> character) {
+            return true;
+        }
+
+        @Override
+        protected boolean remove(ApplyableCarrier<?> character) {
+            return true;
+        }
+    }
+
     /**
      * An effect which prevents the target from attacking with melee or ranged.
      */
@@ -163,7 +184,7 @@ public final class Effects {
     }
 
     @Listener(order = Order.FIRST)
-    public void onShoot(ConstructEntityEvent.Post event, @Root Living source, @Getter("getTargetEntity") Projectile projectile) {
+    public void onShoot(SpawnEntityEvent event, @Root Living source, @Getter("getTargetEntity") Projectile projectile) {
         if (AtherysSkills.getInstance().getEffectService().hasEffect(source, DisarmEffect.DISARM_ID)) {
             projectile.remove();
         }

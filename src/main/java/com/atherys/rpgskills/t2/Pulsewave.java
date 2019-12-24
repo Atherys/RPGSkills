@@ -10,25 +10,34 @@ import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.text.TextTemplate;
+import org.spongepowered.api.util.Tuple;
 
 import java.util.Collection;
 
-import static com.atherys.rpgskills.util.CommonProperties.AMPLIFIER;
-import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpgskills.util.CommonProperties.*;
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Pulsewave extends RPGSkill {
     private static final String DEFAULT_RADIUS = "5.0";
     private static final String DEFAULT_DAMAGE = "5.0";
+
     public Pulsewave() {
         super(
                 SkillSpec.create()
                         .id("pulsewave")
                         .name("Pulsewave")
                         .descriptionTemplate(TextTemplate.of(
-                                ""
+                                "Send out a burst of energy, dealing ", arg(DAMAGE), " magical damage to all enemies in a ",
+                                arg(AMPLIFIER), " block radius from you."
                         ))
                         .cooldown("0")
                         .resourceCost("0")
+        );
+
+        setDescriptionArguments(
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
+                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_RADIUS))
         );
     }
 
@@ -36,8 +45,7 @@ public class Pulsewave extends RPGSkill {
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         Collection<Entity> inRadius = user.getNearbyEntities(asDouble(user, getProperty(AMPLIFIER, String.class, DEFAULT_RADIUS)));
         String damageExpression = getProperty(DAMAGE, String.class, DEFAULT_DAMAGE);
-        DamageSource damageSource = DamageUtils.directPhysical(user);
-        Vector3d userPosition = user.getLocation().getPosition();
+        DamageSource damageSource = DamageUtils.directMagical(user);
 
         inRadius.forEach(entity -> {
             if (entity instanceof Living && !entity.equals(user)) {

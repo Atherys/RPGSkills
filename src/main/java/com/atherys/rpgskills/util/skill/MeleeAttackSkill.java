@@ -1,4 +1,4 @@
-package com.atherys.rpgskills.util;
+package com.atherys.rpgskills.util.skill;
 
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
@@ -16,9 +16,9 @@ public interface MeleeAttackSkill {
 
         if (source.getSource() instanceof Living && event.getTargetEntity() instanceof Living) {
             Living user = (Living) source.getSource();
-            meleeAttack(user, (Living) event.getTargetEntity());
+            event.setCancelled(meleeAttack(user, (Living) event.getTargetEntity()));
         }
     }
 
-    void meleeAttack(Living user, Living target);
+    boolean meleeAttack(Living user, Living target);
 }

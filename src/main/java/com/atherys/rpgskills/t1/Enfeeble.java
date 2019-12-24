@@ -6,7 +6,7 @@ import com.atherys.rpg.api.stat.AttributeType;
 import com.atherys.rpg.api.stat.AttributeTypes;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.Effects;
-import com.atherys.rpgskills.util.PartySkill;
+import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;

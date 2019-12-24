@@ -1,4 +1,4 @@
-package com.atherys.rpgskills.util;
+package com.atherys.rpgskills.util.skill;
 
 import com.atherys.party.AtherysParties;
 import com.atherys.skills.api.exception.CastException;

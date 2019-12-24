@@ -2,6 +2,8 @@ package com.atherys.rpgskills.t1;
 
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
+import com.atherys.rpgskills.t2.VexingMark;
+import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.util.LivingUtils;
@@ -35,6 +37,9 @@ public class Recover extends RPGSkill {
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         double healAmount = asDouble(user, getProperty(HEALING, String.class, DEFAULT_HEAL_EXPRESSION));
+        if (AtherysSkills.getInstance().getEffectService().hasEffect(user, VexingMark.VEXING_MARK_EFFECT)) {
+            healAmount *= 0.5;
+        }
         LivingUtils.healLiving(user, healAmount);
         return CastResult.success();
     }
