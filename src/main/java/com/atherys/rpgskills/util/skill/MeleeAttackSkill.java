@@ -1,6 +1,7 @@
 package com.atherys.rpgskills.util.skill;
 
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.cause.entity.damage.source.IndirectEntityDamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
@@ -13,6 +14,10 @@ public interface MeleeAttackSkill {
 
     default void onDamage(DamageEntityEvent event, @Root EntityDamageSource source) {
         if (event instanceof IndirectEntityDamageSource) return;
+
+        if (source.getType() == DamageTypes.CUSTOM
+                || source.getType() == DamageTypes.MAGIC
+                || source.getType() == DamageTypes.VOID) return;
 
         if (source.getSource() instanceof Living && event.getTargetEntity() instanceof Living) {
             Living user = (Living) source.getSource();

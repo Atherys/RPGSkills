@@ -1,5 +1,6 @@
 package com.atherys.rpgskills.t2;
 
+import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
@@ -16,6 +17,7 @@ import org.spongepowered.api.entity.FallingBlock;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.CollideBlockEvent;
+import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.text.TextTemplate;
@@ -80,11 +82,13 @@ public class BoulderToss extends RPGSkill implements PartySkill {
             if (arePlayersInParty(user, target)) return;
 
             if (!target.equals(user)) {
+                boulders.remove(boulder.getUniqueId());
+                boulder.remove();
                 double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
                 target.damage(damage, DamageUtils.directMagical(user));
+                AtherysRPG.getInstance().getLogger().info("{} was hit", target.toString());
                 Vector3d normalized = boulder.getVelocity().normalize();
                 target.setVelocity(Vector3d.from(normalized.getX() * 1.5, 0.6, normalized.getZ() * 1.5));
-                boulder.remove();
             }
         }
     }
