@@ -7,6 +7,9 @@ import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
+/**
+ * Provides some useful utilities for dealing with parties inside a skill.
+ */
 public interface PartySkill extends Castable {
     default boolean arePlayersInParty(Living first, Living second) {
         return (first instanceof Player && second instanceof Player) &&

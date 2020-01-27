@@ -3,6 +3,7 @@ package com.atherys.rpgskills.t2;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
@@ -15,10 +16,11 @@ import org.spongepowered.api.util.Tuple;
 import java.util.Collection;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
-import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.CommonProperties.AMPLIFIER;
+import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
-public class Pulsewave extends RPGSkill {
+public class Pulsewave extends RPGSkill implements PartySkill {
     private static final String DEFAULT_RADIUS = "5.0";
     private static final String DEFAULT_DAMAGE = "5.0";
 
@@ -46,11 +48,15 @@ public class Pulsewave extends RPGSkill {
         Collection<Entity> inRadius = user.getNearbyEntities(asDouble(user, getProperty(AMPLIFIER, String.class, DEFAULT_RADIUS)));
         String damageExpression = getProperty(DAMAGE, String.class, DEFAULT_DAMAGE);
         DamageSource damageSource = DamageUtils.directMagical(user);
+        Vector3d userPosition = user.getLocation().getPosition();
 
         inRadius.forEach(entity -> {
-            if (entity instanceof Living && !entity.equals(user)) {
+            if (entity instanceof Living && !entity.equals(user) && !arePlayersInParty(user, (Living) entity)) {
                 Living target = (Living) entity;
                 double damage = asDouble(user, target, damageExpression);
+                Vector3d between = target.getLocation().getPosition().sub(userPosition).normalize();
+                target.setVelocity(Vector3d.from(between.getX() * 0.5, 0.4, between.getZ() * 0.5));
+
                 target.damage(damage, damageSource);
             }
         });

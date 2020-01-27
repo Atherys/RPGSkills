@@ -3,7 +3,6 @@ package com.atherys.rpgskills.t2;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
-import com.atherys.rpgskills.util.skill.AtherysSkill;
 import com.atherys.rpgskills.util.skill.MeleeAttackSkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.ApplyableCarrier;
@@ -19,7 +18,8 @@ import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
-import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
+import static com.atherys.rpgskills.util.CommonProperties.TIME;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {

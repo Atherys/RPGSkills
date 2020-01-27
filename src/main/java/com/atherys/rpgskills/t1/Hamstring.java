@@ -46,7 +46,7 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
         );
 
         setDescriptionArguments(
-                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "5.0")),
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_SLOW_AMPLIFIER)),
                 Tuple.of(TIME, ofProperty(this, AMPLIFIER, DEFAULT_SLOW_TIME))
         );

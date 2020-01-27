@@ -16,7 +16,6 @@ import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.AttackEntityEvent;
 import org.spongepowered.api.event.entity.SpawnEntityEvent;
-import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.Root;
 
 import java.util.Map;
@@ -51,11 +50,11 @@ public final class Effects {
         return new DisarmEffect(duration);
     }
 
-    private static class DamageOverTimeEffect extends PeriodicEffect {
+    public static class DamageOverTimeEffect extends PeriodicEffect {
 
         private double damagePerTick;
 
-        private DamageOverTimeEffect(String id, String name, long duration, double totalDamage) {
+        public DamageOverTimeEffect(String id, String name, long duration, double totalDamage) {
             super(id, name, 1000, (int) (duration / 1000), false);
             this.damagePerTick = totalDamage / duration * 1000;
         }
@@ -184,9 +183,13 @@ public final class Effects {
     }
 
     @Listener(order = Order.FIRST)
-    public void onShoot(SpawnEntityEvent event, @Root Living source, @Getter("getTargetEntity") Projectile projectile) {
+    public void onShoot(SpawnEntityEvent event, @Root Living source) {
         if (AtherysSkills.getInstance().getEffectService().hasEffect(source, DisarmEffect.DISARM_ID)) {
-            projectile.remove();
+            event.getEntities().forEach(entity -> {
+                if (entity instanceof Projectile) {
+                    entity.remove();
+                }
+            });
         }
     }
 }

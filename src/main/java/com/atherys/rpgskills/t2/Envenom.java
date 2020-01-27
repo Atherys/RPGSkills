@@ -3,9 +3,8 @@ package com.atherys.rpgskills.t2;
 import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
-import com.atherys.rpgskills.util.skill.AttackSkill;
-import com.atherys.rpgskills.util.CommonProperties;
 import com.atherys.rpgskills.util.Effects;
+import com.atherys.rpgskills.util.skill.AttackSkill;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
@@ -59,7 +58,7 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
         if (arePlayersInParty(user, target)) return true;
 
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, POISON_EFFECT_USER)) {
-            int poisonDamage = asInt(user, target, getProperty(CommonProperties.AMPLIFIER, String.class, DEFAULT_POISON_DAMAGE));
+            int poisonDamage = asInt(user, target, getProperty(DAMAGE, String.class, DEFAULT_POISON_DAMAGE));
             int poisonTime = asInt(user, target, getProperty(TIME, String.class, DEFAULT_POISON_TIME));
 
             Applyable poisonEffect = Effects.damageOverTime(
