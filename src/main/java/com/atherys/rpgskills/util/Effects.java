@@ -39,7 +39,7 @@ public final class Effects {
     }
 
     public static Applyable ofSpeed(String id, String name, int duration, int modifier) {
-        return new SlowEffect(id, name, duration, modifier);
+        return new SpeedEffect(id, name, duration, modifier);
     }
 
     public static Applyable ofBlindness(String id, String name, int duration, int modifier) {

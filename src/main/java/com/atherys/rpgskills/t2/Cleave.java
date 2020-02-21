@@ -44,7 +44,7 @@ public class Cleave extends RPGSkill implements PartySkill {
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         Vector3d direction = PhysicsUtils.getUnitDirection(user);
-        Vector3d centre = user.getLocation().getPosition().add(direction.getX() * 5, 0, direction.getZ() * 5);
+        Vector3d centre = user.getLocation().getPosition().add(direction.getX() * 2, 0, direction.getZ() * 2);
         AtherysRPG.getInstance().getLogger().info(centre.toString());
         Collection<Entity> inRadius = user.getWorld().getNearbyEntities(centre, 2);
         String damageExpression = getProperty(DAMAGE, String.class, DEFAULT_DAMAGE);

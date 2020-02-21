@@ -1,7 +1,9 @@
 package com.atherys.rpgskills.t1;
 
+import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
+import com.atherys.rpg.data.RPGKeys;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
@@ -43,7 +45,8 @@ public class FireballSkill extends RPGSkill {
         SmallFireball fireball = (SmallFireball) user.getWorld().createEntity(EntityTypes.SMALL_FIREBALL, spawnPosition);
 
         fireball.setShooter(user);
-        fireball.offer(Keys.ATTACK_DAMAGE, asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION)));
+        fireball.offer(Keys.FIRE_TICKS, 0);
+        fireball.offer(RPGKeys.DAMAGE_EXPRESSION, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
         Vector3d velocity = PhysicsUtils.getUnitDirection(user);
         fireball.setVelocity(velocity);
         fireball.offer(Keys.ACCELERATION, velocity.mul(0.05));
