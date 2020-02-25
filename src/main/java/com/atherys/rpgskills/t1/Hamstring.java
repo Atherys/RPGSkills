@@ -1,8 +1,10 @@
 package com.atherys.rpgskills.t1;
 
+import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.skill.MeleeAttackSkill;
 import com.atherys.rpgskills.util.skill.PartySkill;
@@ -16,7 +18,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.filter.cause.Root;
-import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
@@ -27,8 +28,8 @@ import static org.spongepowered.api.text.TextTemplate.arg;
 public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill {
     public static final String HAMSTRING_EFFECT = "hamstring-user-effect";
 
-    private static final String DEFAULT_SLOW_TIME = "60";
-    private static final String DEFAULT_SLOW_AMPLIFIER= "50";
+    private static final String DEFAULT_TIME = "60";
+    private static final String DEFAULT_AMPLIFIER = "50";
     private static final String DEFAULT_DAMAGE = "5.0";
 
     public Hamstring() {
@@ -36,9 +37,9 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
                 SkillSpec.create()
                 .id("hamstring")
                 .name("Hamstring")
-                .descriptionTemplate(TextTemplate.of(
+                .descriptionTemplate(DescriptionUtils.buildTemplate(
                         "Your next melee attack to hit an enemy will cripple them, dealing ", arg(DAMAGE),
-                        " physical damage and reducing their movement speed by ", arg(AMPLIFIER), "% for ", arg(TIME), " seconds."
+                        " physical damage and reducing their movement speed by ", arg(AMPLIFIER), "% for ", arg(TIME), "."
                 ))
                 .cooldown("0")
                 .resourceCost("0")
@@ -47,8 +48,8 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_SLOW_AMPLIFIER)),
-                Tuple.of(TIME, ofProperty(this, AMPLIFIER, DEFAULT_SLOW_TIME))
+                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_AMPLIFIER)),
+                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME)))
         );
     }
 
@@ -66,8 +67,8 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, HAMSTRING_EFFECT)) {
             AtherysSkills.getInstance().getEffectService().removeEffect(user, HAMSTRING_EFFECT);
 
-            int slowTime = asInt(user, getProperty(TIME, String.class, DEFAULT_SLOW_TIME));
-            int slowAmplifier = asInt(user, getProperty(AMPLIFIER, String.class, DEFAULT_SLOW_AMPLIFIER));
+            int slowTime = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
+            int slowAmplifier = asInt(user, getProperty(AMPLIFIER, String.class, DEFAULT_AMPLIFIER));
             double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
 
             target.damage(damage, DamageUtils.directPhysical(user));

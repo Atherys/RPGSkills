@@ -2,13 +2,13 @@ package com.atherys.rpgskills.t2;
 
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.util.LivingUtils;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
@@ -22,7 +22,7 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
                 SkillSpec.create()
                         .id("invigorate")
                         .name("Invigorate")
-                        .descriptionTemplate(TextTemplate.of(
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Reinvigorate a target ally, healing them for ", arg(HEALING), "."
                         ))
                         .cooldown("0")

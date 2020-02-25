@@ -2,12 +2,12 @@ package com.atherys.rpgskills.t2;
 
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.text.TextTemplate;
 
 public class Cleanse  extends TargetedRPGSkill implements PartySkill {
     public Cleanse() {
@@ -15,7 +15,7 @@ public class Cleanse  extends TargetedRPGSkill implements PartySkill {
                 SkillSpec.create()
                         .id("cleanse")
                         .name("Cleanse")
-                        .descriptionTemplate(TextTemplate.of(
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Cleanse target ally of any negative effects."
                         ))
                         .cooldown("0")

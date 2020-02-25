@@ -1,16 +1,19 @@
 package com.atherys.rpgskills.t2;
 
+import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.text.TextTemplate;
+import org.spongepowered.api.util.Tuple;
 
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
 import static com.atherys.rpgskills.util.CommonProperties.TIME;
 import static org.spongepowered.api.text.TextTemplate.arg;
@@ -25,12 +28,17 @@ public class Blindbolt extends TargetedRPGSkill implements PartySkill {
                 SkillSpec.create()
                         .id("blindbolt")
                         .name("Blindbolt")
-                        .descriptionTemplate(TextTemplate.of(
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Strike your target with a bolt of energy, dealing ",
-                                arg(DAMAGE), " magical damage and blinding them for ", arg(TIME), " seconds."
+                                arg(DAMAGE), " magical damage and blinding them for ", arg(TIME), "."
                         ))
                         .cooldown("0")
                         .resourceCost("0")
+        );
+
+        setDescriptionArguments(
+                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME))),
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE))
         );
     }
 

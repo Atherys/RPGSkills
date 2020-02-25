@@ -1,8 +1,10 @@
 package com.atherys.rpgskills.t2;
 
+import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.skill.MeleeAttackSkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.ApplyableCarrier;
@@ -14,7 +16,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.filter.cause.Root;
-import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
@@ -33,8 +34,8 @@ public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
                 SkillSpec.create()
                         .id("shield-spikes")
                         .name("ShieldSpikes")
-                        .descriptionTemplate(TextTemplate.of(
-                                "For the next ", arg(TIME), " seconds, any melee weapon attacks against you are blocked ",
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
+                                "For the next ", arg(TIME), ", any melee weapon attacks against you are blocked ",
                                 " and the attacker takes ", arg(DAMAGE), " physical damage."
                         ))
                         .cooldown("0")
@@ -42,8 +43,8 @@ public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
         );
 
         setDescriptionArguments(
-                Tuple.of(TIME, ofProperty(this, TIME, DEFAULT_TIME)),
-                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE))
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
+                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME)))
         );
     }
 

@@ -1,8 +1,10 @@
 package com.atherys.rpgskills.t2;
 
+import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.ApplyableCarrier;
@@ -10,7 +12,6 @@ import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.util.LivingUtils;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
@@ -27,9 +28,9 @@ public class Siphon extends TargetedRPGSkill {
                 SkillSpec.create()
                         .id("siphon")
                         .name("Siphon")
-                        .descriptionTemplate(TextTemplate.of(
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Siphon life from target enemy, dealing ", arg(DAMAGE), " magical damage to them and healing yourself for ",
-                                arg(HEALING), " over ", arg(TIME), " seconds."
+                                arg(HEALING), " over ", arg(TIME), "."
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -38,7 +39,7 @@ public class Siphon extends TargetedRPGSkill {
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(HEALING, ofProperty(this, HEALING, DEFAULT_HEALING)),
-                Tuple.of(TIME, ofProperty(this, TIME, DEFAULT_TIME))
+                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME)))
         );
     }
 

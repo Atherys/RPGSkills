@@ -4,15 +4,16 @@ import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.google.common.collect.ImmutableMap;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Slash extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_STR * 1.5, 0.5, 10.0)";
@@ -25,7 +26,9 @@ public class Slash extends TargetedRPGSkill implements PartySkill {
                         .cooldown("0")
                         .descriptionTemplate("Strikes the target with a powerful blow.")
                         .resourceCost("0")
-                        .descriptionTemplate(TextTemplate.of("Slash at your target, dealing ", TextTemplate.arg("damage"), " physical damage."))
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
+                                "Slash at your target, dealing ", arg("damage"), " physical damage."
+                        ))
                         .properties(ImmutableMap.of(MAX_RANGE_PROPERTY, "5.0"))
         );
 

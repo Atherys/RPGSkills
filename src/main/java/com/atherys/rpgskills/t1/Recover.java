@@ -3,6 +3,7 @@ package com.atherys.rpgskills.t1;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.t2.VexingMark;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
@@ -22,7 +23,7 @@ public class Recover extends RPGSkill {
                 SkillSpec.create()
                 .id("recovery")
                 .name("Recovery")
-                .descriptionTemplate(TextTemplate.of(
+                .descriptionTemplate(DescriptionUtils.buildTemplate(
                         "Recover some strength, healing yourself for ", TextTemplate.arg(HEALING), "."
                 ))
                 .resourceCost("0")

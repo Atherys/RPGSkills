@@ -2,12 +2,12 @@ package com.atherys.rpgskills.t2;
 
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.text.TextTemplate;
 
 public class Leap extends RPGSkill {
     public Leap() {
@@ -15,7 +15,7 @@ public class Leap extends RPGSkill {
                 SkillSpec.create()
                         .id("leap")
                         .name("Leap")
-                        .descriptionTemplate(TextTemplate.of(
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Jump forward in the direction you're facing."
                         ))
                         .cooldown("0")

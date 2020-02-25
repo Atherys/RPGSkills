@@ -4,6 +4,7 @@ import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.api.exception.CastException;
@@ -19,7 +20,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.CollideBlockEvent;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
-import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.util.Tuple;
 
 import java.util.Map;
@@ -40,7 +40,7 @@ public class BoulderToss extends RPGSkill implements PartySkill {
                 SkillSpec.create()
                         .id("boulder-toss")
                         .name("Boulder Toss")
-                        .descriptionTemplate(TextTemplate.of(
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Throw a boulder in the direction you’re facing. The first enemy hit takes ",
                                 arg(DAMAGE), " physical damage and is knocked back."
                         ))

@@ -1,9 +1,9 @@
 package com.atherys.rpgskills.t1;
 
-import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.data.RPGKeys;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
@@ -26,7 +26,7 @@ public class FireballSkill extends RPGSkill {
                 SkillSpec.create()
                 .id("fireball")
                 .name("Fireball")
-                .descriptionTemplate(TextTemplate.of(
+                .descriptionTemplate(DescriptionUtils.buildTemplate(
                         "Launch a fireball in the direction you’re facing, dealing ", TextTemplate.arg(DAMAGE),
                         " magical damage to any enemy hit."
                 ))

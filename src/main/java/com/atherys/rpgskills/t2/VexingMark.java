@@ -1,11 +1,12 @@
 package com.atherys.rpgskills.t2;
 
 import com.atherys.rpg.api.effect.TemporaryAttributesEffect;
+import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpg.api.stat.AttributeType;
 import com.atherys.rpg.api.stat.AttributeTypes;
-import com.atherys.rpgskills.util.Effects;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.ApplyableCarrier;
@@ -13,7 +14,6 @@ import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.util.Tuple;
 
 import java.util.Collections;
@@ -28,15 +28,15 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
     public static final String VEXING_MARK_EFFECT = "vexing-mark-effect";
 
     private static final String DEFAULT_DECREASE = "0.5";
-    private static final String DEFAULT_TIME = "10.0";
+    private static final String DEFAULT_TIME = "10000";
 
     public VexingMark() {
         super(
                 SkillSpec.create()
                         .id("vexing-mark")
                         .name("Vexing Mark")
-                        .descriptionTemplate(TextTemplate.of(
-                                "Mark your target, making them standout for ", arg(TIME), " seconds. All healing they receive is reduced by ",
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
+                                "Mark your target, making them standout for ", arg(TIME), ". All healing they receive is reduced by ",
                                 arg(AMPLIFIER), "% for the duration."
                         ))
                         .cooldown("0")
@@ -44,8 +44,8 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
         );
 
         setDescriptionArguments(
-                Tuple.of(TIME, ofProperty(this, TIME, DEFAULT_TIME)),
-                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_DECREASE))
+                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_DECREASE)),
+                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME)))
         );
     }
 

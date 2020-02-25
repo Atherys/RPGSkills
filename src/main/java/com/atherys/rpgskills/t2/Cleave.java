@@ -4,6 +4,7 @@ import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.api.exception.CastException;
@@ -12,7 +13,6 @@ import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
-import org.spongepowered.api.text.TextTemplate;
 import org.spongepowered.api.util.Tuple;
 
 import java.util.Collection;
@@ -28,7 +28,7 @@ public class Cleave extends RPGSkill implements PartySkill {
                 SkillSpec.create()
                         .id("cleave")
                         .name("Cleave")
-                        .descriptionTemplate(TextTemplate.of(
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Make a wide sweeping melee attack in front of you, dealing ",
                                 arg(DAMAGE), " physical damage to all enemies in the area."
                         ))
