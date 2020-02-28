@@ -57,7 +57,7 @@ public final class Effects {
         public DamageOverTimeEffect(String id, String name, long duration, double totalDamage) {
             super(id, name, 1000, (int) (duration / 1000), false);
             // total divided by ticks
-            this.damagePerTick = totalDamage / duration / 1000;
+            this.damagePerTick = totalDamage / (duration / 1000.0);
         }
 
         @Override
