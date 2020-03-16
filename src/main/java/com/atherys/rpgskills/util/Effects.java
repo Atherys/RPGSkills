@@ -42,7 +42,7 @@ public final class Effects {
         return new SpeedEffect(id, name, duration, modifier);
     }
 
-    public static Applyable ofBlindness(String id, String name, int duration, int modifier) {
+    public static Applyable ofBlindness(String id, String name, int duration) {
         return new BlindEffect(id, name, duration, false);
     }
 
@@ -81,13 +81,13 @@ public final class Effects {
                 .ambience(true);
 
 
-        private SlowEffect(String id, String name, int amplifier, int duration) {
+        private SlowEffect(String id, String name, int duration, int amplifier) {
             super(
                     id,
                     name,
                     builder
                         .amplifier(amplifier)
-                        .duration(duration)
+                        .duration(duration / 50)
                         .build(),
                     false
             );
@@ -101,13 +101,13 @@ public final class Effects {
                 .ambience(true);
 
 
-        private SpeedEffect(String id, String name, int amplifier, int duration) {
+        private SpeedEffect(String id, String name, int duration, int amplifier) {
             super(
                     id,
                     name,
                     builder
                         .amplifier(amplifier)
-                        .duration(duration)
+                        .duration(duration / 50)
                         .build(),
                     true
             );
@@ -125,7 +125,7 @@ public final class Effects {
                     id,
                     name,
                     builder
-                        .duration(duration)
+                        .duration(duration / 50)
                         .amplifier(1)
                         .build(),
                     isPositive

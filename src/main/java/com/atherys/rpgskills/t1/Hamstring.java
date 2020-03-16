@@ -28,7 +28,7 @@ import static org.spongepowered.api.text.TextTemplate.arg;
 public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill {
     public static final String HAMSTRING_EFFECT = "hamstring-user-effect";
 
-    private static final String DEFAULT_TIME = "60";
+    private static final String DEFAULT_TIME = "5000";
     private static final String DEFAULT_AMPLIFIER = "50";
     private static final String DEFAULT_DAMAGE = "5.0";
 

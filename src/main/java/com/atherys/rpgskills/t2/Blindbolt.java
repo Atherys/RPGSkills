@@ -52,7 +52,7 @@ public class Blindbolt extends TargetedRPGSkill implements PartySkill {
 
         AtherysSkills.getInstance().getEffectService().applyEffect(
                 target,
-                Effects.ofBlindness(BLINDBOLT_EFFECT, "Blindbolt", time, 2)
+                Effects.ofBlindness(BLINDBOLT_EFFECT, "Blindbolt", time)
         );
         return CastResult.success();
     }

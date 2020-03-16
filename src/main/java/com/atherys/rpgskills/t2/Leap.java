@@ -26,7 +26,7 @@ public class Leap extends RPGSkill {
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         Vector3d direction = PhysicsUtils.getUnitDirection(user);
-        user.setVelocity(Vector3d.from(direction.getX() * 1.5, 0.8, direction.getZ() * 1.5));
+        user.setVelocity(Vector3d.from(direction.getX(), 0.8, direction.getZ()));
 
         return CastResult.success();
     }
