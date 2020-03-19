@@ -63,7 +63,7 @@ public final class Effects {
         @Override
         protected boolean apply(ApplyableCarrier<?> character) {
             character.getLiving().ifPresent(living -> {
-                living.damage(damagePerTick, DamageSources.POISON);
+                living.damage(damagePerTick, DamageSources.VOID);
             });
             return true;
         }

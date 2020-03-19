@@ -21,15 +21,17 @@ import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofSource;
 import static com.atherys.rpg.api.skill.TargetedRPGSkill.MAX_RANGE_PROPERTY;
 import static com.atherys.rpgskills.util.CommonProperties.*;
 import static org.spongepowered.api.text.TextTemplate.arg;
+import static org.spongepowered.api.text.format.TextColors.GOLD;
 
 public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill {
     public static final String HAMSTRING_EFFECT = "hamstring-user-effect";
 
     private static final String DEFAULT_TIME = "5000";
-    private static final String DEFAULT_AMPLIFIER = "50";
+    private static final String DEFAULT_AMPLIFIER = "1";
     private static final String DEFAULT_DAMAGE = "5.0";
 
     public Hamstring() {
@@ -39,7 +41,7 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
                 .name("Hamstring")
                 .descriptionTemplate(DescriptionUtils.buildTemplate(
                         "Your next melee attack to hit an enemy will cripple them, dealing ", arg(DAMAGE),
-                        " physical damage and reducing their movement speed by ", arg(AMPLIFIER), "% for ", arg(TIME), "."
+                        " physical damage and reducing their movement speed by ", arg(AMPLIFIER), GOLD, "%", " for ", arg(TIME), "."
                 ))
                 .cooldown("0")
                 .resourceCost("0")
@@ -48,7 +50,7 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_AMPLIFIER)),
+                Tuple.of(AMPLIFIER, ofSource(getProperty(AMPLIFIER, String.class, DEFAULT_AMPLIFIER) + "*15")),
                 Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME)))
         );
     }

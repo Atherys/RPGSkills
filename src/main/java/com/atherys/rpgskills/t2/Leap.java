@@ -10,6 +10,11 @@ import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.entity.living.Living;
 
 public class Leap extends RPGSkill {
+    private static final String HORIZONTAL = "horizontal";
+    private static final String VERTICAL = "vertical";
+
+    private static final String DEFAULT_HORIZONTAL = "1";
+
     public Leap() {
         super(
                 SkillSpec.create()
@@ -26,7 +31,10 @@ public class Leap extends RPGSkill {
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         Vector3d direction = PhysicsUtils.getUnitDirection(user);
-        user.setVelocity(Vector3d.from(direction.getX(), 0.8, direction.getZ()));
+        double horizontal = asDouble(user, getProperty(HORIZONTAL, String.class, DEFAULT_HORIZONTAL));
+        double vertical = asDouble(user, getProperty(VERTICAL, String.class, DEFAULT_HORIZONTAL));
+
+        user.setVelocity(Vector3d.from(direction.getX() * horizontal, vertical, direction.getZ() * horizontal));
 
         return CastResult.success();
     }

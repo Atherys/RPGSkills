@@ -15,7 +15,8 @@ import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.util.Tuple;
 
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
@@ -53,7 +54,7 @@ public class Cleave extends RPGSkill implements PartySkill {
         Vector3d inFront = user.getLocation().getPosition().add(direction);
 
         AtherysRPG.getInstance().getLogger().info(centre.toString());
-        Collection<Entity> inRadius = user.getWorld().getNearbyEntities(centre, 1.75);
+        Set<Entity> inRadius = new HashSet<>(user.getWorld().getNearbyEntities(centre, 1.75));
         inRadius.addAll(user.getWorld().getNearbyEntities(inFront, 0.75));
 
         String damageExpression = getProperty(DAMAGE, String.class, DEFAULT_DAMAGE);

@@ -1,6 +1,7 @@
 package com.atherys.rpgskills.util;
 
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.TextElement;
 import org.spongepowered.api.text.TextRepresentable;
 import org.spongepowered.api.text.TextTemplate;
 
@@ -17,6 +18,7 @@ public class DescriptionUtils {
      */
     public static TextTemplate buildTemplate(Object...elements) {
         List<TextRepresentable> finalElements = new ArrayList<>();
+        boolean lastWasNotString = false;
         for (Object o : elements) {
             if (o instanceof TextTemplate.Arg.Builder) {
                 finalElements.add(
@@ -24,8 +26,16 @@ public class DescriptionUtils {
                                 .color(GOLD)
                                 .build()
                 );
+            } else if (o instanceof TextElement) {
+                finalElements.add(Text.of(o));
+                lastWasNotString = true;
             } else {
-                finalElements.add(Text.of(DARK_GREEN, o));
+                if (lastWasNotString) {
+                    finalElements.add(Text.of(o));
+                    lastWasNotString = false;
+                } else {
+                    finalElements.add(Text.of(DARK_GREEN, o));
+                }
             }
         }
         return TextTemplate.of(finalElements.toArray());
