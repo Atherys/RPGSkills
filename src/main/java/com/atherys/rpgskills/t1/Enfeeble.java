@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Enfeeble extends TargetedRPGSkill implements PartySkill {
@@ -51,7 +52,7 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "5.0")),
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_RESISTANCE_LOSS)),
                 Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME))),
-                Tuple.of(OTHER_TEXT, TextSerializers.FORMATTING_CODE.deserialize(this.getProperty(OTHER_TEXT, String.class, DEFAULT_OTHER_TEXT)))
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

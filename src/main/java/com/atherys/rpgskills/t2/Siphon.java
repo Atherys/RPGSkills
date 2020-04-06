@@ -17,6 +17,7 @@ import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Siphon extends TargetedRPGSkill {
@@ -42,7 +43,7 @@ public class Siphon extends TargetedRPGSkill {
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(HEALING, ofProperty(this, HEALING, DEFAULT_HEALING)),
                 Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME))),
-                Tuple.of(OTHER_TEXT, TextSerializers.FORMATTING_CODE.deserialize(this.getProperty(OTHER_TEXT, String.class, DEFAULT_OTHER_TEXT)))
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

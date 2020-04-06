@@ -21,6 +21,7 @@ import java.util.Map;
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
 import static com.atherys.rpgskills.util.CommonProperties.TIME;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Bolster extends RPGSkill {
@@ -50,7 +51,7 @@ public class Bolster extends RPGSkill {
                 Tuple.of(PHYS_PROP, ofProperty(this, PHYS_PROP, DEFAULT_PHYS)),
                 Tuple.of(MAG_PROP, ofProperty(this, MAG_PROP, DEFAULT_MAG)),
                 Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME))),
-                Tuple.of(OTHER_TEXT, TextSerializers.FORMATTING_CODE.deserialize(this.getProperty(OTHER_TEXT, String.class, DEFAULT_OTHER_TEXT)))
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

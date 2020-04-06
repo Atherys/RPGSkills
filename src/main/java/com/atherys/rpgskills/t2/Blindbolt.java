@@ -17,6 +17,7 @@ import org.spongepowered.api.util.Tuple;
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
 import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Blindbolt extends TargetedRPGSkill implements PartySkill {
@@ -43,7 +44,7 @@ public class Blindbolt extends TargetedRPGSkill implements PartySkill {
         setDescriptionArguments(
                 Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME))),
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-                Tuple.of(OTHER_TEXT, TextSerializers.FORMATTING_CODE.deserialize(this.getProperty(OTHER_TEXT, String.class, DEFAULT_OTHER_TEXT)))
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

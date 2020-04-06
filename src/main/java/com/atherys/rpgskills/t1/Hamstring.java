@@ -25,6 +25,7 @@ import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofSource;
 import static com.atherys.rpg.api.skill.TargetedRPGSkill.MAX_RANGE_PROPERTY;
 import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 import static org.spongepowered.api.text.format.TextColors.GOLD;
 
@@ -56,7 +57,7 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(AMPLIFIER, ofSource(getProperty(AMPLIFIER, String.class, DEFAULT_AMPLIFIER) + "*15")),
                 Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME))),
-                Tuple.of(OTHER_TEXT, TextSerializers.FORMATTING_CODE.deserialize(this.getProperty(OTHER_TEXT, String.class, DEFAULT_OTHER_TEXT)))
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 
