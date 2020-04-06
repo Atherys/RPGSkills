@@ -16,6 +16,7 @@ import org.spongepowered.api.plugin.Plugin;
 @Plugin(
         id = "rpgskills",
         name = "RPG Skills",
+        version = "%PLUGIN_VERSION%",
         description = "Proprietary skills for A'therys Horizons",
         dependencies = {
                 @Dependency(id = "atheryscore"),

@@ -11,17 +11,20 @@ import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
-import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
-import static com.atherys.rpgskills.util.CommonProperties.TIME;
+import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Blindbolt extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_DAMAGE = "5.0";
     private static final String DEFAULT_TIME = "5000";
     private static final String BLINDBOLT_EFFECT = "blindbolt-effect";
+
+    private static final String DEFAULT_OTHER_TEXT = "";
 
     public Blindbolt() {
         super(
@@ -30,7 +33,8 @@ public class Blindbolt extends TargetedRPGSkill implements PartySkill {
                         .name("Blindbolt")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Strike your target with a bolt of energy, dealing ",
-                                arg(DAMAGE), " magical damage and blinding them for ", arg(TIME), "."
+                                arg(DAMAGE), " magical damage and blinding them for ", arg(TIME), ". ",
+                                arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -38,7 +42,8 @@ public class Blindbolt extends TargetedRPGSkill implements PartySkill {
 
         setDescriptionArguments(
                 Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME))),
-                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE))
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
+                Tuple.of(OTHER_TEXT, TextSerializers.FORMATTING_CODE.deserialize(this.getProperty(OTHER_TEXT, String.class, DEFAULT_OTHER_TEXT)))
         );
     }
 

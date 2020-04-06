@@ -12,6 +12,7 @@ import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.util.LivingUtils;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
@@ -22,6 +23,7 @@ public class Siphon extends TargetedRPGSkill {
     private static final String DEFAULT_DAMAGE = "5.0";
     private static final String DEFAULT_HEALING = "5.0";
     private static final String DEFAULT_TIME = "10000";
+    private static final String DEFAULT_OTHER_TEXT = "";
 
     public Siphon() {
         super(
@@ -30,7 +32,7 @@ public class Siphon extends TargetedRPGSkill {
                         .name("Siphon")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Siphon life from target enemy, dealing ", arg(DAMAGE), " magical damage to them and healing yourself for ",
-                                arg(HEALING), " over ", arg(TIME), "."
+                                arg(HEALING), " over ", arg(TIME), ". ", arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -39,7 +41,8 @@ public class Siphon extends TargetedRPGSkill {
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(HEALING, ofProperty(this, HEALING, DEFAULT_HEALING)),
-                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME)))
+                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME))),
+                Tuple.of(OTHER_TEXT, TextSerializers.FORMATTING_CODE.deserialize(this.getProperty(OTHER_TEXT, String.class, DEFAULT_OTHER_TEXT)))
         );
     }
 

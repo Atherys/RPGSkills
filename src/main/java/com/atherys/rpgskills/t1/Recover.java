@@ -10,13 +10,17 @@ import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.util.LivingUtils;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.text.TextTemplate;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.HEALING;
+import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Recover extends RPGSkill {
-    private static String DEFAULT_HEAL_EXPRESSION = "5.0";
+    private final static String DEFAULT_HEAL_EXPRESSION = "5.0";
+    private final static String DEFAULT_OTHER_TEXT = "";
 
     public Recover() {
         super(
@@ -24,14 +28,15 @@ public class Recover extends RPGSkill {
                 .id("recovery")
                 .name("Recovery")
                 .descriptionTemplate(DescriptionUtils.buildTemplate(
-                        "Recover some strength, healing yourself for ", TextTemplate.arg(HEALING), "."
+                        "Recover some strength, healing yourself for ", arg(HEALING), ". ", arg(OTHER_TEXT)
                 ))
                 .resourceCost("0")
                 .cooldown("0")
         );
 
         setDescriptionArguments(
-                Tuple.of(HEALING, ofProperty(this, HEALING, DEFAULT_HEAL_EXPRESSION))
+                Tuple.of(HEALING, ofProperty(this, HEALING, DEFAULT_HEAL_EXPRESSION)),
+                Tuple.of(OTHER_TEXT, TextSerializers.FORMATTING_CODE.deserialize(this.getProperty(OTHER_TEXT, String.class, DEFAULT_OTHER_TEXT)))
         );
     }
 
