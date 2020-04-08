@@ -10,6 +10,7 @@ import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
+import org.spongepowered.api.boss.BossBarColors;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.util.Tuple;
 
@@ -37,7 +38,7 @@ public class Disarm extends TargetedRPGSkill implements PartySkill {
 
         setDescriptionArguments(
             Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-            Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME)))
+            Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
         );
     }
 
@@ -46,6 +47,7 @@ public class Disarm extends TargetedRPGSkill implements PartySkill {
         if (arePlayersInParty(user, target)) throw isInParty();
 
         int disarmTime = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
+        AtherysSkills.getInstance().getLogger().info("Disarm time: {}", disarmTime);
         double disarmDamage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
 
         AtherysSkills.getInstance().getEffectService().applyEffect(target, Effects.disarm(disarmTime));

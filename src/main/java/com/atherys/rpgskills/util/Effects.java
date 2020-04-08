@@ -153,23 +153,22 @@ public final class Effects {
     /**
      * An effect which prevents the target from attacking with melee or ranged.
      */
-    private static class DisarmEffect extends TemporaryEffect {
+    private static class DisarmEffect extends TemporaryPotionEffect {
         public static final String DISARM_ID = "disarm";
+        private static PotionEffect.Builder builder = PotionEffect.builder()
+                .particles(true)
+                .potionType(PotionEffectTypes.MINING_FATIGUE)
+                .ambience(true)
+                .amplifier(200);
 
         public DisarmEffect(int duration) {
             super(
                     DISARM_ID,
                     "Disarm",
-                    duration,
+                    builder.duration(duration / 50).build(),
                     false
             );
         }
-
-        @Override
-        protected boolean apply(ApplyableCarrier<?> character) { return true; }
-
-        @Override
-        protected boolean remove(ApplyableCarrier<?> character) { return true; }
     }
 
     @Listener(order = Order.FIRST)

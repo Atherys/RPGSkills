@@ -10,4 +10,5 @@ public final class CommonProperties {
 
     public static final String TIME = "time";
 
+    public static final String ATTRIBUTE = "attribute";
 }

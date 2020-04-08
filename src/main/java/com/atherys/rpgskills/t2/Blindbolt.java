@@ -37,7 +37,7 @@ public class Blindbolt extends TargetedRPGSkill implements PartySkill {
         );
 
         setDescriptionArguments(
-                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME))),
+                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE))
         );
     }

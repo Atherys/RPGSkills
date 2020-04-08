@@ -39,7 +39,7 @@ public class Siphon extends TargetedRPGSkill {
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(HEALING, ofProperty(this, HEALING, DEFAULT_HEALING)),
-                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME)))
+                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
         );
     }
 

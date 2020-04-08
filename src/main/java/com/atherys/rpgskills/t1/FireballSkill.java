@@ -12,11 +12,14 @@ import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.projectile.Projectile;
 import org.spongepowered.api.entity.projectile.Snowball;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.action.CollideEvent;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.text.TextTemplate;
@@ -57,14 +60,14 @@ public class FireballSkill extends RPGSkill implements PartySkill {
         Vector3d spawnPosition = user.getLocation().getPosition().add(0, 1.5, 0);
         Snowball fireball = (Snowball) user.getWorld().createEntity(EntityTypes.SNOWBALL, spawnPosition);
 
-        AtherysRPG.getInstance().getLogger().info(fireball.getValues().toString());
-
         fireball.setShooter(user);
         fireball.offer(Keys.FIRE_TICKS, Integer.MAX_VALUE);
         fireball.offer(new DamageExpressionData(getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION)));
         Vector3d velocity = PhysicsUtils.getUnitDirection(user).mul(2.5);
         fireball.setVelocity(velocity);
         fireball.offer(Keys.ACCELERATION, velocity.mul(0.05));
+
+        fireballs.put(fireball.getUniqueId(), user);
 
         user.getWorld().spawnEntity(fireball);
 
@@ -75,17 +78,15 @@ public class FireballSkill extends RPGSkill implements PartySkill {
     public void onFireballCollide(CollideEntityEvent event, @Getter("getSource") Snowball fireball) {
         Living user = fireballs.get(fireball.getUniqueId());
 
-        if (user != null && event.getEntities().get(0) instanceof Living) {
-            fireballs.remove(fireball.getUniqueId());
-            Living target = (Living) event.getEntities().get(0);
-
-            // If the entity is not a player, we don't want a double hit
-            if (!(target instanceof Player)) return;
+        if (user != null && event.getEntities().get(0) instanceof Player) {
+            Player target = (Player) event.getEntities().get(0);
 
             if (arePlayersInParty(user, target)) return;
 
             if (!target.equals(user)) {
-                DamageUtils.indirectSource(user, fireball);
+                fireballs.remove(fireball.getUniqueId());
+                double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
+                target.damage(damage, DamageUtils.directMagical(user));
             }
         }
     }

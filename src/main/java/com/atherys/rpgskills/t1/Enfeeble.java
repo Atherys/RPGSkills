@@ -48,7 +48,7 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "5.0")),
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_RESISTANCE_LOSS)),
-                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME)))
+                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
         );
     }
 

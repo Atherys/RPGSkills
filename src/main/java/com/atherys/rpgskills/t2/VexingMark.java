@@ -12,6 +12,7 @@ import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.ApplyableCarrier;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.util.Tuple;
@@ -20,8 +21,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
-import static com.atherys.rpgskills.util.CommonProperties.AMPLIFIER;
-import static com.atherys.rpgskills.util.CommonProperties.TIME;
+import static com.atherys.rpgskills.util.CommonProperties.*;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class VexingMark extends TargetedRPGSkill implements PartySkill {
@@ -29,6 +29,9 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
 
     private static final String DEFAULT_DECREASE = "0.5";
     private static final String DEFAULT_TIME = "10000";
+    private static final String DEFAULT_ATTRIBUTE = AttributeTypes.CONSTITUTION.getId();
+
+    private AttributeType attributeType;
 
     public VexingMark() {
         super(
@@ -45,15 +48,17 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
 
         setDescriptionArguments(
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_DECREASE)),
-                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME)))
+                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
         );
+
+        this.attributeType = Sponge.getRegistry().getType(AttributeType.class, getProperty(ATTRIBUTE, String.class, DEFAULT_ATTRIBUTE)).get();
     }
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         if (arePlayersInParty(user, target)) throw isInParty();
         double decrease = asDouble(user, target, getProperty(AMPLIFIER, String.class, DEFAULT_DECREASE));
-        Map<AttributeType, Double> decreasedAttributes = Collections.singletonMap(AttributeTypes.CONSTITUTION, -decrease);
+        Map<AttributeType, Double> decreasedAttributes = Collections.singletonMap(attributeType, -decrease);
 
         AtherysSkills.getInstance().getEffectService().applyEffect(
                 target,

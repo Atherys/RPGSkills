@@ -46,7 +46,7 @@ public class Bolster extends RPGSkill {
         setDescriptionArguments(
                 Tuple.of(PHYS_PROP, ofProperty(this, PHYS_PROP, DEFAULT_PHYS)),
                 Tuple.of(MAG_PROP, ofProperty(this, MAG_PROP, DEFAULT_MAG)),
-                Tuple.of(TIME, DescriptionArguments.time(getProperty(TIME, String.class, DEFAULT_TIME)))
+                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
         );
     }
 

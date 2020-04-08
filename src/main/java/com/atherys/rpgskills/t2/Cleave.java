@@ -50,12 +50,12 @@ public class Cleave extends RPGSkill implements PartySkill {
          P####
            ###
          */
-        Vector3d centre = user.getLocation().getPosition().add(direction.getX() * 3, 0, direction.getZ() * 3);
-        Vector3d inFront = user.getLocation().getPosition().add(direction);
+        Vector3d centre = user.getLocation().getPosition().add(direction.getX() * 3, 1, direction.getZ() * 3);
+        Vector3d inFront = user.getLocation().getPosition().add(direction.getX(), 1, direction.getZ());
 
         AtherysRPG.getInstance().getLogger().info(centre.toString());
         Set<Entity> inRadius = new HashSet<>(user.getWorld().getNearbyEntities(centre, 1.75));
-        inRadius.addAll(user.getWorld().getNearbyEntities(inFront, 0.75));
+        inRadius.addAll(user.getWorld().getNearbyEntities(inFront, 2));
 
         String damageExpression = getProperty(DAMAGE, String.class, DEFAULT_DAMAGE);
         DamageSource damageSource = DamageUtils.directPhysical(user);
