@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class VexingMark extends TargetedRPGSkill implements PartySkill {
@@ -29,6 +30,7 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
 
     private static final String DEFAULT_DECREASE = "0.5";
     private static final String DEFAULT_TIME = "10000";
+    private static final String DEFAULT_OTHER_TEXT = "";
     private static final String DEFAULT_ATTRIBUTE = AttributeTypes.CONSTITUTION.getId();
 
     private AttributeType attributeType;
@@ -40,7 +42,7 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
                         .name("Vexing Mark")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Mark your target, making them standout for ", arg(TIME), ". All healing they receive is reduced by ",
-                                arg(AMPLIFIER), "% for the duration."
+                                arg(AMPLIFIER), "% for the duration. ", arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -48,7 +50,8 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
 
         setDescriptionArguments(
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_DECREASE)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
+                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
 
         this.attributeType = Sponge.getRegistry().getType(AttributeType.class, getProperty(ATTRIBUTE, String.class, DEFAULT_ATTRIBUTE)).get();

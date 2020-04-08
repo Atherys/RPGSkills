@@ -19,8 +19,9 @@ import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
-import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
-import static com.atherys.rpgskills.util.CommonProperties.TIME;
+import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
@@ -28,6 +29,7 @@ public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
 
     private static final String DEFAULT_TIME = "10000";
     private static final String DEFAULT_DAMAGE = "5.0";
+    private static final String DEFAULT_OTHER_TEXT = "";
 
     public ShieldSpikes() {
         super(
@@ -36,7 +38,7 @@ public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
                         .name("ShieldSpikes")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "For the next ", arg(TIME), ", any melee weapon attacks against you are blocked ",
-                                " and the attacker takes ", arg(DAMAGE), " physical damage."
+                                " and the attacker takes ", arg(DAMAGE), " physical damage. ", arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -44,7 +46,8 @@ public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
+                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

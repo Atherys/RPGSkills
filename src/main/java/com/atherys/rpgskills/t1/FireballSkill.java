@@ -22,7 +22,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.CollideEvent;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
-import org.spongepowered.api.text.TextTemplate;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.Tuple;
 
 import java.util.Map;
@@ -31,9 +31,13 @@ import java.util.WeakHashMap;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
+import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class FireballSkill extends RPGSkill implements PartySkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_WIS * 1.5, 0.5, 10.0)";
+    private static final String DEFAULT_OTHER_TEXT = "";
 
     private Map<UUID, Living> fireballs = new WeakHashMap<>();
 
@@ -43,15 +47,16 @@ public class FireballSkill extends RPGSkill implements PartySkill {
                 .id("fireball")
                 .name("Fireball")
                 .descriptionTemplate(DescriptionUtils.buildTemplate(
-                        "Launch a fireball in the direction you’re facing, dealing ", TextTemplate.arg(DAMAGE),
-                        " magical damage to any enemy hit."
+                        "Launch a fireball in the direction you’re facing, dealing ", arg(DAMAGE),
+                        " magical damage to any enemy hit. ", arg(OTHER_TEXT)
                 ))
                 .resourceCost("0")
                 .cooldown("0")
         );
 
         setDescriptionArguments(
-                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE_EXPRESSION))
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE_EXPRESSION)),
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

@@ -18,7 +18,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
 import static com.atherys.rpgskills.util.CommonProperties.TIME;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Bolster extends RPGSkill {
@@ -29,6 +31,7 @@ public class Bolster extends RPGSkill {
     private static final String DEFAULT_TIME = "10000";
     private static final String DEFAULT_PHYS = "5.0";
     private static final String DEFAULT_MAG = "5.0";
+    private static final String DEFAULT_OTHER_TEXT = "";
 
     public Bolster() {
         super(
@@ -39,14 +42,15 @@ public class Bolster extends RPGSkill {
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Bolster your defenses, gaining ", arg(PHYS_PROP), " physical resistance and ", arg(MAG_PROP),
-                                " magical resistance for ", arg(TIME), "."
+                                " magical resistance for ", arg(TIME), ". ", arg(OTHER_TEXT)
                         ))
         );
 
         setDescriptionArguments(
                 Tuple.of(PHYS_PROP, ofProperty(this, PHYS_PROP, DEFAULT_PHYS)),
                 Tuple.of(MAG_PROP, ofProperty(this, MAG_PROP, DEFAULT_MAG)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
+                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

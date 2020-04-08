@@ -11,18 +11,21 @@ import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.Tuple;
 
 import java.util.Collection;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
-import static com.atherys.rpgskills.util.CommonProperties.AMPLIFIER;
-import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
+import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Pulsewave extends RPGSkill implements PartySkill {
     private static final String DEFAULT_RADIUS = "5.0";
     private static final String DEFAULT_DAMAGE = "5.0";
+    private static final String DEFAULT_OTHER_TEXT = "";
 
     public Pulsewave() {
         super(
@@ -31,7 +34,7 @@ public class Pulsewave extends RPGSkill implements PartySkill {
                         .name("Pulsewave")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Send out a burst of energy, dealing ", arg(DAMAGE), " magical damage to all enemies in a ",
-                                arg(AMPLIFIER), " block radius from you."
+                                arg(AMPLIFIER), " block radius from you. ", arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -39,7 +42,8 @@ public class Pulsewave extends RPGSkill implements PartySkill {
 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_RADIUS))
+                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_RADIUS)),
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

@@ -24,6 +24,7 @@ import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofSource;
 import static com.atherys.rpg.api.skill.TargetedRPGSkill.MAX_RANGE_PROPERTY;
 import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 import static org.spongepowered.api.text.format.TextColors.GOLD;
 
@@ -33,6 +34,7 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
     private static final String DEFAULT_TIME = "5000";
     private static final String DEFAULT_AMPLIFIER = "1";
     private static final String DEFAULT_DAMAGE = "5.0";
+    private static final String DEFAULT_OTHER_TEXT = "";
 
     public Hamstring() {
         super(
@@ -41,7 +43,9 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
                 .name("Hamstring")
                 .descriptionTemplate(DescriptionUtils.buildTemplate(
                         "Your next melee attack to hit an enemy will cripple them, dealing ", arg(DAMAGE),
-                        " physical damage and reducing their movement speed by ", arg(AMPLIFIER), GOLD, "%", " for ", arg(TIME), "."
+                        " physical damage and reducing their movement speed by ", arg(AMPLIFIER),
+                        GOLD, "%", " for ", arg(TIME),
+                        ". ", arg(OTHER_TEXT)
                 ))
                 .cooldown("0")
                 .resourceCost("0")
@@ -51,7 +55,8 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(AMPLIFIER, ofSource(getProperty(AMPLIFIER, String.class, DEFAULT_AMPLIFIER) + "*15")),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
+                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

@@ -21,6 +21,7 @@ import java.util.Map;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Enfeeble extends TargetedRPGSkill implements PartySkill {
@@ -30,6 +31,7 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_TIME = "5000";
     private static final String DEFAULT_RESISTANCE_LOSS = "5";
     private static final String DEFAULT_DAMAGE = "5";
+    private static final String DEFAULT_OTHER_TEXT = "";
 
     public Enfeeble() {
         super(
@@ -39,7 +41,7 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Weaken your target, dealing ", arg(DAMAGE), " magical damage over ",
                                 arg(TIME), " and reducing their physical and magic resistances by ",
-                                arg(AMPLIFIER), " for the duration."
+                                arg(AMPLIFIER), " for the duration.", arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -48,7 +50,8 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "5.0")),
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_RESISTANCE_LOSS)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
+                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

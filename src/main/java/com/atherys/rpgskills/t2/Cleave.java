@@ -13,6 +13,7 @@ import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
+import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.Tuple;
 
 import java.util.HashSet;
@@ -20,10 +21,14 @@ import java.util.Set;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
+import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
+import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Cleave extends RPGSkill implements PartySkill {
     private static String DEFAULT_DAMAGE = "5.0";
+    private static final String DEFAULT_OTHER_TEXT = "";
+
     public Cleave() {
         super(
                 SkillSpec.create()
@@ -31,14 +36,15 @@ public class Cleave extends RPGSkill implements PartySkill {
                         .name("Cleave")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Make a wide sweeping melee attack in front of you, dealing ",
-                                arg(DAMAGE), " physical damage to all enemies in the area."
+                                arg(DAMAGE), " physical damage to all enemies in the area. ", arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
                         .resourceCost("0")
         );
 
         setDescriptionArguments(
-                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE))
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
+                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

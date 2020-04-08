@@ -28,10 +28,12 @@ import java.util.WeakHashMap;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
+import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class BoulderToss extends RPGSkill implements PartySkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "5.0";
+    private static final String DEFAULT_OTHER_TEXT = "";
 
     private Map<UUID, Living> boulders = new WeakHashMap<>();
 
@@ -42,7 +44,7 @@ public class BoulderToss extends RPGSkill implements PartySkill {
                         .name("Boulder Toss")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Throw a boulder in the direction you’re facing. The first enemy hit takes ",
-                                arg(DAMAGE), " physical damage and is knocked back."
+                                arg(DAMAGE), " physical damage and is knocked back. ", arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
                         .resourceCost("0")
