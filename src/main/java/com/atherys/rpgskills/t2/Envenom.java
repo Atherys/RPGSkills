@@ -64,11 +64,12 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
             int poisonDamage = asInt(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
             int poisonTime = asInt(user, target, getProperty(TIME, String.class, DEFAULT_TIME));
 
-            Applyable poisonEffect = Effects.damageOverTime(
+            Applyable poisonEffect = Effects.pureDamageOverTime(
                     "poison",
                     "Poison",
                     poisonTime,
-                    poisonDamage
+                    poisonDamage,
+                    user
             );
 
             AtherysSkills.getInstance().getEffectService().applyEffect(target, poisonEffect);

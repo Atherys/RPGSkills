@@ -49,8 +49,7 @@ public class Siphon extends TargetedRPGSkill {
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         int duration = asInt(user, target, getProperty(TIME, String.class, DEFAULT_TIME));
-        double incoming = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
-        double damage = DamageUtils.magicDamage(target, incoming);
+        double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
         double healing = asDouble(user, getProperty(HEALING, String.class, DEFAULT_HEALING));
 
         AtherysSkills.getInstance().getEffectService().applyEffect(target, new SiphonEffect(duration, damage, healing, user));
@@ -62,7 +61,7 @@ public class Siphon extends TargetedRPGSkill {
         private double healingPerTick;
 
         protected SiphonEffect(long duration, double damage, double healing, Living caster) {
-            super("siphon", "Siphon", duration, damage);
+            super("siphon", "Siphon", duration, damage, DamageUtils.directMagical(caster));
             this.caster = caster;
             this.healingPerTick = healing / duration * 1000;
         }
@@ -83,5 +82,6 @@ public class Siphon extends TargetedRPGSkill {
         protected boolean remove(ApplyableCarrier<?> character) {
             return true;
         }
+
     }
 }

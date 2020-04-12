@@ -1,24 +1,44 @@
 package com.atherys.rpgskills.util;
 
 import com.atherys.core.utils.EntityUtils;
+import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.effect.TemporaryAttributesEffect;
 import com.atherys.rpg.api.stat.AttributeType;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.*;
+import com.flowpowered.math.vector.Vector3d;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.projectile.Projectile;
+import org.spongepowered.api.entity.projectile.arrow.Arrow;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
+import org.spongepowered.api.event.SpongeEventFactory;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.EventContext;
+import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
+import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.AttackEntityEvent;
+import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.entity.SpawnEntityEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.event.message.MessageEvent;
+import org.spongepowered.api.text.channel.MessageChannel;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.gamerule.DefaultGameRules;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 public final class Effects {
 
@@ -26,8 +46,20 @@ public final class Effects {
         return new TemporaryAttributesEffect(id, name, duration, buffs, isPositive);
     }
 
-    public static Applyable damageOverTime(String id, String name, long duration, double damage) {
-        return new DamageOverTimeEffect(id, name, duration, damage);
+    public static Applyable damageOverTime(String id, String name, long duration, double damage, EntityDamageSource damageSource) {
+        return new DamageOverTimeEffect(id, name, duration, damage, damageSource);
+    }
+
+    public static Applyable magicalDamageOverTime(String id, String name, long duration, double damage, Living user) {
+        return damageOverTime(id, name, duration, damage, DamageUtils.directMagical(user));
+    }
+
+    public static Applyable physicalDamageOverTime(String id, String name, long duration, double damage, Living user) {
+        return damageOverTime(id, name, duration, damage, DamageUtils.directPhysical(user));
+    }
+
+    public static Applyable pureDamageOverTime(String id, String name, long duration, double damage, Living user) {
+        return damageOverTime(id, name, duration, damage, DamageUtils.directPure(user));
     }
 
     public static Applyable blankTemporary(String id, String name, int duration, boolean isPositive) {
@@ -53,17 +85,41 @@ public final class Effects {
     public static class DamageOverTimeEffect extends PeriodicEffect {
 
         private double damagePerTick;
+        private Cause source;
+        private boolean keepInventory;
 
-        public DamageOverTimeEffect(String id, String name, long duration, double totalDamage) {
+        public DamageOverTimeEffect(String id, String name, long duration, double totalDamage, EntityDamageSource source) {
             super(id, name, 1000, (int) (duration / 1000), false);
             // total divided by ticks
             this.damagePerTick = totalDamage / (duration / 1000.0);
+            this.source = Cause.of(EventContext.empty(), source);
+            this.keepInventory = Boolean.getBoolean(source.getSource().getWorld().getGameRule(DefaultGameRules.KEEP_INVENTORY).orElse("true"));
         }
 
         @Override
         protected boolean apply(ApplyableCarrier<?> character) {
             character.getLiving().ifPresent(living -> {
-                living.damage(damagePerTick, DamageSources.VOID);
+                DamageEntityEvent event = SpongeEventFactory.createDamageEntityEvent(
+                        source, Collections.emptyList(), living, damagePerTick
+                );
+                Sponge.getEventManager().post(event);
+                if (!event.isCancelled()) {
+
+                    if (event.willCauseDeath() && living.health().get() > 0) {
+                        DestructEntityEvent.Death deathEvent = SpongeEventFactory.createDestructEntityEventDeath(
+                                source,
+                                MessageChannel.TO_PLAYERS,
+                                Optional.empty(),
+                                new MessageEvent.MessageFormatter(),
+                                living,
+                                keepInventory,
+                                true
+                        );
+                        Sponge.getEventManager().post(deathEvent);
+                    }
+
+                    living.damage(event.getBaseDamage(), DamageSources.VOID);
+                }
             });
             return true;
         }
