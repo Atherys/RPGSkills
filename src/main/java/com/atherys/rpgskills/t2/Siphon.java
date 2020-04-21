@@ -74,7 +74,9 @@ public class Siphon extends TargetedRPGSkill {
             }
 
             super.apply(character);
-            LivingUtils.healLiving(caster, healingPerTick);
+            if (caster.health().get() > 0) {
+                LivingUtils.healLiving(caster, healingPerTick);
+            }
             return true;
         }
 
