@@ -68,7 +68,8 @@ public class Siphon extends TargetedRPGSkill {
 
         @Override
         protected boolean apply(ApplyableCarrier<?> character) {
-            if (caster.isRemoved()) {
+            if (caster.isRemoved() || caster.health().get() <= 0) {
+                AtherysSkills.getInstance().getLogger().info("Remove siphon");
                 this.setRemoved();
                 return true;
             }
