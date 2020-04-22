@@ -86,14 +86,15 @@ public class BoulderToss extends RPGSkill implements PartySkill {
             if (arePlayersInParty(user, target)) return;
 
             if (!target.equals(user)) {
-                double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
-                boolean dealtDamage = target.damage(damage, DamageUtils.directMagical(user));
+                Vector3d velocity = boulder.getVelocity().normalize();
                 boulders.remove(boulder.getUniqueId());
                 boulder.remove();
 
+                double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
+                boolean dealtDamage = target.damage(damage, DamageUtils.directMagical(user));
+
                 if (dealtDamage) {
-                    Vector3d normalized = boulder.getVelocity().normalize();
-                    target.setVelocity(Vector3d.from(normalized.getX() * 1.5, 0.6, normalized.getZ() * 1.5));
+                    target.setVelocity(Vector3d.from(velocity.getX() * 1.5, 0.6, velocity.getZ() * 1.5));
                 }
             }
         }
