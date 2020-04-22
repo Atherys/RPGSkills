@@ -15,8 +15,10 @@ import com.atherys.skills.api.skill.CastResult;
 import com.google.common.collect.ImmutableMap;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.util.Tuple;
 
@@ -86,8 +88,8 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
         return false;
     }
 
-    @Listener
-    public void onMeleeAttack(DamageEntityEvent event, @Root EntityDamageSource source) {
-        onDamage(event, source);
+    @Listener(order = Order.LAST)
+    public void onMeleeAttack(DamageEntityEvent event, @Root EntityDamageSource source, @Getter("getTargetEntity") Living target) {
+        onDamage(event, source, target);
     }
 }

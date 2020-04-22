@@ -15,6 +15,7 @@ import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.util.Tuple;
 
@@ -59,8 +60,8 @@ public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
     }
 
     @Listener
-    public void onAttack(DamageEntityEvent event, @Root EntityDamageSource source) {
-        onDamage(event, source);
+    public void onAttack(DamageEntityEvent event, @Root EntityDamageSource source, @Getter("getTargetEntity") Living target) {
+        onDamage(event, source, target);
     }
 
     @Override
