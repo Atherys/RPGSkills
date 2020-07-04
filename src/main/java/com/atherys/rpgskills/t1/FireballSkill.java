@@ -12,6 +12,8 @@ import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.effect.particle.ParticleEffect;
+import org.spongepowered.api.effect.particle.ParticleOptions;
 import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Living;
@@ -40,6 +42,12 @@ public class FireballSkill extends RPGSkill implements PartySkill {
     private static final String DEFAULT_OTHER_TEXT = "";
 
     private Map<UUID, Living> fireballs = new WeakHashMap<>();
+
+    private static final ParticleEffect particleEffect = ParticleEffect.builder()
+            .type(ParticleTypes.FLAME)
+            .quantity(25)
+            .offset(Vector3d.ONE)
+            .build();
 
     public FireballSkill() {
         super(
@@ -92,6 +100,7 @@ public class FireballSkill extends RPGSkill implements PartySkill {
                 fireballs.remove(fireball.getUniqueId());
                 double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
                 target.damage(damage, DamageUtils.directMagical(user));
+                target.getWorld().spawnParticles(particleEffect, target.getLocation().getPosition());
             }
         }
     }

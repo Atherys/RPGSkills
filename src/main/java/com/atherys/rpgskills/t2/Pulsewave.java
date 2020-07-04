@@ -1,5 +1,6 @@
 package com.atherys.rpgskills.t2;
 
+import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
@@ -8,11 +9,16 @@ import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
+import org.spongepowered.api.effect.particle.ParticleEffect;
+import org.spongepowered.api.effect.particle.ParticleTypes;
+import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
-import org.spongepowered.api.text.serializer.TextSerializers;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.util.Tuple;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import java.util.Collection;
 
@@ -26,6 +32,11 @@ public class Pulsewave extends RPGSkill implements PartySkill {
     private static final String DEFAULT_RADIUS = "5.0";
     private static final String DEFAULT_DAMAGE = "5.0";
     private static final String DEFAULT_OTHER_TEXT = "";
+
+    private static final ParticleEffect particleEffect = ParticleEffect.builder()
+            .type(ParticleTypes.MAGIC_CRITICAL_HIT)
+            .quantity(5)
+            .build();
 
     public Pulsewave() {
         super(
@@ -49,7 +60,8 @@ public class Pulsewave extends RPGSkill implements PartySkill {
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        Collection<Entity> inRadius = user.getNearbyEntities(asDouble(user, getProperty(AMPLIFIER, String.class, DEFAULT_RADIUS)));
+        double radius = asDouble(user, getProperty(AMPLIFIER, String.class, DEFAULT_RADIUS));
+        Collection<Entity> inRadius = user.getNearbyEntities(radius);
         String damageExpression = getProperty(DAMAGE, String.class, DEFAULT_DAMAGE);
         DamageSource damageSource = DamageUtils.directMagical(user);
         Vector3d userPosition = user.getLocation().getPosition();
@@ -64,6 +76,32 @@ public class Pulsewave extends RPGSkill implements PartySkill {
                 target.damage(damage, damageSource);
             }
         });
+
+
+        spawnParticles(user.getLocation(), radius / 3);
+
+        Task.builder()
+                .delayTicks(4)
+                .execute(() -> spawnParticles(user.getLocation(), radius * 2/3))
+                .submit(AtherysRPG.getInstance());
+
+        Task.builder()
+                .delayTicks(8)
+                .execute(() -> spawnParticles(user.getLocation(), radius))
+                .submit(AtherysRPG.getInstance());
+
         return CastResult.success();
+    }
+
+    private void spawnParticles(Location<World> location, double radius) {
+        Vector3d position = location.getPosition();
+        double y = position.getY() + 1;
+
+        for (double i = 0; i < Math.PI * 2; i += 0.1) {
+            double x = position.getX() + radius * Math.cos(i);
+            double z = position.getZ() + radius * Math.sin(i);
+
+            location.getExtent().spawnParticles(particleEffect, Vector3d.from(x, y, z));
+        }
     }
 }

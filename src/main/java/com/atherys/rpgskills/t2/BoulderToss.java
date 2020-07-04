@@ -82,6 +82,7 @@ public class BoulderToss extends RPGSkill implements PartySkill {
 
         if (user != null && event.getEntities().get(0) instanceof Living) {
             Living target = (Living) event.getEntities().get(0);
+            AtherysRPG.getInstance().getLogger().info("Here");
 
             if (arePlayersInParty(user, target)) return;
 
@@ -92,6 +93,8 @@ public class BoulderToss extends RPGSkill implements PartySkill {
 
                 double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
                 boolean dealtDamage = target.damage(damage, DamageUtils.directMagical(user));
+
+                AtherysRPG.getInstance().getLogger().info("Damaged: {}", damage);
 
                 if (dealtDamage) {
                     target.setVelocity(Vector3d.from(velocity.getX() * 1.5, 0.6, velocity.getZ() * 1.5));

@@ -4,13 +4,23 @@ import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.t2.VexingMark;
 import com.atherys.rpgskills.util.DescriptionUtils;
+import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.util.LivingUtils;
+import com.flowpowered.math.vector.Vector3d;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.effect.particle.ParticleEffect;
+import org.spongepowered.api.effect.particle.ParticleType;
+import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.util.Tuple;
+import org.spongepowered.api.world.World;
 
+
+import java.util.Arrays;
+import java.util.List;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.HEALING;
@@ -21,6 +31,32 @@ import static org.spongepowered.api.text.TextTemplate.arg;
 public class Recover extends RPGSkill {
     private final static String DEFAULT_HEAL_EXPRESSION = "5.0";
     private final static String DEFAULT_OTHER_TEXT = "";
+
+    private static final ParticleEffect particleEffect = ParticleEffect.builder()
+            .type(ParticleTypes.HAPPY_VILLAGER)
+            .quantity(2)
+            .build();
+
+    private static final List<Vector3d> offsets = Arrays.asList(
+            Vector3d.from(0, 3, 0),
+            Vector3d.from(0.5, 3, 0),
+            Vector3d.from(0, 3, 0.5),
+            Vector3d.from(0, 3.2, 0),
+            Vector3d.from(0, 3.5, 0),
+            Vector3d.from(0.1, 3.3, 0.7),
+            Vector3d.from(0, 2.8, 0),
+            Vector3d.from(0.5, 3, 0.2),
+            Vector3d.from(0.3, 2.7, 0.3),
+            Vector3d.from(0.7, 3.3, 0.1),
+            Vector3d.from(0, 3.5, 1),
+            Vector3d.from(0, 3, 0.5),
+            Vector3d.from(-0.5, 3, 0.0),
+            Vector3d.from(-0.2, 3.4, -0.2),
+            Vector3d.from(-0.7, 3.8, 0.3),
+            Vector3d.from(-0.4, 2.6, -0.5),
+            Vector3d.from(0.4, 3.1, -0.8),
+            Vector3d.from(0.2, 2.9, -0.5)
+    );
 
     public Recover() {
         super(
@@ -47,6 +83,7 @@ public class Recover extends RPGSkill {
             healAmount *= 0.5;
         }
         LivingUtils.healLiving(user, healAmount);
+        PhysicsUtils.spawnParticleCloud(particleEffect, user.getLocation());
         return CastResult.success();
     }
 }

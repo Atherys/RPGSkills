@@ -1,8 +1,10 @@
 package com.atherys.rpgskills.t2;
 
+import com.atherys.core.utils.Sound;
 import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
+import com.atherys.rpgskills.RpgSkills;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.skill.MeleeAttackSkill;
@@ -11,13 +13,26 @@ import com.atherys.skills.api.effect.ApplyableCarrier;
 import com.atherys.skills.api.effect.TemporaryEffect;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
+import com.atherys.skills.effect.EntityEffectCarrier;
+import com.flowpowered.math.vector.Vector3d;
+import org.spongepowered.api.effect.particle.ParticleEffect;
+import org.spongepowered.api.effect.particle.ParticleTypes;
+import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.util.Tuple;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
@@ -31,6 +46,16 @@ public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
     private static final String DEFAULT_TIME = "10000";
     private static final String DEFAULT_DAMAGE = "5.0";
     private static final String DEFAULT_OTHER_TEXT = "";
+
+    private static ParticleEffect particleEffect = ParticleEffect.builder()
+            .quantity(1)
+            .type(ParticleTypes.ANGRY_VILLAGER)
+            .build();
+
+    private static Sound zombie = Sound.builder(SoundTypes.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1).build();
+    private static Sound blaze = Sound.builder(SoundTypes.ENTITY_BLAZE_HURT, 1).build();
+
+    private Set<Living> shieldSpikers;
 
     public ShieldSpikes() {
         super(
@@ -50,12 +75,31 @@ public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
                 Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
+
+        shieldSpikers = new HashSet<>();
+
+        Task.builder()
+                .execute(() -> {
+                    shieldSpikers.removeIf(living -> {
+
+                        if (!living.isRemoved()) {
+                            living.getWorld().spawnParticles(particleEffect, living.getLocation().getPosition().add(0, 1, 0));
+                            return !AtherysSkills.getInstance().getEffectService().hasEffect(living, SHIELD_SPIKES_EFFECT);
+                        }
+
+                        return true;
+                    });
+                })
+                .interval(500, TimeUnit.MILLISECONDS)
+                .submit(RpgSkills.getInstance());
     }
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         int duration = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
         AtherysSkills.getInstance().getEffectService().applyEffect(user, new ShieldSpikesEffect(duration));
+        user.getWorld().spawnParticles(particleEffect, user.getLocation().getPosition().add(0, 1, 0));
+        shieldSpikers.add(user);
         return CastResult.success();
     }
 
@@ -69,6 +113,12 @@ public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
         if (AtherysSkills.getInstance().getEffectService().hasEffect(target, SHIELD_SPIKES_EFFECT)) {
             double damage = asDouble(target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
             user.damage(damage, DamageUtils.directPhysical(target));
+
+            Location<World> location = target.getLocation();
+
+            Sound.playSound(zombie, location.getExtent(), location.getPosition());
+            Sound.playSound(blaze, location.getExtent(), location.getPosition());
+
             return true;
         }
 
