@@ -37,27 +37,6 @@ public class Recover extends RPGSkill {
             .quantity(2)
             .build();
 
-    private static final List<Vector3d> offsets = Arrays.asList(
-            Vector3d.from(0, 3, 0),
-            Vector3d.from(0.5, 3, 0),
-            Vector3d.from(0, 3, 0.5),
-            Vector3d.from(0, 3.2, 0),
-            Vector3d.from(0, 3.5, 0),
-            Vector3d.from(0.1, 3.3, 0.7),
-            Vector3d.from(0, 2.8, 0),
-            Vector3d.from(0.5, 3, 0.2),
-            Vector3d.from(0.3, 2.7, 0.3),
-            Vector3d.from(0.7, 3.3, 0.1),
-            Vector3d.from(0, 3.5, 1),
-            Vector3d.from(0, 3, 0.5),
-            Vector3d.from(-0.5, 3, 0.0),
-            Vector3d.from(-0.2, 3.4, -0.2),
-            Vector3d.from(-0.7, 3.8, 0.3),
-            Vector3d.from(-0.4, 2.6, -0.5),
-            Vector3d.from(0.4, 3.1, -0.8),
-            Vector3d.from(0.2, 2.9, -0.5)
-    );
-
     public Recover() {
         super(
                 SkillSpec.create()
