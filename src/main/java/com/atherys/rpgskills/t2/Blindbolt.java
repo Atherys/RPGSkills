@@ -13,14 +13,20 @@ import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.effect.particle.ParticleEffect;
+import org.spongepowered.api.effect.particle.ParticleOptions;
+import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.entity.projectile.arrow.Arrow;
+import org.spongepowered.api.entity.projectile.EnderPearl;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
+import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
+import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.util.Color;
 import org.spongepowered.api.util.Tuple;
 
 import java.util.Map;
@@ -37,6 +43,12 @@ public class Blindbolt extends RPGSkill implements PartySkill {
     private static final String DEFAULT_TIME = "5000";
     private static final String BLINDBOLT_EFFECT = "blindbolt-effect";
     private static final String DEFAULT_OTHER_TEXT = "";
+
+    private static final ParticleEffect trail = ParticleEffect.builder()
+            .type(ParticleTypes.REDSTONE_DUST)
+            .option(ParticleOptions.COLOR, Color.BLACK)
+            .build();
+
     private final Map<UUID, Living> blindBolts = new WeakHashMap<>();
 
     public Blindbolt() {
@@ -63,13 +75,12 @@ public class Blindbolt extends RPGSkill implements PartySkill {
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         Vector3d spawnPosition = user.getLocation().getPosition().add(0, 1.5, 0);
-        Arrow bolt = (Arrow) user.getWorld().createEntity(EntityTypes.TIPPED_ARROW, spawnPosition);
+        EnderPearl bolt = (EnderPearl) user.getWorld().createEntity(EntityTypes.ENDER_PEARL, spawnPosition);
 
         bolt.setShooter(user);
         Vector3d velocity = PhysicsUtils.getUnitDirection(user).mul(3);
         bolt.setVelocity(velocity);
         bolt.offer(Keys.ACCELERATION, velocity.mul(0.05));
-        bolt.offer(Keys.INVISIBLE, true);
 
         user.getWorld().spawnEntity(bolt);
         blindBolts.put(bolt.getUniqueId(), user);
@@ -78,7 +89,15 @@ public class Blindbolt extends RPGSkill implements PartySkill {
     }
 
     @Listener
-    public void onBlindBoltCollide(CollideEntityEvent event, @Getter("getSource") Arrow bolt) {
+    public void onEnderPearlTeleport(MoveEntityEvent.Teleport event, @First EnderPearl bolt) {
+        if (blindBolts.containsKey(bolt.getUniqueId())) {
+            event.setCancelled(true);
+            blindBolts.remove(bolt.getUniqueId());
+        }
+    }
+
+    @Listener
+    public void onBlindBoltCollide(CollideEntityEvent event, @Getter("getSource") EnderPearl bolt) {
         Living user = blindBolts.get(bolt.getUniqueId());
 
         if (user != null && event.getEntities().get(0) instanceof Player) {
@@ -87,7 +106,6 @@ public class Blindbolt extends RPGSkill implements PartySkill {
             if (arePlayersInParty(user, target)) return;
 
             if (!target.equals(user)) {
-                blindBolts.remove(bolt.getUniqueId());
                 double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
                 target.damage(damage, DamageUtils.directMagical(user));
 
