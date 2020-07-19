@@ -3,7 +3,9 @@ package com.atherys.rpgskills.util;
 import com.flowpowered.math.imaginary.Quaterniond;
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.effect.particle.ParticleEffect;
+import org.spongepowered.api.effect.sound.SoundType;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -44,6 +46,13 @@ public final class PhysicsUtils {
         Vector3d position = location.getPosition();
         for (Vector3d offset : offsets) {
             location.getExtent().spawnParticles(particleEffect, position.add(offset));
+        }
+    }
+
+    public static void playSoundForLiving(Living living, SoundType sound, double volume) {
+        if (living instanceof Player) {
+            Player player = (Player) living;
+            player.playSound(sound, player.getPosition(), volume);
         }
     }
 
