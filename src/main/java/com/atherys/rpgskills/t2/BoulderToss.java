@@ -82,7 +82,7 @@ public class BoulderToss extends RPGSkill implements PartySkill {
         );
     }
 
-    private void applyAOEDamage(Location<World> eventLocation, Living user) {
+    private void applyAOEDamage(Location<World> eventLocation, Living user, Living excludeEntity) {
         double damageModifier = asDouble(user, getProperty(AOE_DAMAGE_MODIFIER, String.class, DEFAULT_AOE_DAMAGE_MODIFIER));
         double range = asDouble(user, getProperty(AOE_RANGE, String.class, DEFAULT_AOE_RANGE));
         Collection<Entity> entities = eventLocation.getExtent().getNearbyEntities(eventLocation.getPosition(), range);
@@ -92,7 +92,7 @@ public class BoulderToss extends RPGSkill implements PartySkill {
         PhysicsUtils.spawnParticleCloud(effect, eventLocation.setPosition(new Vector3d(position.getX(), position.getFloorY() - 2, position.getZ())));
 
         entities.forEach(target -> {
-            if (target instanceof Living && !arePlayersInParty(user, (Living) target) && !target.equals(user)) {
+            if (target instanceof Living && !arePlayersInParty(user, (Living) target) && !target.equals(user) && !target.equals(excludeEntity)) {
                 double damage = (asDouble(user, (Living) target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION))) / damageModifier;
                 target.damage(damage, DamageUtils.directMagical(user));
             }
@@ -125,7 +125,7 @@ public class BoulderToss extends RPGSkill implements PartySkill {
             Living target = (Living) event.getEntities().get(0);
             AtherysRPG.getInstance().getLogger().info("Here");
 
-            applyAOEDamage(target.getLocation(), user);
+            applyAOEDamage(target.getLocation(), user, target);
 
             if (arePlayersInParty(user, target)) return;
 
@@ -149,7 +149,8 @@ public class BoulderToss extends RPGSkill implements PartySkill {
     @Listener
     public void onWallCollide(CollideBlockEvent event, @Getter("getSource") FallingBlock boulder) {
         if (boulders.containsKey(boulder.getUniqueId())) {
-            applyAOEDamage(event.getTargetLocation(), boulders.get(boulder.getUniqueId()));
+            Living user = boulders.get(boulder.getUniqueId());
+            applyAOEDamage(event.getTargetLocation(), user, user);
             boulders.remove(boulder.getUniqueId());
             boulder.remove();
         }
