@@ -14,6 +14,7 @@ import com.flowpowered.math.vector.Vector3d;
 import com.google.common.collect.ImmutableMap;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
+import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.Tuple;
@@ -61,6 +62,7 @@ public class Slash extends TargetedRPGSkill implements PartySkill {
         target.damage(damage, DamageUtils.directPhysical(user));
         Vector3d inFront = PhysicsUtils.getUnitDirection(user).mul(2);
         user.getWorld().spawnParticles(particleEffect, user.getLocation().getPosition().add(inFront.getX(), 1, inFront.getZ()));
+        PhysicsUtils.playSoundForLiving(user, SoundTypes.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
 
         return CastResult.success();
     }

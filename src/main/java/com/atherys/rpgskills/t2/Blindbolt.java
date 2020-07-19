@@ -109,7 +109,7 @@ public class Blindbolt extends RPGSkill implements PartySkill {
                 double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
                 target.damage(damage, DamageUtils.directMagical(user));
 
-                PhysicsUtils.playSoundForLiving(target, SoundTypes.BLOCK_END_PORTAL_SPAWN, 1);
+                PhysicsUtils.playSoundForLiving(target, SoundTypes.BLOCK_END_PORTAL_SPAWN, 1, 1);
                 int time = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
                 AtherysSkills.getInstance().getEffectService().applyEffect(
                         target,

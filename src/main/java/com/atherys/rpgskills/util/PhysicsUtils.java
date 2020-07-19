@@ -49,10 +49,10 @@ public final class PhysicsUtils {
         }
     }
 
-    public static void playSoundForLiving(Living living, SoundType sound, double volume) {
+    public static void playSoundForLiving(Living living, SoundType sound, double volume, double pitch) {
         if (living instanceof Player) {
             Player player = (Player) living;
-            player.playSound(sound, player.getPosition(), volume);
+            player.playSound(sound, player.getPosition(), volume, pitch);
         }
     }
 
