@@ -1,5 +1,6 @@
 package com.atherys.rpgskills.t1;
 
+import com.atherys.core.utils.Sound;
 import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
@@ -15,6 +16,7 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleOptions;
 import org.spongepowered.api.effect.particle.ParticleTypes;
+import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
@@ -49,6 +51,12 @@ public class FireballSkill extends RPGSkill implements PartySkill {
             .offset(Vector3d.ONE)
             .build();
 
+    private static final Sound blaze = Sound.builder(SoundTypes.ENTITY_BLAZE_SHOOT, 1)
+            .build();
+
+    private static final Sound extinguish = Sound.builder(SoundTypes.ENTITY_GENERIC_EXTINGUISH_FIRE, 1)
+            .build();
+
     public FireballSkill() {
         super(
                 SkillSpec.create()
@@ -75,7 +83,6 @@ public class FireballSkill extends RPGSkill implements PartySkill {
 
         fireball.setShooter(user);
         fireball.offer(Keys.FIRE_TICKS, Integer.MAX_VALUE);
-        fireball.offer(new DamageExpressionData(getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION)));
         Vector3d velocity = PhysicsUtils.getUnitDirection(user).mul(2.5);
         fireball.setVelocity(velocity);
         fireball.offer(Keys.ACCELERATION, velocity.mul(0.05));
@@ -83,6 +90,7 @@ public class FireballSkill extends RPGSkill implements PartySkill {
         fireballs.put(fireball.getUniqueId(), user);
 
         user.getWorld().spawnEntity(fireball);
+        Sound.playSound(blaze, user.getWorld(), spawnPosition);
 
         return CastResult.success();
     }
@@ -91,8 +99,8 @@ public class FireballSkill extends RPGSkill implements PartySkill {
     public void onFireballCollide(CollideEntityEvent event, @Getter("getSource") Snowball fireball) {
         Living user = fireballs.get(fireball.getUniqueId());
 
-        if (user != null && event.getEntities().get(0) instanceof Player) {
-            Player target = (Player) event.getEntities().get(0);
+        if (user != null && event.getEntities().get(0) instanceof Living) {
+            Living target = (Living) event.getEntities().get(0);
 
             if (arePlayersInParty(user, target)) return;
 
@@ -101,6 +109,7 @@ public class FireballSkill extends RPGSkill implements PartySkill {
                 double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
                 target.damage(damage, DamageUtils.directMagical(user));
                 target.getWorld().spawnParticles(particleEffect, target.getLocation().getPosition());
+                Sound.playSound(extinguish, user.getWorld(), target.getLocation().getPosition());
             }
         }
     }

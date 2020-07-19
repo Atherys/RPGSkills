@@ -123,7 +123,6 @@ public class BoulderToss extends RPGSkill implements PartySkill {
 
         if (user != null && event.getEntities().get(0) instanceof Living) {
             Living target = (Living) event.getEntities().get(0);
-            AtherysRPG.getInstance().getLogger().info("Here");
 
             applyAOEDamage(target.getLocation(), user, target);
 

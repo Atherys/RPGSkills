@@ -3,6 +3,7 @@ package com.atherys.rpgskills.t2;
 import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
+import com.atherys.rpg.data.DamageExpressionData;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.Effects;
@@ -100,8 +101,8 @@ public class Blindbolt extends RPGSkill implements PartySkill {
     public void onBlindBoltCollide(CollideEntityEvent event, @Getter("getSource") EnderPearl bolt) {
         Living user = blindBolts.get(bolt.getUniqueId());
 
-        if (user != null && event.getEntities().get(0) instanceof Player) {
-            Player target = (Player) event.getEntities().get(0);
+        if (user != null && event.getEntities().get(0) instanceof Living) {
+            Living target = (Living) event.getEntities().get(0);
 
             if (arePlayersInParty(user, target)) return;
 
