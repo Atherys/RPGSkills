@@ -1,4 +1,4 @@
-package com.atherys.rpgskills.t1;
+package com.atherys.rpgskills.other;
 
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;

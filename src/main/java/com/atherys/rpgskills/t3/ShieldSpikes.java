@@ -1,4 +1,4 @@
-package com.atherys.rpgskills.t2;
+package com.atherys.rpgskills.t3;
 
 import com.atherys.core.utils.Sound;
 import com.atherys.rpg.api.skill.DescriptionArguments;

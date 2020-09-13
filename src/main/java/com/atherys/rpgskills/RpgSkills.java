@@ -1,7 +1,10 @@
 package com.atherys.rpgskills;
 
+import com.atherys.rpgskills.t2.Bolster;
+import com.atherys.rpgskills.other.Recover;
 import com.atherys.rpgskills.t1.*;
 import com.atherys.rpgskills.t2.*;
+import com.atherys.rpgskills.t3.*;
 import com.atherys.rpgskills.util.BlankEffect;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.skill.BlankSkill;
@@ -41,26 +44,40 @@ public class RpgSkills {
     public void onRegisterSkills(SkillRegistrationEvent event) {
         event.registerSkills(
                 // Tier 1
-                new Enfeeble(),
                 new FireballSkill(),
-                new Hamstring(),
-                new Recover(),
+                new Invocation(),
+                new Shield(),
                 new Slash(),
-                new Bolster(),
+                new Sprint(),
 
                 // Tier 2
-                new BoulderToss(),
+                new ArcaneWard(),
+                new Backstab(),
+                new Bolster(),
                 new Cleanse(),
-                new ShieldSpikes(),
-                new Disarm(),
-                new Envenom(),
-                new Invigorate(),
-                new Leap(),
-                new Blindbolt(),
-                new Pulsewave(),
-                new Siphon(),
                 new Cleave(),
+                new Endurance(),
+                new Enfeeble(),
+                new Hamstring(),
+                new IceBolt(),
+                new Intimidate(),
+                new Invigorate(),
+                new Kick(),
+                new Leap(),
+                new Pulsewave(),
+                new Shock(),
+                new Strengthen(),
+                new Tackle(),
+                new Vanish(),
                 new VexingMark(),
+
+                // Tier 3
+                new BoulderToss(),
+                new Blindbolt(),
+                new Disarm(),
+                new Siphon(),
+                new ShieldSpikes(),
+                new Envenom(),
 
                 // For tree root
                 new BlankSkill("root-skill", "RootSkill")
