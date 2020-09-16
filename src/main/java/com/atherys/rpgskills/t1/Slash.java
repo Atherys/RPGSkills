@@ -36,7 +36,7 @@ public class Slash extends TargetedRPGSkill implements PartySkill {
     public Slash() {
         super(
                 SkillSpec.create()
-                        .id("slash")
+                        .id("bash")
                         .name("Slash")
                         .cooldown("0")
                         .descriptionTemplate("Strikes the target with a powerful blow.")

@@ -5,14 +5,11 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.event.block.CollideBlockEvent;
 
-public class Kick extends RPGSkill {
-    public Kick() {
+public class SplitShot extends RPGSkill {
+    public SplitShot() {
         super(
-                SkillSpec.create()
-                        .id("kick")
-                        .name("Kick")
+                SkillSpec.create().id("split-shot").name("Split Shot")
         );
     }
 

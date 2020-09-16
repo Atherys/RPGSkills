@@ -2,11 +2,19 @@ package com.atherys.rpgskills.t2;
 
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
+import com.atherys.rpg.api.skill.TargetedRPGSkill;
+import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.PhysicsUtils;
+import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
+import com.flowpowered.math.vector.Vector3d;
+import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.living.Living;
 
-public class Backstab extends RPGSkill {
+import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
+
+public class Backstab extends TargetedRPGSkill implements PartySkill {
     public Backstab() {
         super(
                 SkillSpec.create()
@@ -16,7 +24,16 @@ public class Backstab extends RPGSkill {
     }
 
     @Override
-    public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        return null;
+    public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
+        if (arePlayersInParty(user, target)) throw isInParty();
+
+        double damage = asDouble(user, target, getProperty(DAMAGE, String.class, "50"));
+
+        Vector3d facing = PhysicsUtils.getUnitDirection(target.getRotation());
+
+        target.damage(damage, DamageUtils.directPhysical(user));
+        PhysicsUtils.playSoundForLiving(user, SoundTypes.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
+
+        return CastResult.success();
     }
 }

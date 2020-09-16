@@ -37,6 +37,10 @@ public final class PhysicsUtils {
 
     public static Vector3d getUnitDirection(Living entity) {
         Vector3d rotation = entity.getHeadRotation();
+        return getUnitDirection(rotation);
+    }
+
+    public static Vector3d getUnitDirection(Vector3d rotation) {
         return Quaterniond
                 .fromAxesAnglesDeg(rotation.getX(), -rotation.getY(), rotation.getZ()).getDirection()
                 .normalize();

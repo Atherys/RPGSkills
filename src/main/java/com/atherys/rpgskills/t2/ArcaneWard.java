@@ -10,7 +10,7 @@ public class ArcaneWard extends RPGSkill {
     public ArcaneWard() {
         super(
                 SkillSpec.create()
-                        .id("arcaneward")
+                        .id("arcane-ward")
                         .name("Arcane Ward"));
     }
 

@@ -1,18 +1,15 @@
-package com.atherys.rpgskills.t2;
+package com.atherys.rpgskills.t3;
 
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.event.block.CollideBlockEvent;
 
-public class Kick extends RPGSkill {
-    public Kick() {
+public class FrostBreath extends RPGSkill {
+    protected FrostBreath() {
         super(
-                SkillSpec.create()
-                        .id("kick")
-                        .name("Kick")
+                SkillSpec.create().id("frost-breath").name("Frost Breath")
         );
     }
 

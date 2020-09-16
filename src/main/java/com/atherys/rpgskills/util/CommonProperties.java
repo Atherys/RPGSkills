@@ -4,6 +4,8 @@ public final class CommonProperties {
 
     public static final String DAMAGE = "damage";
 
+    public static final String RANGE = "range";
+
     public static final String HEALING = "healing";
 
     public static final String AMPLIFIER = "amplifier";

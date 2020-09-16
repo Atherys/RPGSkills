@@ -10,7 +10,7 @@ public class IceBolt extends RPGSkill {
     public IceBolt() {
         super(
                 SkillSpec.create()
-                        .id("icebolt")
+                        .id("ice-bolt")
                         .name("Ice Bolt")
         );
     }

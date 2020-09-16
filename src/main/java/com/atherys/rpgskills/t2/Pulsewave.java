@@ -41,7 +41,7 @@ public class Pulsewave extends RPGSkill implements PartySkill {
     public Pulsewave() {
         super(
                 SkillSpec.create()
-                        .id("pulsewave")
+                        .id("pulsefire")
                         .name("Pulsewave")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Send out a burst of energy, dealing ", arg(DAMAGE), " magical damage to all enemies in a ",
@@ -62,21 +62,22 @@ public class Pulsewave extends RPGSkill implements PartySkill {
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         double radius = asDouble(user, getProperty(AMPLIFIER, String.class, DEFAULT_RADIUS));
         Collection<Entity> inRadius = user.getNearbyEntities(radius);
-        String damageExpression = getProperty(DAMAGE, String.class, DEFAULT_DAMAGE);
-        DamageSource damageSource = DamageUtils.directMagical(user);
-        Vector3d userPosition = user.getLocation().getPosition();
 
-        inRadius.forEach(entity -> {
-            if (entity instanceof Living && !entity.equals(user) && !arePlayersInParty(user, (Living) entity)) {
-                Living target = (Living) entity;
-                double damage = asDouble(user, target, damageExpression);
-                Vector3d between = target.getLocation().getPosition().sub(userPosition).normalize();
-                target.setVelocity(Vector3d.from(between.getX() * 0.5, 0.4, between.getZ() * 0.5));
+        if (inRadius.size() > 0) {
+            double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
+            DamageSource damageSource = DamageUtils.directMagical(user);
+            Vector3d userPosition = user.getLocation().getPosition();
 
-                target.damage(damage, damageSource);
-            }
-        });
+            inRadius.forEach(entity -> {
+                if (entity instanceof Living && !entity.equals(user) && !arePlayersInParty(user, (Living) entity)) {
+                    Living target = (Living) entity;
+                    Vector3d between = target.getLocation().getPosition().sub(userPosition).normalize();
 
+                    target.setVelocity(Vector3d.from(between.getX() * 0.5, 0.4, between.getZ() * 0.5));
+                    target.damage(damage, damageSource);
+                }
+            });
+        }
 
         spawnParticles(user.getLocation(), radius / 3);
 
