@@ -46,7 +46,7 @@ public class Invocation extends TargetedRPGSkill implements PartySkill {
             PhysicsUtils.spawnParticleCloud(ally, target.getLocation());
         } else {
             target.damage(amount, DamageUtils.directMagical(user));
-            PhysicsUtils.spawnParticleCloud(enemy, target.getLocation());
+            PhysicsUtils.spawnParticleCloud(enemy, target.getLocation().add(0, -1, 0));
         }
         return CastResult.success();
     }

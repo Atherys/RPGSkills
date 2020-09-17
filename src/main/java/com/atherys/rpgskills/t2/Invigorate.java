@@ -33,7 +33,7 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
             .build();
 
     private static final ParticleEffect healEffect = ParticleEffect.builder()
-            .type(ParticleTypes.HAPPY_VILLAGER)
+            .type(ParticleTypes.HEART)
             .quantity(2)
             .build();
 
@@ -69,7 +69,7 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
 
         Task.builder()
                 .delayTicks(10)
-                .execute(() -> PhysicsUtils.spawnParticleCloud(healEffect, target.getLocation()))
+                .execute(() -> PhysicsUtils.spawnParticleCloud(healEffect, target.getLocation().sub(0, 1, 0)))
                 .submit(AtherysRPG.getInstance());
 
         return CastResult.success();
