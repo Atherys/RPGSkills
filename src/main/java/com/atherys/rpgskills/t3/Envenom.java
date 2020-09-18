@@ -57,7 +57,7 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
     }
 
     @Override
-    public boolean attack(Living user, Living target) {
+    public boolean attack(Living user, Living target, DamageEntityEvent event) {
         if (arePlayersInParty(user, target)) return true;
 
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, POISON_EFFECT_USER)) {

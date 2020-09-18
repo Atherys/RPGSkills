@@ -15,4 +15,8 @@ public final class CommonProperties {
     public static final String OTHER_TEXT = "other-text";
 
     public static final String ATTRIBUTE = "attribute";
+
+    public static final String HORIZONTAL = "horizontal";
+
+    public static final String VERTICAL = "vertical";
 }

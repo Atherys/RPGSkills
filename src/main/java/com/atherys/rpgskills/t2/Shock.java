@@ -6,6 +6,7 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.CommonProperties;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.PhysicsUtils;
+import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
@@ -17,7 +18,7 @@ import org.spongepowered.api.entity.living.Living;
 
 import java.util.Collection;
 
-public class Shock extends RPGSkill {
+public class Shock extends RPGSkill implements PartySkill {
     private static ParticleEffect particle = ParticleEffect.builder()
             .type(ParticleTypes.MAGIC_CRITICAL_HIT)
             .quantity(2)
@@ -46,10 +47,11 @@ public class Shock extends RPGSkill {
         double distance = Double.MAX_VALUE;
 
         for (Entity e : nearby) {
-            if (e instanceof Living && e != user) {
+            if (e instanceof Living && e != user && !arePlayersInParty((Living) e, user)) {
                 double d = e.getLocation().getPosition().distanceSquared(position);
                 if (d < distance) {
                     closest = (Living) e;
+                    distance = d;
                 }
             }
         }

@@ -21,6 +21,7 @@ import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.event.entity.DamageEntityEvent;
 
 public class Vanish extends RPGSkill implements AttackSkill {
     private static ParticleEffect effect = ParticleEffect.builder()
@@ -52,7 +53,7 @@ public class Vanish extends RPGSkill implements AttackSkill {
     }
 
     @Override
-    public boolean attack(Living user, Living target) {
+    public boolean attack(Living user, Living target, DamageEntityEvent event) {
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, "vanish")) {
             AtherysSkills.getInstance().getEffectService().removeEffect(user, "vanish");
         }

@@ -22,18 +22,18 @@ public interface AttackSkill {
         Living target = (Living) event.getTargetEntity();
 
         if (source.getSource() instanceof Living) {
-            event.setCancelled(attack((Living) source.getSource(), target));
+            event.setCancelled(attack((Living) source.getSource(), target, event));
             return;
         }
 
         if (source instanceof IndirectEntityDamageSource) {
             IndirectEntityDamageSource indirectSource = (IndirectEntityDamageSource)  source;
             if (indirectSource.getIndirectSource() instanceof Living)  {
-                event.setCancelled(attack((Living) indirectSource.getIndirectSource(), target));
+                event.setCancelled(attack((Living) indirectSource.getIndirectSource(), target, event));
             }
         }
     }
 
-    boolean attack(Living user, Living target);
+    boolean attack(Living user, Living target, DamageEntityEvent event);
 
 }
