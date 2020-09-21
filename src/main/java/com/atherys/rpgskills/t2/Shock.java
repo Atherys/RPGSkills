@@ -59,7 +59,8 @@ public class Shock extends RPGSkill implements PartySkill {
         if (closest != null) {
             double damage = asDouble(user, getProperty(CommonProperties.DAMAGE, String.class, "50"));
             PhysicsUtils.spawnParticleBeam(particle, user.getLocation(), closest.getLocation());
-            PhysicsUtils.spawnParticleCloud(particle, closest.getLocation());
+            PhysicsUtils.spawnParticleCloud(particle, closest.getLocation().add(0, -1, 0));
+            PhysicsUtils.spawnParticleCloud(particle, closest.getLocation().add(0, -2, 0));
             Sound.playSound(sound, closest.getWorld(), closest.getLocation().getPosition());
             closest.damage(damage, DamageUtils.directMagical(user));
         }

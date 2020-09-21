@@ -90,7 +90,8 @@ public class RpgSkills {
         event.registerEffects(
                 new BlankEffect(Hamstring.HAMSTRING_EFFECT, "Hamstring User", true),
                 new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User", true),
-                new BlankEffect(ArcaneWard.WARD_EFFECT, "Arcane Ward User", true)
+                new BlankEffect(ArcaneWard.WARD_EFFECT, "Arcane Ward User", true),
+                new BlankEffect(Tackle.TACKLE_EFFECT, "Arcane Ward User", true)
         );
     }
 }

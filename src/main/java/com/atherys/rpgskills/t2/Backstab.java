@@ -45,7 +45,7 @@ public class Backstab extends TargetedRPGSkill implements PartySkill {
         double angle = Math.acos(direction.dot(facing));
         if (angle <= 1 && angle >= 0) {
             damage *= 2;
-            PhysicsUtils.spawnParticleCloud(particle, target.getLocation());
+            PhysicsUtils.spawnParticleCloud(particle, target.getLocation().add(0, -1, 0));
         }
 
         target.damage(damage, DamageUtils.directPhysical(user));
