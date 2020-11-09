@@ -36,8 +36,17 @@ public class Cleanse  extends TargetedRPGSkill implements PartySkill {
     }
 
     @Override
+    public CastResult cast(Living user, long timestamp, String... args) throws CastException {
+        try {
+            return super.cast(user, timestamp, args);
+        } catch (CastException e) {
+            return cast(user, user, timestamp, args);
+        }
+    }
+
+    @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
-        if (!arePlayersInParty(user, target)) throw notInParty();
+        if (!arePlayersInParty(user, target) && user != target) throw notInParty();
 
         AtherysSkills.getInstance().getEffectService().clearNegativeEffects(target);
         return CastResult.success();

@@ -10,7 +10,6 @@ import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.util.LivingUtils;
-import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.living.Living;
@@ -56,8 +55,17 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
     }
 
     @Override
+    public CastResult cast(Living user, long timestamp, String... args) throws CastException {
+        try {
+            return super.cast(user, timestamp, args);
+        } catch (CastException e) {
+            return cast(user, user, timestamp, args);
+        }
+    }
+
+    @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
-        if (!arePlayersInParty(user, target)) throw notInParty();
+        if (!arePlayersInParty(user, target) && user != target) throw notInParty();
 
         double healAmount = asDouble(user, getProperty(HEALING, String.class, DEFAULT_HEAL_EXPRESSION));
         if (AtherysSkills.getInstance().getEffectService().hasEffect(target, VexingMark.VEXING_MARK_EFFECT)) {
@@ -66,6 +74,9 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
         LivingUtils.healLiving(target, healAmount);
 
         PhysicsUtils.spawnParticleBeam(beamEffect, user.getLocation(), target.getLocation());
+        if (target != user) {
+            PhysicsUtils.spawnParticleBeam(beamEffect, user.getLocation(), target.getLocation());
+        }
 
         Task.builder()
                 .delayTicks(10)
