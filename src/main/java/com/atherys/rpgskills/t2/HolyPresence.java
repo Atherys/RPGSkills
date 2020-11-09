@@ -27,6 +27,8 @@ public class HolyPresence extends RPGSkill implements PartySkill {
                 SkillSpec.create()
                         .id("holy-presence")
                         .name("Holy Presence")
+                        .resourceCost("0")
+                        .cooldown("0")
         );
     }
 
