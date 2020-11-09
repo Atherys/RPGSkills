@@ -85,17 +85,8 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
         public boolean apply(long timestamp, ApplyableCarrier<?> character) {
             character.getLiving().ifPresent(living -> {
                 PhysicsUtils.playSoundForLiving(living, SoundTypes.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1.2);
-                living.offer(Keys.GLOWING, true);
             });
             return super.apply(timestamp, character);
-        }
-
-        @Override
-        protected boolean remove(ApplyableCarrier<?> character) {
-            character.getLiving().ifPresent(living -> {
-                living.offer(Keys.GLOWING, false);
-            });
-            return super.remove(character);
         }
     }
 }

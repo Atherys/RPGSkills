@@ -1,6 +1,7 @@
 package com.atherys.rpgskills;
 
 import com.atherys.rpgskills.other.ArcaneWard;
+import com.atherys.rpgskills.other.Intimidate;
 import com.atherys.rpgskills.t2.Bolster;
 import com.atherys.rpgskills.t1.*;
 import com.atherys.rpgskills.t2.*;
@@ -56,7 +57,7 @@ public class RpgSkills {
                 new Bolster(),
                 new Cleanse(),
                 new Cleave(),
-                new Endurance(),
+                new HolyPresence(),
                 new Enfeeble(),
                 new Hamstring(),
                 new IceBolt(),
