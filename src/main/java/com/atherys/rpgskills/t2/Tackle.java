@@ -54,6 +54,7 @@ public class Tackle extends RPGSkill {
             Entity target = event.getEntities().get(0);
 
             if (target instanceof Living) {
+                event.setCancelled(true);
                 AtherysSkills.getInstance().getEffectService().removeEffect(collider, TACKLE_EFFECT);
                 collider.setVelocity(Vector3d.ZERO);
 

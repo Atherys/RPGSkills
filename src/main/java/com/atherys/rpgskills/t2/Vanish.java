@@ -65,18 +65,14 @@ public class Vanish extends RPGSkill implements AttackSkill {
         return false;
     }
 
-    private static class VanishEffect extends TemporaryPotionEffect {
-        private static PotionEffect.Builder builder = PotionEffect.builder()
-                .particles(false)
-                .potionType(PotionEffectTypes.INVISIBILITY);
+    private static class VanishEffect extends TemporaryEffect {
 
         protected VanishEffect(int duration) {
-            super("vanish", "Vanish", builder.duration(duration / 50).build(), true);
+            super("vanish", "Vanish", duration / 50, true);
         }
 
         @Override
         protected boolean apply(ApplyableCarrier<?> character) {
-            super.apply(character);
             character.getLiving().ifPresent(living -> {
                 living.offer(Keys.VANISH, true);
             });
@@ -85,7 +81,6 @@ public class Vanish extends RPGSkill implements AttackSkill {
 
         @Override
         protected boolean remove(ApplyableCarrier<?> character) {
-            super.remove(character);
             character.getLiving().ifPresent(living -> {
                 living.offer(Keys.VANISH, false);
             });

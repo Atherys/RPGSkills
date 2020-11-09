@@ -1,5 +1,6 @@
 package com.atherys.rpgskills;
 
+import com.atherys.rpgskills.other.ArcaneWard;
 import com.atherys.rpgskills.t2.Bolster;
 import com.atherys.rpgskills.other.Recover;
 import com.atherys.rpgskills.t1.*;
