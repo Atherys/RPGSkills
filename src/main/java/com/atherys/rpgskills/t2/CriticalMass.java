@@ -42,7 +42,7 @@ public class CriticalMass extends RPGSkill implements RadiusSkill, PartySkill {
             h.setVariable("DISTANCE", BigDecimal.valueOf(distance));
             double horizontal = AtherysRPG.getInstance().getExpressionService().evalExpression(user, h).doubleValue();
 
-            Expression v = AtherysRPG.getInstance().getExpressionService().getExpression(getProperty(HORIZONTAL, String.class, DEFAULT_HORIZONTAL));
+            Expression v = AtherysRPG.getInstance().getExpressionService().getExpression(getProperty(VERTICAL, String.class, DEFAULT_HORIZONTAL));
             v.setVariable("DISTANCE", BigDecimal.valueOf(distance));
             double vertical = AtherysRPG.getInstance().getExpressionService().evalExpression(user, v).doubleValue();
 
