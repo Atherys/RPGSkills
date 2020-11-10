@@ -12,6 +12,8 @@ public class Strengthen extends RPGSkill {
                 SkillSpec.create()
                         .id("strengthen")
                         .name("Strengthen")
+                        .resourceCost("0")
+                        .cooldown("0")
         );
     }
 

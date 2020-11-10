@@ -9,7 +9,11 @@ import org.spongepowered.api.entity.living.Living;
 public class SplitShot extends RPGSkill {
     public SplitShot() {
         super(
-                SkillSpec.create().id("split-shot").name("Split Shot")
+                SkillSpec.create()
+                        .id("split-shot")
+                        .name("Split Shot")
+                        .cooldown("0")
+                        .resourceCost("0")
         );
     }
 
