@@ -71,6 +71,7 @@ public class RpgSkills {
                 new SplitShot(),
                 new Strengthen(),
                 new Tackle(),
+                new Thorns(),
                 new Vanish(),
                 new VexingMark(),
 
