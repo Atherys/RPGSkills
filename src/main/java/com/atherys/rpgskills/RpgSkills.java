@@ -57,6 +57,7 @@ public class RpgSkills {
                 new Bolster(),
                 new Cleanse(),
                 new Cleave(),
+                new CriticalMass(),
                 new HolyPresence(),
                 new Enfeeble(),
                 new Hamstring(),
