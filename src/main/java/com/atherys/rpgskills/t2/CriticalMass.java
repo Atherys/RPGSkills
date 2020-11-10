@@ -35,7 +35,7 @@ public class CriticalMass extends RPGSkill implements RadiusSkill, PartySkill {
         Vector3d userPosition = user.getLocation().getPosition();
 
         applyToRadius(user.getLocation(), radius, living -> {
-            if (arePlayersInParty(living, user)) return;
+            if (arePlayersInParty(living, user) || living == user) return;
             double distance = userPosition.distanceSquared(living.getLocation().getPosition());
 
             Expression h = AtherysRPG.getInstance().getExpressionService().getExpression(getProperty(HORIZONTAL, String.class, DEFAULT_HORIZONTAL));
