@@ -11,6 +11,7 @@ import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.projectile.Projectile;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.projectile.LaunchProjectileEvent;
+import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.world.World;
 
@@ -33,7 +34,7 @@ public class SplitShot extends RPGSkill {
     }
 
     @Listener
-    public void onShoot(LaunchProjectileEvent event, @Root Living living) {
+    public void onShoot(LaunchProjectileEvent event, @First Living living) {
         if (AtherysSkills.getInstance().getEffectService().hasEffect(living, SPLITSHOT_EFFECT) && event.getTargetEntity().getType() == EntityTypes.TIPPED_ARROW) {
             AtherysSkills.getInstance().getEffectService().removeEffect(living, SPLITSHOT_EFFECT);
 
