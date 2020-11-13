@@ -68,9 +68,6 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
         if (!arePlayersInParty(user, target) && user != target) throw notInParty();
 
         double healAmount = asDouble(user, getProperty(HEALING, String.class, DEFAULT_HEAL_EXPRESSION));
-        if (AtherysSkills.getInstance().getEffectService().hasEffect(target, VexingMark.VEXING_MARK_EFFECT)) {
-            healAmount *= 0.5;
-        }
         LivingUtils.healLiving(target, healAmount);
 
         PhysicsUtils.spawnParticleBeam(beamEffect, user.getLocation(), target.getLocation());
