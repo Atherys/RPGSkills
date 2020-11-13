@@ -6,12 +6,15 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.Effects;
+import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.rpgskills.util.skill.RadiusSkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
+import org.spongepowered.api.effect.particle.ParticleEffect;
+import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
@@ -27,6 +30,11 @@ public class HolyPresence extends RPGSkill implements PartySkill, RadiusSkill {
 
     private static final String DEFAULT_RADIUS = "10";
     private static final String DEFAULT_DURATION = "4000";
+
+    private static final ParticleEffect particleEffect = ParticleEffect.builder()
+            .type(ParticleTypes.INSTANT_SPELL)
+            .quantity(3)
+            .build();
 
     public HolyPresence() {
         super(
@@ -57,6 +65,8 @@ public class HolyPresence extends RPGSkill implements PartySkill, RadiusSkill {
                 AtherysSkills.getInstance().getEffectService().applyEffect(living, Effects.ofSlowness("holy-presence", "Holy Presence", duration, amplifier));
             }
         });
+
+        PhysicsUtils.spawnParticleCircle(particleEffect, user.getLocation(), radius);
 
         return CastResult.success();
     }

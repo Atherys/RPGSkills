@@ -69,4 +69,17 @@ public final class PhysicsUtils {
             from.getExtent().spawnParticles(particleEffect, from.getPosition().add(difference.mul(i).add(0, 1, 0)));
         }
     }
+
+    public static void spawnParticleCircle(ParticleEffect particleEffect, Location<World> center, double radius) {
+        Vector3d position = center.getPosition();
+        double y = position.getY() + 1;
+
+        for (double i = 0; i < Math.PI * 2; i += 0.1) {
+            double x = position.getX() + radius * Math.cos(i);
+            double z = position.getZ() + radius * Math.sin(i);
+
+            center.getExtent().spawnParticles(particleEffect, Vector3d.from(x, y, z));
+        }
+
+    }
 }

@@ -5,6 +5,7 @@ import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.DescriptionUtils;
+import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
@@ -79,30 +80,18 @@ public class Pulsewave extends RPGSkill implements PartySkill {
             });
         }
 
-        spawnParticles(user.getLocation(), radius / 3);
+        PhysicsUtils.spawnParticleCircle(particleEffect, user.getLocation(), radius / 3);
 
         Task.builder()
                 .delayTicks(4)
-                .execute(() -> spawnParticles(user.getLocation(), radius * 2/3))
+                .execute(() -> PhysicsUtils.spawnParticleCircle(particleEffect, user.getLocation(), radius * 2/3))
                 .submit(AtherysRPG.getInstance());
 
         Task.builder()
                 .delayTicks(8)
-                .execute(() -> spawnParticles(user.getLocation(), radius))
+                .execute(() -> PhysicsUtils.spawnParticleCircle(particleEffect, user.getLocation(), radius))
                 .submit(AtherysRPG.getInstance());
 
         return CastResult.success();
-    }
-
-    private void spawnParticles(Location<World> location, double radius) {
-        Vector3d position = location.getPosition();
-        double y = position.getY() + 1;
-
-        for (double i = 0; i < Math.PI * 2; i += 0.1) {
-            double x = position.getX() + radius * Math.cos(i);
-            double z = position.getZ() + radius * Math.sin(i);
-
-            location.getExtent().spawnParticles(particleEffect, Vector3d.from(x, y, z));
-        }
     }
 }
