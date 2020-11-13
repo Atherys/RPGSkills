@@ -1,9 +1,11 @@
 package com.atherys.rpgskills.t2;
 
 import com.atherys.core.utils.Sound;
+import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.CommonProperties;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.AttackSkill;
@@ -22,6 +24,10 @@ import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.util.Tuple;
+
+import static com.atherys.rpgskills.util.CommonProperties.TIME;
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Vanish extends RPGSkill implements AttackSkill {
     private static ParticleEffect effect = ParticleEffect.builder()
@@ -38,12 +44,20 @@ public class Vanish extends RPGSkill implements AttackSkill {
                         .name("Vanish")
                         .cooldown("0")
                         .resourceCost("0")
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
+                                "Vanish in a cloud of smoke, becoming invisible to enemies for ", arg(TIME),
+                                " seconds. Taking damage or using skills reveals you."
+                        ))
+        );
+
+        setDescriptionArguments(
+            Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, "10000"))
         );
     }
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        int duration = asInt(user, getProperty(CommonProperties.TIME, String.class, "10000"));
+        int duration = asInt(user, getProperty(TIME, String.class, "10000"));
         PhysicsUtils.spawnParticleCloud(effect, user.getLocation().add(0, -3, 0));
         PhysicsUtils.spawnParticleCloud(effect, user.getLocation().add(0, -2, 0));
         PhysicsUtils.spawnParticleCloud(effect, user.getLocation().add(0, -1, 0));

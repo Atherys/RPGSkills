@@ -5,6 +5,7 @@ import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.CommonProperties;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.api.exception.CastException;
@@ -15,8 +16,14 @@ import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.util.Tuple;
 
 import java.util.Collection;
+
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
+import static com.atherys.rpgskills.util.CommonProperties.RANGE;
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Shock extends RPGSkill implements PartySkill {
     private static ParticleEffect particle = ParticleEffect.builder()
@@ -35,12 +42,20 @@ public class Shock extends RPGSkill implements PartySkill {
                         .name("Shock")
                         .resourceCost("0")
                         .cooldown("0")
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
+                                "Shock the closest enemy within ", arg(RANGE), " blocks, dealing ", arg(DAMAGE), " magical damage."
+                        ))
+        );
+
+        setDescriptionArguments(
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "50")),
+                Tuple.of(RANGE, ofProperty(this, RANGE, "20"))
         );
     }
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        Collection<Entity> nearby = user.getNearbyEntities(asDouble(user, getProperty(CommonProperties.RANGE, String.class, "20")));
+        Collection<Entity> nearby = user.getNearbyEntities(asDouble(user, getProperty(RANGE, String.class, "20")));
         Vector3d position = user.getLocation().getPosition();
 
         Living closest = null;
@@ -57,7 +72,7 @@ public class Shock extends RPGSkill implements PartySkill {
         }
 
         if (closest != null) {
-            double damage = asDouble(user, getProperty(CommonProperties.DAMAGE, String.class, "50"));
+            double damage = asDouble(user, getProperty(DAMAGE, String.class, "50"));
             PhysicsUtils.spawnParticleBeam(particle, user.getLocation(), closest.getLocation());
             PhysicsUtils.spawnParticleCloud(particle, closest.getLocation().add(0, -1, 0));
             PhysicsUtils.spawnParticleCloud(particle, closest.getLocation().add(0, -2, 0));

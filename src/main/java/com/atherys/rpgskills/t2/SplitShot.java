@@ -5,19 +5,27 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
+import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.data.DataContainer;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.Transform;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.projectile.Projectile;
+import org.spongepowered.api.entity.projectile.arrow.Arrow;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.projectile.LaunchProjectileEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.world.World;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class SplitShot extends RPGSkill {
     public static final String SPLITSHOT_EFFECT = "split-shot";
+
+    private static final List<Double> angles = Arrays.asList(0.17, -0.17, 0.34, -0.34);
+
     public SplitShot() {
         super(
                 SkillSpec.create()
@@ -40,24 +48,15 @@ public class SplitShot extends RPGSkill {
             AtherysSkills.getInstance().getEffectService().removeEffect(living, SPLITSHOT_EFFECT);
 
             Projectile originalArrow = event.getTargetEntity();
-            Transform transform = originalArrow.getTransform();
-            World world = living.getWorld();
+            Vector3d velocity = originalArrow.getVelocity();
 
-            Projectile arrow1 = (Projectile) world.createEntity(EntityTypes.TIPPED_ARROW, transform.getPosition());
-            arrow1.setVelocity(originalArrow.getVelocity().add(0.5, 0, 0));
-            world.spawnEntity(arrow1);
+            angles.forEach(a -> {
+                double x = velocity.getX();
+                double z = velocity.getZ();
+                Vector3d newVelocity = Vector3d.from((Math.cos(a) * x - Math.sin(a) * z), velocity.getY(), Math.sin(a) * x - Math.cos(a) * z);
 
-            Projectile arrow2 = (Projectile) world.createEntity(EntityTypes.TIPPED_ARROW, transform.getPosition());
-            arrow2.setVelocity(originalArrow.getVelocity().add(0.25, 0, 0));
-            world.spawnEntity(arrow2);
-
-            Projectile arrow3 = (Projectile) world.createEntity(EntityTypes.TIPPED_ARROW, transform.getPosition());
-            arrow3.setVelocity(originalArrow.getVelocity().add(0, 0, 0.5));
-            world.spawnEntity(arrow3);
-
-            Projectile arrow4 = (Projectile) world.createEntity(EntityTypes.TIPPED_ARROW, transform.getPosition());
-            arrow4.setVelocity(originalArrow.getVelocity().add(0.5, 0, 0.25));
-            world.spawnEntity(arrow4);
+                living.launchProjectile(Arrow.class, newVelocity);
+            });
         }
     }
 }

@@ -44,7 +44,7 @@ public class Thorns extends RPGSkill implements AttackSkill {
     }
 
     @Listener(order = Order.LATE)
-    public void onAttack(DamageEntityEvent event, EntityDamageSource source) {
+    public void onAttack(DamageEntityEvent event, @Root EntityDamageSource source) {
         onDamage(event, source);
     }
 

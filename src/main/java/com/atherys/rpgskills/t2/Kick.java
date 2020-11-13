@@ -5,6 +5,7 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.CommonProperties;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
@@ -16,13 +17,15 @@ import org.spongepowered.api.event.block.CollideBlockEvent;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.util.Tuple;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.atherys.rpgskills.util.CommonProperties.HORIZONTAL;
-import static com.atherys.rpgskills.util.CommonProperties.VERTICAL;
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpgskills.util.CommonProperties.*;
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Kick extends TargetedRPGSkill {
     private static Map<UUID, Living> kickers = new HashMap<>();
@@ -34,6 +37,14 @@ public class Kick extends TargetedRPGSkill {
                         .name("Kick")
                         .cooldown("0")
                         .resourceCost("0")
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
+                                "Deliver a heavy kick to a target enemy, knocking them back. If they collide with an enemy, they both take ",
+                                arg(DAMAGE), " physical damage."
+                        ))
+        );
+
+        setDescriptionArguments(
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "50"))
         );
     }
 

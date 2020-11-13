@@ -37,12 +37,11 @@ public class Slash extends TargetedRPGSkill implements PartySkill {
         super(
                 SkillSpec.create()
                         .id("bash")
-                        .name("Slash")
+                        .name("Bash")
                         .cooldown("0")
-                        .descriptionTemplate("Strikes the target with a powerful blow.")
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Slash at your target, dealing ", arg("damage"), " physical damage. ", arg(OTHER_TEXT)
+                                "Strike your target, dealing ", arg("damage"), " physical damage. ", arg(OTHER_TEXT)
                         ))
                         .properties(ImmutableMap.of(MAX_RANGE_PROPERTY, "5.0"))
         );

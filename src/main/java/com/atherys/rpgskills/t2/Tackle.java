@@ -1,11 +1,9 @@
 package com.atherys.rpgskills.t2;
 
+import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
-import com.atherys.rpgskills.util.CommonProperties;
-import com.atherys.rpgskills.util.DamageUtils;
-import com.atherys.rpgskills.util.Effects;
-import com.atherys.rpgskills.util.PhysicsUtils;
+import com.atherys.rpgskills.util.*;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
@@ -18,6 +16,12 @@ import org.spongepowered.api.event.block.CollideBlockEvent;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.util.Tuple;
+
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
+import static com.atherys.rpgskills.util.CommonProperties.TIME;
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Tackle extends RPGSkill {
     public static final String TACKLE_EFFECT = "tackle-user-effect";
@@ -29,6 +33,15 @@ public class Tackle extends RPGSkill {
                         .name("Tackle")
                         .cooldown("0")
                         .resourceCost("0")
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
+                                "Dash forward in the direction you are facing, dealing ",
+                                arg(DAMAGE), " physical damage to any enemy you collide with slowing both of you ", arg(TIME), " seconds."
+                        ))
+        );
+
+        setDescriptionArguments(
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "50")),
+                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, "3000"))
         );
     }
 
@@ -58,7 +71,7 @@ public class Tackle extends RPGSkill {
                 AtherysSkills.getInstance().getEffectService().removeEffect(collider, TACKLE_EFFECT);
                 collider.setVelocity(Vector3d.ZERO);
 
-                double damage = asDouble(collider, getProperty(CommonProperties.DAMAGE, String.class, "50"));
+                double damage = asDouble(collider, getProperty(DAMAGE, String.class, "50"));
                 DamageSource source = DamageUtils.directPhysical(collider);
 
                 target.damage(damage, source);

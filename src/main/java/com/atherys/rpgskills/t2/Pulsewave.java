@@ -34,18 +34,18 @@ public class Pulsewave extends RPGSkill implements PartySkill {
     private static final String DEFAULT_OTHER_TEXT = "";
 
     private static final ParticleEffect particleEffect = ParticleEffect.builder()
-            .type(ParticleTypes.MAGIC_CRITICAL_HIT)
+            .type(ParticleTypes.FLAME)
             .quantity(5)
             .build();
 
     public Pulsewave() {
         super(
                 SkillSpec.create()
-                        .id("pulsefire")
-                        .name("Pulsewave")
+                        .id("immolate")
+                        .name("Immolate")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Send out a burst of energy, dealing ", arg(DAMAGE), " magical damage to all enemies in a ",
-                                arg(AMPLIFIER), " block radius from you. ", arg(OTHER_TEXT)
+                                "Send out a burst of fire, dealing ", arg(DAMAGE), " magical damage to all enemies in a ",
+                                arg(RADIUS), " block radius from you. ", arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -53,14 +53,14 @@ public class Pulsewave extends RPGSkill implements PartySkill {
 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_RADIUS)),
+                Tuple.of(RADIUS, ofProperty(this, AMPLIFIER, DEFAULT_RADIUS)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        double radius = asDouble(user, getProperty(AMPLIFIER, String.class, DEFAULT_RADIUS));
+        double radius = asDouble(user, getProperty(RADIUS, String.class, DEFAULT_RADIUS));
         Collection<Entity> inRadius = user.getNearbyEntities(radius);
 
         if (inRadius.size() > 0) {

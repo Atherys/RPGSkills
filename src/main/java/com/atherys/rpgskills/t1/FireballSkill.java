@@ -26,6 +26,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.CollideEvent;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
+import org.spongepowered.api.event.item.inventory.ChangeInventoryEvent;
 import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.Tuple;
 
@@ -88,6 +89,7 @@ public class FireballSkill extends RPGSkill implements PartySkill {
         fireball.offer(Keys.ACCELERATION, velocity.mul(0.05));
 
         fireballs.put(fireball.getUniqueId(), user);
+
 
         user.getWorld().spawnEntity(fireball);
         Sound.playSound(blaze, user.getWorld(), spawnPosition);

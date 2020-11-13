@@ -37,7 +37,7 @@ public class Bolster extends RPGSkill {
         super(
                 SkillSpec.create()
                         .id("fortify")
-                        .name("Bolster")
+                        .name("Fortify")
                         .cooldown("0")
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(

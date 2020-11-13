@@ -39,8 +39,8 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
     public Invigorate() {
         super(
                 SkillSpec.create()
-                        .id("invigorate")
-                        .name("Invigorate")
+                        .id("pray")
+                        .name("Pray")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Reinvigorate a target ally, healing them for ", arg(HEALING), ". ", arg(OTHER_TEXT)
                         ))

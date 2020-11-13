@@ -24,14 +24,10 @@ public class Cleanse  extends TargetedRPGSkill implements PartySkill {
                         .id("cleanse")
                         .name("Cleanse")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Cleanse target ally of any negative effects.", arg(OTHER_TEXT)
+                                "Cleanse target ally of any negative effects. If you have no target, cleanse yourself."
                         ))
                         .cooldown("0")
                         .resourceCost("0")
-        );
-
-        setDescriptionArguments(
-                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

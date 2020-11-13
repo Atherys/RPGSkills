@@ -3,6 +3,7 @@ package com.atherys.rpgskills.t2;
 import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.rpgskills.util.skill.RadiusSkill;
 import com.atherys.skills.api.exception.CastException;
@@ -10,10 +11,13 @@ import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
 import com.udojava.evalex.Expression;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.util.Tuple;
 
 import java.math.BigDecimal;
 
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class CriticalMass extends RPGSkill implements RadiusSkill, PartySkill {
     private static final String DEFAULT_RADIUS = "10";
@@ -26,12 +30,19 @@ public class CriticalMass extends RPGSkill implements RadiusSkill, PartySkill {
                         .name("Critical Mass")
                         .cooldown("0")
                         .resourceCost("0")
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
+                                "All enemies within ", arg(RADIUS),  " blocks are pulled toward you."
+                        ))
+        );
+
+        setDescriptionArguments(
+            Tuple.of(RADIUS, ofProperty(this, RADIUS, DEFAULT_RADIUS))
         );
     }
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        double radius = asDouble(user, getProperty(AMPLIFIER, String.class, DEFAULT_RADIUS));
+        double radius = asDouble(user, getProperty(RADIUS, String.class, DEFAULT_RADIUS));
         Vector3d userPosition = user.getLocation().getPosition();
 
         applyToRadius(user.getLocation(), radius, living -> {
