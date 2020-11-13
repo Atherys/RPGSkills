@@ -5,6 +5,7 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.CommonProperties;
 import com.atherys.rpgskills.util.DamageUtils;
+import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.api.exception.CastException;
@@ -14,6 +15,11 @@ import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.Cancellable;
+import org.spongepowered.api.util.Tuple;
+
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpgskills.util.CommonProperties.HEALING;
+import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Invocation extends TargetedRPGSkill implements PartySkill {
 
@@ -34,12 +40,19 @@ public class Invocation extends TargetedRPGSkill implements PartySkill {
                         .name("Invocation")
                         .cooldown("0")
                         .resourceCost("0")
+                        .descriptionTemplate(DescriptionUtils.buildTemplate(
+                                "Heal target for ", arg(HEALING), ". If they are an enemy, deal that much damage instead."
+                        ))
+        );
+
+        setDescriptionArguments(
+                Tuple.of(HEALING, ofProperty(this, HEALING, "50"))
         );
     }
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
-        double amount = asDouble(user, getProperty(CommonProperties.DAMAGE, String.class, "50"));
+        double amount = asDouble(user, getProperty(HEALING, String.class, "50"));
 
         if (arePlayersInParty(user, target)) {
             LivingUtils.healLiving(target, amount);
