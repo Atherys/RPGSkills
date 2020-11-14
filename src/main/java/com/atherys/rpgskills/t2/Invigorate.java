@@ -70,7 +70,6 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
         double healAmount = asDouble(user, getProperty(HEALING, String.class, DEFAULT_HEAL_EXPRESSION));
         LivingUtils.healLiving(target, healAmount);
 
-        PhysicsUtils.spawnParticleBeam(beamEffect, user.getLocation(), target.getLocation());
         if (target != user) {
             PhysicsUtils.spawnParticleBeam(beamEffect, user.getLocation(), target.getLocation());
         }
