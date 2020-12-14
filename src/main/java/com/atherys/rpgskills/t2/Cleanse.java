@@ -24,20 +24,25 @@ public class Cleanse  extends TargetedRPGSkill implements PartySkill {
                         .id("cleanse")
                         .name("Cleanse")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Cleanse target ally of any negative effects.", arg(OTHER_TEXT)
+                                "Cleanse target ally of any negative effects. If you have no target, cleanse yourself."
                         ))
                         .cooldown("0")
                         .resourceCost("0")
         );
+    }
 
-        setDescriptionArguments(
-                Tuple.of(OTHER_TEXT, otherText(this))
-        );
+    @Override
+    public CastResult cast(Living user, long timestamp, String... args) throws CastException {
+        try {
+            return super.cast(user, timestamp, args);
+        } catch (CastException e) {
+            return cast(user, user, timestamp, args);
+        }
     }
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
-        if (!arePlayersInParty(user, target)) throw notInParty();
+        if (!arePlayersInParty(user, target) && user != target) throw notInParty();
 
         AtherysSkills.getInstance().getEffectService().clearNegativeEffects(target);
         return CastResult.success();

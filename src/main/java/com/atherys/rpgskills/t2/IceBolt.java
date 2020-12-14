@@ -1,19 +1,20 @@
 package com.atherys.rpgskills.t2;
 
-import com.atherys.rpg.AtherysRPG;
-import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
-import com.atherys.rpgskills.util.DescriptionUtils;
+import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
+import com.atherys.skills.AtherysSkills;
+import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.FallingBlock;
 import org.spongepowered.api.entity.living.Living;
@@ -21,40 +22,25 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.CollideBlockEvent;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
-import org.spongepowered.api.util.Tuple;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
-import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
-import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
-import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
-import static org.spongepowered.api.text.TextTemplate.arg;
+import static com.atherys.rpgskills.util.CommonProperties.TIME;
 
-public class BoulderToss extends RPGSkill implements PartySkill {
-    private static final String DEFAULT_DAMAGE_EXPRESSION = "5.0";
-    private static final String DEFAULT_OTHER_TEXT = "";
+public class IceBolt extends RPGSkill implements PartySkill {
+    private static final String DEFAULT_DAMAGE_EXPRESSION = "10";
+    private Map<UUID, Living> iceBolts = new WeakHashMap<>();
 
-    private Map<UUID, Living> boulders = new WeakHashMap<>();
-
-    public BoulderToss() {
+    public IceBolt() {
         super(
                 SkillSpec.create()
-                        .id("boulder-toss")
-                        .name("Boulder Toss")
-                        .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Throw a boulder in the direction you’re facing. The first enemy hit takes ",
-                                arg(DAMAGE), " physical damage and is knocked back. ", arg(OTHER_TEXT)
-                        ))
+                        .id("ice-bolt")
+                        .name("Ice Bolt")
                         .cooldown("0")
                         .resourceCost("0")
-        );
-
-        setDescriptionArguments(
-                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE_EXPRESSION)),
-                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 
@@ -63,13 +49,13 @@ public class BoulderToss extends RPGSkill implements PartySkill {
         Vector3d spawnPosition = user.getLocation().getPosition().add(0, 2, 0);
         FallingBlock boulder = (FallingBlock) user.getWorld().createEntity(EntityTypes.FALLING_BLOCK, spawnPosition);
 
-        boulder.offer(Keys.FALLING_BLOCK_STATE, BlockState.builder().blockType(BlockTypes.COBBLESTONE).build());
+        boulder.offer(Keys.FALLING_BLOCK_STATE, BlockState.builder().blockType(BlockTypes.ICE).build());
         boulder.offer(Keys.FALL_TIME, 1);
         boulder.offer(Keys.CAN_PLACE_AS_BLOCK, false);
 
         Vector3d velocity = PhysicsUtils.getUnitDirection(user).mul(1.25, 1.25, 1.25);
 
-        boulders.put(boulder.getUniqueId(), user);
+        iceBolts.put(boulder.getUniqueId(), user);
         boulder.setVelocity(velocity);
         user.getWorld().spawnEntity(boulder);
 
@@ -77,8 +63,8 @@ public class BoulderToss extends RPGSkill implements PartySkill {
     }
 
     @Listener
-    public void collide(CollideEntityEvent event, @Getter("getSource") FallingBlock boulder) {
-        Living user = boulders.get(boulder.getUniqueId());
+    public void collide(CollideEntityEvent event, @Getter("getSource") FallingBlock iceBolt) {
+        Living user = iceBolts.get(iceBolt.getUniqueId());
 
         if (user != null && event.getEntities().get(0) instanceof Living) {
             Living target = (Living) event.getEntities().get(0);
@@ -86,24 +72,26 @@ public class BoulderToss extends RPGSkill implements PartySkill {
             if (arePlayersInParty(user, target)) return;
 
             if (!target.equals(user)) {
-                Vector3d velocity = boulder.getVelocity().normalize();
-                boulders.remove(boulder.getUniqueId());
-                boulder.remove();
+                Vector3d velocity = iceBolt.getVelocity().normalize();
+                iceBolts.remove(iceBolt.getUniqueId());
+                iceBolt.remove();
 
                 double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
                 boolean dealtDamage = target.damage(damage, DamageUtils.directMagical(user));
 
                 if (dealtDamage) {
-                    target.setVelocity(Vector3d.from(velocity.getX() * 1.5, 0.6, velocity.getZ() * 1.5));
+                    int duration = asInt(user, getProperty(TIME, String.class, "5000"));
+                    Applyable slowness = Effects.ofSlowness("icebolt", "IceBolt", duration, 2);
                 }
             }
         }
     }
 
     @Listener
-    public void onWallCollide(CollideBlockEvent event, @Getter("getSource") FallingBlock boulder) {
-        if (boulders.containsKey(boulder.getUniqueId())) {
-            boulder.remove();
+    public void onWallCollide(CollideBlockEvent event, @Getter("getSource") FallingBlock iceBolt) {
+        if (iceBolts.containsKey(iceBolt.getUniqueId())) {
+            iceBolts.remove(iceBolt.getUniqueId());
+            iceBolt.remove();
         }
     }
 }

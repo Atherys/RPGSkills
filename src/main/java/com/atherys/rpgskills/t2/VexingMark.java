@@ -6,6 +6,7 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpg.api.stat.AttributeType;
 import com.atherys.rpgskills.util.DescriptionUtils;
+import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.ApplyableCarrier;
@@ -13,6 +14,7 @@ import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.util.Tuple;
 
@@ -32,7 +34,7 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_OTHER_TEXT = "";
     private static final String DEFAULT_ATTRIBUTE = "atherys:constitution";
 
-    private AttributeType attributeType;
+    private final AttributeType attributeType;
 
     public VexingMark() {
         super(
@@ -81,17 +83,9 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
         @Override
         public boolean apply(long timestamp, ApplyableCarrier<?> character) {
             character.getLiving().ifPresent(living -> {
-                living.offer(Keys.GLOWING, true);
+                PhysicsUtils.playSoundForLiving(living, SoundTypes.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1.2);
             });
             return super.apply(timestamp, character);
-        }
-
-        @Override
-        protected boolean remove(ApplyableCarrier<?> character) {
-            character.getLiving().ifPresent(living -> {
-                living.offer(Keys.GLOWING, false);
-            });
-            return super.remove(character);
         }
     }
 }

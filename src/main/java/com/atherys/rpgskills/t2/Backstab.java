@@ -1,54 +1,47 @@
-package com.atherys.rpgskills.t1;
+package com.atherys.rpgskills.t2;
 
 import com.atherys.rpg.api.skill.DescriptionArguments;
+import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
+import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
-import com.atherys.skills.api.util.MathUtils;
 import com.flowpowered.math.vector.Vector3d;
-import com.google.common.collect.ImmutableMap;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
-import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
-import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
-public class Slash extends TargetedRPGSkill implements PartySkill {
-    private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_STR * 1.5, 0.5, 10.0)";
-    private static final String DEFAULT_OTHER_TEXT = "";
-
-    private static final ParticleEffect particleEffect = ParticleEffect.builder()
-            .type(ParticleTypes.SWEEP_ATTACK)
-            .quantity(1)
+public class Backstab extends TargetedRPGSkill implements PartySkill {
+    private static ParticleEffect particle = ParticleEffect.builder()
+            .type(ParticleTypes.REDSTONE_DUST)
+            .quantity(2)
             .build();
 
-    public Slash() {
+    public Backstab() {
         super(
                 SkillSpec.create()
-                        .id("bash")
-                        .name("Bash")
+                        .id("backstab")
+                        .name("Backstab")
                         .cooldown("0")
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Strike your target, dealing ", arg("damage"), " physical damage. ", arg(OTHER_TEXT)
+                                "Make a precise strike against target enemy, dealing ", arg(DAMAGE),
+                                "physical damage. If you strike from behind, deal double damage."
                         ))
-                        .properties(ImmutableMap.of(MAX_RANGE_PROPERTY, "5.0"))
         );
 
         setDescriptionArguments(
-                Tuple.of(DAMAGE, DescriptionArguments.ofProperty(this, DAMAGE, DEFAULT_DAMAGE_EXPRESSION)),
-                Tuple.of(OTHER_TEXT, otherText(this))
+                Tuple.of(DAMAGE, DescriptionArguments.ofProperty(this, DAMAGE, "10"))
         );
     }
 
@@ -56,11 +49,18 @@ public class Slash extends TargetedRPGSkill implements PartySkill {
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         if (arePlayersInParty(user, target)) throw isInParty();
 
-        double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
+        double damage = asDouble(user, target, getProperty(DAMAGE, String.class, "10"));
+
+        Vector3d facing = PhysicsUtils.getUnitDirection(target.getRotation());
+        Vector3d direction = PhysicsUtils.getUnitDirection(user);
+
+        double angle = Math.acos(direction.dot(facing));
+        if (angle <= 1 && angle >= 0) {
+            damage *= 2;
+            PhysicsUtils.spawnParticleCloud(particle, target.getLocation().add(0, -1, 0));
+        }
 
         target.damage(damage, DamageUtils.directPhysical(user));
-        Vector3d inFront = PhysicsUtils.getUnitDirection(user).mul(2);
-        user.getWorld().spawnParticles(particleEffect, user.getLocation().getPosition().add(inFront.getX(), 1, inFront.getZ()));
         PhysicsUtils.playSoundForLiving(user, SoundTypes.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
 
         return CastResult.success();

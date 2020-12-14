@@ -1,4 +1,4 @@
-package com.atherys.rpgskills.t2;
+package com.atherys.rpgskills.t3;
 
 import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
@@ -57,7 +57,7 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
     }
 
     @Override
-    public boolean attack(Living user, Living target) {
+    public boolean attack(Living user, Living target, DamageEntityEvent event) {
         if (arePlayersInParty(user, target)) return true;
 
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, POISON_EFFECT_USER)) {

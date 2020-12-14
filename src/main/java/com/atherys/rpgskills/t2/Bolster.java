@@ -1,4 +1,4 @@
-package com.atherys.rpgskills.t1;
+package com.atherys.rpgskills.t2;
 
 import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
@@ -36,8 +36,8 @@ public class Bolster extends RPGSkill {
     public Bolster() {
         super(
                 SkillSpec.create()
-                        .id("bolster")
-                        .name("Bolster")
+                        .id("fortify")
+                        .name("Fortify")
                         .cooldown("0")
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(

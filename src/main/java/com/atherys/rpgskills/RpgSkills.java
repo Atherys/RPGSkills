@@ -1,7 +1,11 @@
 package com.atherys.rpgskills;
 
+import com.atherys.rpgskills.other.ArcaneWard;
+import com.atherys.rpgskills.other.Intimidate;
+import com.atherys.rpgskills.t2.Bolster;
 import com.atherys.rpgskills.t1.*;
 import com.atherys.rpgskills.t2.*;
+import com.atherys.rpgskills.t3.*;
 import com.atherys.rpgskills.util.BlankEffect;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.skill.BlankSkill;
@@ -41,26 +45,43 @@ public class RpgSkills {
     public void onRegisterSkills(SkillRegistrationEvent event) {
         event.registerSkills(
                 // Tier 1
-                new Enfeeble(),
                 new FireballSkill(),
-                new Hamstring(),
-                new Recover(),
+                new Invocation(),
+                new Shield(),
                 new Slash(),
-                new Bolster(),
+                new Sprint(),
 
                 // Tier 2
-                new BoulderToss(),
+                new ArcaneWard(),
+                new Backstab(),
+                new Bolster(),
                 new Cleanse(),
-                new ShieldSpikes(),
-                new Disarm(),
-                new Envenom(),
-                new Invigorate(),
-                new Leap(),
-                new Blindbolt(),
-                new Pulsewave(),
-                new Siphon(),
                 new Cleave(),
+                new CriticalMass(),
+                new HolyPresence(),
+                new Enfeeble(),
+                new Hamstring(),
+                new IceBolt(),
+                new Intimidate(),
+                new Invigorate(),
+                new Kick(),
+                new Leap(),
+                new Pulsewave(),
+                new Shock(),
+                new SplitShot(),
+                new Strengthen(),
+                new Tackle(),
+                new Thorns(),
+                new Vanish(),
                 new VexingMark(),
+
+                // Tier 3
+                new BoulderToss(),
+                new Blindbolt(),
+                new Disarm(),
+                new Siphon(),
+                new ShieldSpikes(),
+                new Envenom(),
 
                 // For tree root
                 new BlankSkill("root-skill", "RootSkill")
@@ -71,7 +92,10 @@ public class RpgSkills {
     public void onRegisterEffects(EffectRegistrationEvent event) {
         event.registerEffects(
                 new BlankEffect(Hamstring.HAMSTRING_EFFECT, "Hamstring User", true),
-                new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User", true)
+                new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User", true),
+                new BlankEffect(ArcaneWard.WARD_EFFECT, "Arcane Ward User", true),
+                new BlankEffect(Tackle.TACKLE_EFFECT, "Arcane Ward User", true),
+                new BlankEffect(SplitShot.SPLITSHOT_EFFECT, "Split Shot User", true)
         );
     }
 }

@@ -66,6 +66,10 @@ public final class Effects {
         return new BlankTemporaryEffect(id, name, duration, isPositive);
     }
 
+    public static Applyable shield(String id, String name, int duration, int modifier) {
+        return new ShieldEffect(id, name, duration, modifier);
+    }
+
     public static Applyable ofSlowness(String id, String name, int duration, int modifier) {
         return new SlowEffect(id, name, duration, modifier);
     }
@@ -185,6 +189,25 @@ public final class Effects {
                         .amplifier(1)
                         .build(),
                     isPositive
+            );
+        }
+    }
+
+    private static class ShieldEffect extends TemporaryPotionEffect {
+        private static PotionEffect.Builder builder = PotionEffect.builder()
+                .particles(true)
+                .potionType(PotionEffectTypes.ABSORPTION)
+                .ambience(true);
+
+        public ShieldEffect(String id, String name, int duration, int amplifier) {
+            super(
+                    id,
+                    name,
+                    builder
+                        .duration(duration / 50)
+                        .amplifier(amplifier)
+                        .build(),
+                    true
             );
         }
     }

@@ -1,4 +1,4 @@
-package com.atherys.rpgskills.t2;
+package com.atherys.rpgskills.t3;
 
 import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.SkillSpec;
@@ -6,12 +6,18 @@ import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.Effects;
+import com.atherys.rpgskills.util.PhysicsUtils;
+import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.ApplyableCarrier;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.util.LivingUtils;
+import org.spongepowered.api.effect.particle.ParticleEffect;
+import org.spongepowered.api.effect.particle.ParticleOptions;
+import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.util.Color;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
@@ -19,11 +25,17 @@ import static com.atherys.rpgskills.util.CommonProperties.*;
 import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
-public class Siphon extends TargetedRPGSkill {
+public class Siphon extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_DAMAGE = "5.0";
     private static final String DEFAULT_HEALING = "5.0";
     private static final String DEFAULT_TIME = "10000";
     private static final String DEFAULT_OTHER_TEXT = "";
+
+    private static final ParticleEffect beamEffect = ParticleEffect.builder()
+            .type(ParticleTypes.PORTAL)
+            .quantity(2)
+            .option(ParticleOptions.COLOR, Color.BLACK)
+            .build();
 
     public Siphon() {
         super(
@@ -48,11 +60,15 @@ public class Siphon extends TargetedRPGSkill {
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
+        if (arePlayersInParty(user, target)) throw isInParty();
+
         int duration = asInt(user, target, getProperty(TIME, String.class, DEFAULT_TIME));
         double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
         double healing = asDouble(user, getProperty(HEALING, String.class, DEFAULT_HEALING));
 
         AtherysSkills.getInstance().getEffectService().applyEffect(target, new SiphonEffect(duration, damage, healing, user));
+
+        PhysicsUtils.spawnParticleBeam(beamEffect, user.getLocation().add(0, -0.5, 0), target.getLocation().add(0, -0.5, 0));
         return CastResult.success();
     }
 
@@ -69,7 +85,6 @@ public class Siphon extends TargetedRPGSkill {
         @Override
         protected boolean apply(ApplyableCarrier<?> character) {
             if (caster.isRemoved() || caster.health().get() <= 0) {
-                AtherysSkills.getInstance().getLogger().info("Remove siphon");
                 this.setRemoved();
                 return true;
             }
