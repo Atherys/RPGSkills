@@ -5,7 +5,6 @@ import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpg.api.stat.AttributeType;
-import com.atherys.rpg.api.stat.AttributeTypes;
 import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
@@ -31,7 +30,7 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_DECREASE = "0.5";
     private static final String DEFAULT_TIME = "10000";
     private static final String DEFAULT_OTHER_TEXT = "";
-    private static final String DEFAULT_ATTRIBUTE = AttributeTypes.CONSTITUTION.getId();
+    private static final String DEFAULT_ATTRIBUTE = "atherys:constitution";
 
     private AttributeType attributeType;
 

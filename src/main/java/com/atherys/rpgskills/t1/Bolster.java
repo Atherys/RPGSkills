@@ -4,13 +4,13 @@ import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.stat.AttributeType;
-import com.atherys.rpg.api.stat.AttributeTypes;
 import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.util.Tuple;
 
@@ -61,8 +61,9 @@ public class Bolster extends RPGSkill {
         double magicAmount = asDouble(user, getProperty(MAG_PROP, String.class, DEFAULT_MAG));
 
         Map<AttributeType, Double> attributes = new HashMap<>(2);
-        attributes.put(AttributeTypes.PHYSICAL_RESISTANCE, physicalAmount);
-        attributes.put(AttributeTypes.MAGICAL_RESISTANCE, magicAmount);
+        // TODO: These really shouldn't be hardcoded. Properties maybe?
+        attributes.put(Sponge.getRegistry().getType(AttributeType.class, "atherys:magical_resistance").orElse(null), magicAmount);
+        attributes.put(Sponge.getRegistry().getType(AttributeType.class, "atherys:physical_resistance").orElse(null), physicalAmount);
         Applyable resistanceEffect = Effects.ofAttributes(SHIELD_EFFECT, "Shield", duration, attributes, true);
 
         AtherysSkills.getInstance().getEffectService().applyEffect(user, resistanceEffect);

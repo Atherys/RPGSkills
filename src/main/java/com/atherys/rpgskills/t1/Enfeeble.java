@@ -4,7 +4,6 @@ import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpg.api.stat.AttributeType;
-import com.atherys.rpg.api.stat.AttributeTypes;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.Effects;
@@ -13,6 +12,7 @@ import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.util.Tuple;
 
@@ -64,8 +64,9 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
         double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
 
         Map<AttributeType, Double> attributes = new HashMap<>(2);
-        attributes.put(AttributeTypes.MAGICAL_RESISTANCE, resistancesLost);
-        attributes.put(AttributeTypes.PHYSICAL_RESISTANCE, resistancesLost);
+        // TODO: These really shouldn't be hardcoded. Properties maybe?
+        attributes.put(Sponge.getRegistry().getType(AttributeType.class, "atherys:magical_resistance").orElse(null), resistancesLost);
+        attributes.put(Sponge.getRegistry().getType(AttributeType.class, "atherys:physical_resistance").orElse(null), resistancesLost);
         Applyable resistanceEffect = Effects.ofAttributes(ENFEEBLE_RESISTANCE_EFFECT, "Enfeeble", duration, attributes, false);
 
         Applyable damageEffect = Effects.magicalDamageOverTime(
