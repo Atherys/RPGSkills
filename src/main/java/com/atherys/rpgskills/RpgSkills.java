@@ -69,7 +69,7 @@ public class RpgSkills {
                 new Pulsewave(),
                 new Shock(),
                 new SplitShot(),
-                new Strengthen(),
+                new Empower(),
                 new Tackle(),
                 new Thorns(),
                 new Vanish(),
