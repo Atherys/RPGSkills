@@ -30,7 +30,7 @@ public class Empower extends RPGSkill {
     private static final String EMPOWER_EFFECT = "empower-effect";
     private static final String DEFAULT_AMPLIFIER = "0.5";
     private static final String DEFAULT_TIME = "5000";
-    private static final String DEFAULT_ATTRIBUTE = "atherys:melee_multiplier";
+    private static final String DEFAULT_ATTRIBUTE = "atherys:strength";
 
     private static Sound sound1 = Sound.builder(SoundTypes.BLOCK_ENDERCHEST_OPEN, 1).pitch(1.5).build();
     private static Sound sound2 = Sound.builder(SoundTypes.ENTITY_ELDER_GUARDIAN_HURT, 0.6).pitch(1.5).build();
@@ -55,8 +55,8 @@ public class Empower extends RPGSkill {
                 Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
         );
 
-        this.attributeType = Sponge.getRegistry().getType(AttributeType.class,
-                getProperty(ATTRIBUTE, String.class, DEFAULT_ATTRIBUTE)).get();
+        String attributeName = getProperty(ATTRIBUTE, String.class, DEFAULT_ATTRIBUTE);
+        this.attributeType = Sponge.getRegistry().getType(AttributeType.class, attributeName).get();
     }
 
     @Override
