@@ -82,6 +82,7 @@ public class RpgSkills {
                 new Siphon(),
                 new ShieldSpikes(),
                 new Envenom(),
+                new ExplosiveShot(),
 
                 // For tree root
                 new BlankSkill("root-skill", "RootSkill")
@@ -95,7 +96,8 @@ public class RpgSkills {
                 new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User", true),
                 new BlankEffect(ArcaneWard.WARD_EFFECT, "Arcane Ward User", true),
                 new BlankEffect(Tackle.TACKLE_EFFECT, "Arcane Ward User", true),
-                new BlankEffect(SplitShot.SPLITSHOT_EFFECT, "Split Shot User", true)
+                new BlankEffect(SplitShot.SPLITSHOT_EFFECT, "Split Shot User", true),
+                new BlankEffect(ExplosiveShot.EXPLOSIVE_SHOT_EFFECT, "Explosive Shot User", true)
         );
     }
 }
