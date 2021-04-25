@@ -80,7 +80,7 @@ public class SplitShot extends RPGSkill {
             angles.forEach(a -> {
                 double x = velocity.getX();
                 double z = velocity.getZ();
-                Vector3d newVelocity = Vector3d.from((Math.cos(a) * x + Math.sin(a) * z), velocity.getY(), Math.sin(a) * x + Math.cos(a) * z);
+                Vector3d newVelocity = Vector3d.from((x * Math.cos(a) - z * Math.sin(a)), velocity.getY(), (x * Math.sin(a) + z * Math.cos(a)));
 
                 living.launchProjectile(Arrow.class, newVelocity).ifPresent(arrow -> {
                     arrow.offer(Keys.PICKUP_RULE, PickupRules.DISALLOWED);
