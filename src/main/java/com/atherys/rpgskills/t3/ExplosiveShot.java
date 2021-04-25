@@ -54,7 +54,5 @@ public class ExplosiveShot extends RPGSkill {
 
     public void onCollide(CollideEvent event, @Getter("getSource") Arrow arrow) {
         Location<World> location = arrow.getLocation();
-        double radius = asDouble(, getProperty(RADIUS, String.class, "3"));
-        Collection<Entity> inRadius = arrow.getNearbyEntities()
     }
 }

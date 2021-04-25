@@ -14,7 +14,6 @@ import com.atherys.skills.api.util.LivingUtils;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;

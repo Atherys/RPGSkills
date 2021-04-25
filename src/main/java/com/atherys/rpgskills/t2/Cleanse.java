@@ -14,9 +14,7 @@ import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
 import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
-public class Cleanse  extends TargetedRPGSkill implements PartySkill {
-
-    private static final String DEFAULT_OTHER_TEXT = "";
+public class Cleanse extends TargetedRPGSkill implements PartySkill {
 
     public Cleanse() {
         super(
