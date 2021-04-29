@@ -31,7 +31,6 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_TIME = "5000";
     private static final String DEFAULT_RESISTANCE_LOSS = "5";
     private static final String DEFAULT_DAMAGE = "5";
-    private static final String DEFAULT_OTHER_TEXT = "";
 
     public Enfeeble() {
         super(
@@ -60,7 +59,7 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
         if (arePlayersInParty(user, target)) throw isInParty();
 
         double resistancesLost = -1 * asDouble(user, target, getProperty(AMPLIFIER, String.class, DEFAULT_RESISTANCE_LOSS));
-        long duration = (long) asDouble(user, getProperty(TIME, String.class, DEFAULT_TIME));
+        long duration = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
         double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
 
         Map<AttributeType, Double> attributes = new HashMap<>(2);

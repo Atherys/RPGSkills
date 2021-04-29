@@ -5,8 +5,11 @@ import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.DescriptionUtils;
+import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
+import com.atherys.skills.AtherysSkills;
+import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
@@ -24,6 +27,7 @@ import org.spongepowered.api.world.World;
 import java.util.Collection;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpg.api.skill.DescriptionArguments.timeProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
 import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
 import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
@@ -32,7 +36,8 @@ import static org.spongepowered.api.text.TextTemplate.arg;
 public class Pulsewave extends RPGSkill implements PartySkill {
     private static final String DEFAULT_RADIUS = "5.0";
     private static final String DEFAULT_DAMAGE = "5.0";
-    private static final String DEFAULT_OTHER_TEXT = "";
+    private static final String DEFAULT_DOT = "5.0";
+    private static final String DEFAULT_TIME = "10000";
 
     private static final ParticleEffect particleEffect = ParticleEffect.builder()
             .type(ParticleTypes.FLAME)
@@ -45,8 +50,9 @@ public class Pulsewave extends RPGSkill implements PartySkill {
                         .id("immolate")
                         .name("Immolate")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Send out a burst of fire, dealing ", arg(DAMAGE), " magical damage to all enemies in a ",
-                                arg(RADIUS), " block radius from you. ", arg(OTHER_TEXT)
+                                "Send out a wave of flames in all directions, dealing ", arg(DAMAGE), " magical damage to all enemies " +
+                                        "within ", arg(RADIUS), " blocks and an additional ", arg(AMPLIFIER), " magical damage over ", arg(TIME), " seconds."
+
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -54,8 +60,9 @@ public class Pulsewave extends RPGSkill implements PartySkill {
 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-                Tuple.of(RADIUS, ofProperty(this, AMPLIFIER, DEFAULT_RADIUS)),
-                Tuple.of(OTHER_TEXT, otherText(this))
+                Tuple.of(RADIUS, ofProperty(this, RADIUS, DEFAULT_RADIUS)),
+                Tuple.of(TIME, timeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_DOT))
         );
     }
 
@@ -66,16 +73,21 @@ public class Pulsewave extends RPGSkill implements PartySkill {
 
         if (inRadius.size() > 0) {
             double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
+            int duration = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
+            Applyable damageEffect = Effects.magicalDamageOverTime(
+                    "immolate",
+                    "Immolate",
+                    duration,
+                    damage,
+                    user
+            );
             DamageSource damageSource = DamageUtils.directMagical(user);
-            Vector3d userPosition = user.getLocation().getPosition();
 
             inRadius.forEach(entity -> {
                 if (entity instanceof Living && !entity.equals(user) && !arePlayersInParty(user, (Living) entity)) {
                     Living target = (Living) entity;
-                    Vector3d between = target.getLocation().getPosition().sub(userPosition).normalize();
-
-                    target.setVelocity(Vector3d.from(between.getX() * 0.5, 0.4, between.getZ() * 0.5));
                     target.damage(damage, damageSource);
+                    AtherysSkills.getInstance().getEffectService().applyEffect(target, damageEffect);
                 }
             });
         }
