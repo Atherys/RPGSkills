@@ -82,7 +82,7 @@ public class Vanish extends RPGSkill implements AttackSkill {
     private static class VanishEffect extends TemporaryEffect {
 
         protected VanishEffect(int duration) {
-            super("vanish", "Vanish", duration / 50, true);
+            super("vanish", "Vanish", duration, true);
         }
 
         @Override
@@ -90,6 +90,7 @@ public class Vanish extends RPGSkill implements AttackSkill {
             character.getLiving().ifPresent(living -> {
                 living.offer(Keys.VANISH, true);
             });
+
             return false;
         }
 
