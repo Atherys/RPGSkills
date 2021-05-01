@@ -36,6 +36,7 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
     private static final String DEFAULT_TIME = "5000";
     private static final String DEFAULT_AMPLIFIER = "1";
     private static final String DEFAULT_DAMAGE = "5.0";
+    private static final String DEFAULT_PREPARED_DURATION = "5000";
     private static final String DEFAULT_OTHER_TEXT = "";
 
     public Hamstring() {
@@ -44,7 +45,8 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
                 .id("hamstring")
                 .name("Hamstring")
                 .descriptionTemplate(DescriptionUtils.buildTemplate(
-                        "Your next melee attack to hit an enemy will cripple them, dealing ", arg(DAMAGE),
+                        "Your next melee attack within ", arg(PREPARED_DURATION),
+                        " to hit an enemy will cripple them, dealing ", arg(DAMAGE),
                         " physical damage and reducing their movement speed by ", arg(AMPLIFIER),
                         GOLD, "%", " for ", arg(TIME),
                         ". ", arg(OTHER_TEXT)
@@ -58,14 +60,18 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(AMPLIFIER, ofSource(getProperty(AMPLIFIER, String.class, DEFAULT_AMPLIFIER) + "*15")),
                 Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(PREPARED_DURATION, DescriptionArguments.timeProperty(this, PREPARED_DURATION, DEFAULT_PREPARED_DURATION)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        AtherysSkills.getInstance().getEffectService().applyEffect(user, HAMSTRING_EFFECT);
-
+        AtherysSkills.getInstance().getEffectService().applyEffect(user,
+                Effects.blankTemporary(
+                    HAMSTRING_EFFECT, "Hamstring User",
+                    asInt(user, getProperty(PREPARED_DURATION, String.class, DEFAULT_PREPARED_DURATION)),
+                    true));
         return CastResult.success();
     }
 
