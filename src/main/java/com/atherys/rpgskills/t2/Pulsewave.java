@@ -74,19 +74,19 @@ public class Pulsewave extends RPGSkill implements PartySkill {
         if (inRadius.size() > 0) {
             double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
             int duration = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
-            Applyable damageEffect = Effects.magicalDamageOverTime(
-                    "immolate",
-                    "Immolate",
-                    duration,
-                    damage,
-                    user
-            );
             DamageSource damageSource = DamageUtils.directMagical(user);
 
             inRadius.forEach(entity -> {
                 if (entity instanceof Living && !entity.equals(user) && !arePlayersInParty(user, (Living) entity)) {
                     Living target = (Living) entity;
                     target.damage(damage, damageSource);
+                    Applyable damageEffect = Effects.magicalDamageOverTime(
+                            "immolate",
+                            "Immolate",
+                            duration,
+                            damage,
+                            user
+                    );
                     AtherysSkills.getInstance().getEffectService().applyEffect(target, damageEffect);
                 }
             });
