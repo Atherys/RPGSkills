@@ -12,6 +12,8 @@ public final class CommonProperties {
 
     public static final String AMPLIFIER = "amplifier";
 
+    public static final String PREPARED_DURATION = "prepared-duration";
+
     public static final String TIME = "time";
 
     public static final String OTHER_TEXT = "other-text";

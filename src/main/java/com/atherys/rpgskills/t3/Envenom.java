@@ -27,6 +27,7 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
     public static final String POISON_EFFECT_USER = "poison-effect-user";
 
     private static final String DEFAULT_TIME = "10000";
+    private static final String DEFAULT_PREPARED_DURATION = "10000";
     private static final String DEFAULT_DAMAGE = "10";
     private static final String DEFAULT_OTHER_TEXT = "";
 
@@ -36,7 +37,8 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
                         .id("envenom")
                         .name("Envenom")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Coat your weapon in a deadly venom, causing your next weapon attack to deal an additional ", arg(DAMAGE),
+                                "Coat your weapon in a deadly venom, causing your next weapon attack within ",
+                                arg(PREPARED_DURATION), " to deal an additional ", arg(DAMAGE),
                                 "pure damage over ", arg(TIME), ". ", arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
@@ -46,13 +48,18 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
         setDescriptionArguments(
                 Tuple.of(DAMAGE, DescriptionArguments.ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(PREPARED_DURATION, DescriptionArguments.timeProperty(this, PREPARED_DURATION, DEFAULT_PREPARED_DURATION)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        AtherysSkills.getInstance().getEffectService().applyEffect(user, POISON_EFFECT_USER);
+        AtherysSkills.getInstance().getEffectService().applyEffect(user,
+                Effects.blankTemporary(
+                        POISON_EFFECT_USER, "Poison User",
+                        asInt(user, getProperty(PREPARED_DURATION, String.class, DEFAULT_PREPARED_DURATION)),
+                        true));
         return CastResult.success();
     }
 
