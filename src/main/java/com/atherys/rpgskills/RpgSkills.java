@@ -91,11 +91,8 @@ public class RpgSkills {
     @Listener
     public void onRegisterEffects(EffectRegistrationEvent event) {
         event.registerEffects(
-                new BlankEffect(Hamstring.HAMSTRING_EFFECT, "Hamstring User", true),
-                new BlankEffect(Envenom.POISON_EFFECT_USER, "Poison User", true),
                 new BlankEffect(ArcaneWard.WARD_EFFECT, "Arcane Ward User", true),
                 new BlankEffect(Tackle.TACKLE_EFFECT, "Arcane Ward User", true),
-                new BlankEffect(SplitShot.SPLITSHOT_EFFECT, "Split Shot User", true),
                 new BlankEffect(ExplosiveShot.EXPLOSIVE_SHOT_EFFECT, "Explosive Shot User", true)
         );
     }
