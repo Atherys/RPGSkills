@@ -23,8 +23,6 @@ import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Bolster extends RPGSkill {
-    public static final String SHIELD_EFFECT = "shield-effect";
-
     private static final String DEFAULT_TIME = "10000";
     private static final String DEFAULT_PHYS = "5.0";
     private static final String DEFAULT_MAG = "5.0";
@@ -65,7 +63,7 @@ public class Bolster extends RPGSkill {
         Map<AttributeType, Double> attributes = new HashMap<>(2);
         attributes.put(physAttributeType, physicalAmount);
         attributes.put(magicAttributeType, magicAmount);
-        Applyable resistanceEffect = Effects.ofAttributes(SHIELD_EFFECT, "Shield", duration, attributes, true);
+        Applyable resistanceEffect = Effects.ofAttributes(getId(), getName(), duration, attributes, true);
 
         AtherysSkills.getInstance().getEffectService().applyEffect(user, resistanceEffect);
 

@@ -41,7 +41,7 @@ public class Shield extends RPGSkill {
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         int duration = asInt(user, getProperty(CommonProperties.TIME, String.class, "10000"));
         int amount = asInt(user, getProperty(AMPLIFIER, String.class, "50"));
-        AtherysSkills.getInstance().getEffectService().applyEffect(user, Effects.shield("sprint", "Sprint", duration, amount));
+        AtherysSkills.getInstance().getEffectService().applyEffect(user, Effects.shield(getId(), getName(), duration, amount));
         return CastResult.success();
     }
 }

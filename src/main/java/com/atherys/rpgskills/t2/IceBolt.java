@@ -103,19 +103,19 @@ public class IceBolt extends RPGSkill implements PartySkill {
             if (arePlayersInParty(user, target)) return;
 
             if (!target.equals(user)) {
-                Vector3d velocity = iceBolt.getVelocity().normalize();
                 iceBolts.remove(iceBolt.getUniqueId());
                 projectileToItem.remove(iceBolt.getUniqueId());
                 iceBolt.getWorld().getEntity(bolt).ifPresent(Entity::remove);
                 iceBolt.remove();
 
-                double damage = asDouble(user, target, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
+                double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE_EXPRESSION));
                 boolean dealtDamage = target.damage(damage, DamageUtils.directMagical(user));
 
                 if (dealtDamage) {
-                    int duration = asInt(user, getProperty(TIME, String.class, DEFAULT_SLOW_DURATION));
+                    int duration = asInt(user, target, getProperty(TIME, String.class, DEFAULT_SLOW_DURATION));
                     int modifier = asInt(user, getProperty(AMPLIFIER, String.class, DEFAULT_SLOW_AMPLIFIER));
-                    Applyable slowness = Effects.ofSlowness("icebolt", "IceBolt", duration, modifier);
+                    Applyable slowness = Effects.ofSlowness(getId(), getName(), duration, modifier);
+
                     AtherysSkills.getInstance().getEffectService().applyEffect(target, slowness);
                 }
             }

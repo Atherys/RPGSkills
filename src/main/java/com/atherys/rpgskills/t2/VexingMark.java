@@ -64,7 +64,7 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
         long duration =  asInt(user, target, getProperty(TIME, String.class, DEFAULT_TIME));
         double decrease = asDouble(user, target, getProperty(AMPLIFIER, String.class, DEFAULT_DECREASE));
         Map<AttributeType, Double> decreasedAttributes = Collections.singletonMap(attributeType, -decrease);
-        Applyable effect = Effects.ofAttributes(VEXING_MARK_EFFECT, "Vexing Mark", duration, decreasedAttributes, false);
+        Applyable effect = Effects.ofAttributes(VEXING_MARK_EFFECT, getName(), duration, decreasedAttributes, false);
 
         AtherysSkills.getInstance().getEffectService().applyEffect(target, effect);
         PhysicsUtils.playSoundForLiving(target, SoundTypes.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1.2);

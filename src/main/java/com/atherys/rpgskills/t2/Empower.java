@@ -26,8 +26,6 @@ import static com.atherys.rpgskills.util.CommonProperties.*;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Empower extends RPGSkill {
-
-    private static final String EMPOWER_EFFECT = "empower-effect";
     private static final String DEFAULT_AMPLIFIER = "0.5";
     private static final String DEFAULT_TIME = "5000";
     private static final String DEFAULT_ATTRIBUTE = "atherys:strength";
@@ -67,7 +65,7 @@ public class Empower extends RPGSkill {
         Map<AttributeType, Double> attributes = new HashMap<>(1);
         attributes.put(this.attributeType, damageMultiplier);
 
-        Applyable damageEffect = Effects.ofAttributes(EMPOWER_EFFECT, "Empower", duration, attributes, true);
+        Applyable damageEffect = Effects.ofAttributes(getId(), getName(), duration, attributes, true);
         AtherysSkills.getInstance().getEffectService().applyEffect(user, damageEffect);
 
         Location<World> location = user.getLocation();

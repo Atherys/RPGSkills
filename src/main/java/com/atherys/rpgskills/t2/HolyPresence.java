@@ -64,12 +64,12 @@ public class HolyPresence extends RPGSkill implements PartySkill, RadiusSkill {
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         double radius = asDouble(user, getProperty(RADIUS, String.class, DEFAULT_RADIUS));
-        int duration = asInt(user, getProperty(TIME, String.class, DEFAULT_DURATION));
         int amplifier = asInt(user, getProperty(AMPLIFIER, String.class, DEFAULT_AMPLIFIER));
         Location<World> location = user.getLocation();
 
         applyToRadius(location, radius, living -> {
             if (!arePlayersInParty(user, living) || living == user) {
+                int duration = asInt(user, living, getProperty(TIME, String.class, DEFAULT_DURATION));
                 AtherysSkills.getInstance().getEffectService().applyEffect(living, Effects.ofSlowness("holy-presence", "Holy Presence", duration, amplifier));
             }
         });

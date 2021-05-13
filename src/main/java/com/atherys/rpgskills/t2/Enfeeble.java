@@ -71,10 +71,10 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
         Map<AttributeType, Double> attributes = new HashMap<>(2);
         attributes.put(physAttributeType, physicalAmount);
         attributes.put(magicAttributeType, magicAmount);
-        Applyable resistanceEffect = Effects.ofAttributes(ENFEEBLE_RESISTANCE_EFFECT, "Enfeeble", duration, attributes, false);
+        Applyable resistanceEffect = Effects.ofAttributes(ENFEEBLE_RESISTANCE_EFFECT, getName(), duration, attributes, false);
 
         double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
-        Applyable damageEffect = Effects.magicalDamageOverTime(ENFEEBLE_DOT_EFFECT, "Enfeeble", duration, damage, user);
+        Applyable damageEffect = Effects.magicalDamageOverTime(ENFEEBLE_DOT_EFFECT, getName(), duration, damage, user);
 
         AtherysSkills.getInstance().getEffectService().applyEffect(target, resistanceEffect);
         AtherysSkills.getInstance().getEffectService().applyEffect(target, damageEffect);

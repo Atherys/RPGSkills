@@ -29,7 +29,7 @@ public class Sprint extends RPGSkill {
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         int duration = asInt(user, getProperty(TIME, String.class, "10000"));
-        AtherysSkills.getInstance().getEffectService().applyEffect(user, Effects.ofSpeed("sprint", "Sprint", duration, 1));
+        AtherysSkills.getInstance().getEffectService().applyEffect(user, Effects.ofSpeed(getId(), getName(), duration, 1));
         return CastResult.success();
     }
 }

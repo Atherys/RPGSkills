@@ -36,7 +36,6 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
     private static final String DEFAULT_TIME = "5000";
     private static final String DEFAULT_AMPLIFIER = "1";
     private static final String DEFAULT_DAMAGE = "5.0";
-    private static final String DEFAULT_OTHER_TEXT = "";
 
     public Hamstring() {
         super(
@@ -76,12 +75,12 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
         if (AtherysSkills.getInstance().getEffectService().hasEffect(user, HAMSTRING_EFFECT)) {
             AtherysSkills.getInstance().getEffectService().removeEffect(user, HAMSTRING_EFFECT);
 
-            int slowTime = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
+            int slowTime = asInt(user, target, getProperty(TIME, String.class, DEFAULT_TIME));
             int slowAmplifier = asInt(user, getProperty(AMPLIFIER, String.class, DEFAULT_AMPLIFIER));
             double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
 
             target.damage(damage, DamageUtils.directPhysical(user));
-            Applyable hamstring = Effects.ofSlowness("hamstring", "Hamstring", slowTime, slowAmplifier);
+            Applyable hamstring = Effects.ofSlowness(getId(), getName(), slowTime, slowAmplifier);
             AtherysSkills.getInstance().getEffectService().applyEffect(target, hamstring);
         }
 
