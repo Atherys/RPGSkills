@@ -6,9 +6,11 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpg.api.stat.AttributeType;
 import com.atherys.rpgskills.util.DescriptionUtils;
+import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.PhysicsUtils;
 import com.atherys.rpgskills.util.skill.PartySkill;
 import com.atherys.skills.AtherysSkills;
+import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.effect.ApplyableCarrier;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
@@ -31,7 +33,6 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
 
     private static final String DEFAULT_DECREASE = "0.5";
     private static final String DEFAULT_TIME = "10000";
-    private static final String DEFAULT_OTHER_TEXT = "";
     private static final String DEFAULT_ATTRIBUTE = "atherys:constitution";
 
     private final AttributeType attributeType;
@@ -55,37 +56,22 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
 
-        this.attributeType = Sponge.getRegistry().getType(AttributeType.class, getProperty(ATTRIBUTE, String.class, DEFAULT_ATTRIBUTE)).get();
+        String attributeId = getProperty(ATTRIBUTE, String.class, DEFAULT_ATTRIBUTE);
+        this.attributeType = Sponge.getRegistry().getType(AttributeType.class, attributeId).get();
     }
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         if (arePlayersInParty(user, target)) throw isInParty();
+
+        long duration =  asInt(user, target, getProperty(TIME, String.class, DEFAULT_TIME));
         double decrease = asDouble(user, target, getProperty(AMPLIFIER, String.class, DEFAULT_DECREASE));
         Map<AttributeType, Double> decreasedAttributes = Collections.singletonMap(attributeType, -decrease);
+        Applyable effect = Effects.ofAttributes(VEXING_MARK_EFFECT, "Vexing Mark", duration, decreasedAttributes, false);
 
-        AtherysSkills.getInstance().getEffectService().applyEffect(
-                target,
-                new VexingMarkEffect(
-                        (long) asDouble(user, target, getProperty(TIME, String.class, DEFAULT_TIME)),
-                        decreasedAttributes
-                )
-        );
+        AtherysSkills.getInstance().getEffectService().applyEffect(target, effect);
+        PhysicsUtils.playSoundForLiving(target, SoundTypes.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1.2);
 
         return CastResult.success();
-    }
-
-    private static class VexingMarkEffect extends TemporaryAttributesEffect {
-        private VexingMarkEffect(long duration, Map<AttributeType, Double> attributes) {
-            super(VEXING_MARK_EFFECT, "Vexing Mark", duration, attributes, false);
-        }
-
-        @Override
-        public boolean apply(long timestamp, ApplyableCarrier<?> character) {
-            character.getLiving().ifPresent(living -> {
-                PhysicsUtils.playSoundForLiving(living, SoundTypes.ENTITY_ELDER_GUARDIAN_CURSE, 1, 1.2);
-            });
-            return super.apply(timestamp, character);
-        }
     }
 }

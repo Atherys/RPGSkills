@@ -41,7 +41,7 @@ public class Pulsewave extends RPGSkill implements PartySkill {
 
     private static final ParticleEffect particleEffect = ParticleEffect.builder()
             .type(ParticleTypes.FLAME)
-            .quantity(5)
+            .quantity(3)
             .build();
 
     public Pulsewave() {
@@ -92,16 +92,18 @@ public class Pulsewave extends RPGSkill implements PartySkill {
             });
         }
 
-        PhysicsUtils.spawnParticleCircle(particleEffect, user.getLocation(), radius / 3);
+        Location<World> particleLocation = new Location<>(user.getWorld(), user.getLocation().getPosition().sub(0, 0.5, 0));
+
+        PhysicsUtils.spawnParticleCircle(particleEffect, particleLocation, radius / 3);
 
         Task.builder()
-                .delayTicks(4)
-                .execute(() -> PhysicsUtils.spawnParticleCircle(particleEffect, user.getLocation(), radius * 2/3))
+                .delayTicks(2)
+                .execute(() -> PhysicsUtils.spawnParticleCircle(particleEffect, particleLocation, radius * 2/3))
                 .submit(AtherysRPG.getInstance());
 
         Task.builder()
-                .delayTicks(8)
-                .execute(() -> PhysicsUtils.spawnParticleCircle(particleEffect, user.getLocation(), radius))
+                .delayTicks(4)
+                .execute(() -> PhysicsUtils.spawnParticleCircle(particleEffect, particleLocation, radius))
                 .submit(AtherysRPG.getInstance());
 
         return CastResult.success();

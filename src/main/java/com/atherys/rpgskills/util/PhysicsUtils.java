@@ -80,6 +80,5 @@ public final class PhysicsUtils {
 
             center.getExtent().spawnParticles(particleEffect, Vector3d.from(x, y, z));
         }
-
     }
 }

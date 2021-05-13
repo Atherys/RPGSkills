@@ -18,20 +18,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
-import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
-import static com.atherys.rpgskills.util.CommonProperties.TIME;
+import static com.atherys.rpgskills.util.CommonProperties.*;
 import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Bolster extends RPGSkill {
     public static final String SHIELD_EFFECT = "shield-effect";
 
-    private static final String MAG_PROP = "magic";
-    private static final String PHYS_PROP = "phys";
     private static final String DEFAULT_TIME = "10000";
     private static final String DEFAULT_PHYS = "5.0";
     private static final String DEFAULT_MAG = "5.0";
-    private static final String DEFAULT_OTHER_TEXT = "";
+
+    private final AttributeType physAttributeType;
+    private final AttributeType magicAttributeType;
 
     public Bolster() {
         super(
@@ -41,29 +40,31 @@ public class Bolster extends RPGSkill {
                         .cooldown("0")
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Bolster your defenses, gaining ", arg(PHYS_PROP), " physical resistance and ", arg(MAG_PROP),
+                                "Bolster your defenses, gaining ", arg(PHYSICAL), " physical resistance and ", arg(MAGICAL),
                                 " magical resistance for ", arg(TIME), ". ", arg(OTHER_TEXT)
                         ))
         );
 
         setDescriptionArguments(
-                Tuple.of(PHYS_PROP, ofProperty(this, PHYS_PROP, DEFAULT_PHYS)),
-                Tuple.of(MAG_PROP, ofProperty(this, MAG_PROP, DEFAULT_MAG)),
+                Tuple.of(PHYSICAL, ofProperty(this, PHYSICAL, DEFAULT_PHYS)),
+                Tuple.of(MAGICAL, ofProperty(this, MAGICAL, DEFAULT_MAG)),
                 Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
+
+        this.physAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:physres_multiplier").get();
+        this.magicAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:magicres_multiplier").get();
     }
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         int duration = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
-        double physicalAmount = asDouble(user, getProperty(PHYS_PROP, String.class, DEFAULT_PHYS));
-        double magicAmount = asDouble(user, getProperty(MAG_PROP, String.class, DEFAULT_MAG));
+        double physicalAmount = asDouble(user, getProperty(PHYSICAL, String.class, DEFAULT_PHYS));
+        double magicAmount = asDouble(user, getProperty(MAGICAL, String.class, DEFAULT_MAG));
 
         Map<AttributeType, Double> attributes = new HashMap<>(2);
-        // TODO: These really shouldn't be hardcoded. Properties maybe?
-        attributes.put(Sponge.getRegistry().getType(AttributeType.class, "atherys:magical_resistance").orElse(null), magicAmount);
-        attributes.put(Sponge.getRegistry().getType(AttributeType.class, "atherys:physical_resistance").orElse(null), physicalAmount);
+        attributes.put(physAttributeType, physicalAmount);
+        attributes.put(magicAttributeType, magicAmount);
         Applyable resistanceEffect = Effects.ofAttributes(SHIELD_EFFECT, "Shield", duration, attributes, true);
 
         AtherysSkills.getInstance().getEffectService().applyEffect(user, resistanceEffect);

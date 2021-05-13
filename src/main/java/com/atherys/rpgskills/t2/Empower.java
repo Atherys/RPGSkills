@@ -55,8 +55,8 @@ public class Empower extends RPGSkill {
                 Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
         );
 
-        String attributeName = getProperty(ATTRIBUTE, String.class, DEFAULT_ATTRIBUTE);
-        this.attributeType = Sponge.getRegistry().getType(AttributeType.class, attributeName).get();
+        String attributeId = getProperty(ATTRIBUTE, String.class, DEFAULT_ATTRIBUTE);
+        this.attributeType = Sponge.getRegistry().getType(AttributeType.class, attributeId).get();
     }
 
     @Override

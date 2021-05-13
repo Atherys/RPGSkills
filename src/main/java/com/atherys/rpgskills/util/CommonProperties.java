@@ -18,6 +18,10 @@ public final class CommonProperties {
 
     public static final String ATTRIBUTE = "attribute";
 
+    public static final String PHYSICAL = "phys";
+
+    public static final String MAGICAL = "magic";
+
     public static final String HORIZONTAL = "horizontal";
 
     public static final String VERTICAL = "vertical";

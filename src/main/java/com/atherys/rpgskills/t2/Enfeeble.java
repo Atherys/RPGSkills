@@ -32,6 +32,9 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_RESISTANCE_LOSS = "5";
     private static final String DEFAULT_DAMAGE = "5";
 
+    private final AttributeType physAttributeType;
+    private final AttributeType magicAttributeType;
+
     public Enfeeble() {
         super(
                 SkillSpec.create()
@@ -40,7 +43,7 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Weaken your target, dealing ", arg(DAMAGE), " magical damage over ",
                                 arg(TIME), " and reducing their physical and magic resistances by ",
-                                arg(AMPLIFIER), " for the duration.", arg(OTHER_TEXT)
+                                arg(PHYSICAL), " and ", arg(MAGICAL), " for the duration.", arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -48,33 +51,31 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "5.0")),
-                Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_RESISTANCE_LOSS)),
                 Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(PHYSICAL, ofProperty(this, PHYSICAL, DEFAULT_RESISTANCE_LOSS)),
+                Tuple.of(MAGICAL, ofProperty(this, MAGICAL, DEFAULT_RESISTANCE_LOSS)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
+
+        this.physAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:physres_multiplier").get();
+        this.magicAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:magicres_multiplier").get();
     }
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         if (arePlayersInParty(user, target)) throw isInParty();
 
-        double resistancesLost = -1 * asDouble(user, target, getProperty(AMPLIFIER, String.class, DEFAULT_RESISTANCE_LOSS));
         long duration = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
-        double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
 
+        double physicalAmount = asDouble(user, getProperty(PHYSICAL, String.class, DEFAULT_RESISTANCE_LOSS));
+        double magicAmount = asDouble(user, getProperty(MAGICAL, String.class, DEFAULT_RESISTANCE_LOSS));
         Map<AttributeType, Double> attributes = new HashMap<>(2);
-        // TODO: These really shouldn't be hardcoded. Properties maybe?
-        attributes.put(Sponge.getRegistry().getType(AttributeType.class, "atherys:magical_resistance").orElse(null), resistancesLost);
-        attributes.put(Sponge.getRegistry().getType(AttributeType.class, "atherys:physical_resistance").orElse(null), resistancesLost);
+        attributes.put(physAttributeType, physicalAmount);
+        attributes.put(magicAttributeType, magicAmount);
         Applyable resistanceEffect = Effects.ofAttributes(ENFEEBLE_RESISTANCE_EFFECT, "Enfeeble", duration, attributes, false);
 
-        Applyable damageEffect = Effects.magicalDamageOverTime(
-                ENFEEBLE_DOT_EFFECT,
-                "Enfeeble",
-                duration,
-                damage,
-                user
-        );
+        double damage = asDouble(user, getProperty(DAMAGE, String.class, DEFAULT_DAMAGE));
+        Applyable damageEffect = Effects.magicalDamageOverTime(ENFEEBLE_DOT_EFFECT, "Enfeeble", duration, damage, user);
 
         AtherysSkills.getInstance().getEffectService().applyEffect(target, resistanceEffect);
         AtherysSkills.getInstance().getEffectService().applyEffect(target, damageEffect);
