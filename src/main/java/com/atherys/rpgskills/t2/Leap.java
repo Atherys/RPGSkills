@@ -11,13 +11,9 @@ import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
-import org.spongepowered.api.effect.sound.SoundType;
 import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.Tuple;
-
-import java.util.HashSet;
 
 import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
 import static com.atherys.rpgskills.util.DescriptionUtils.otherText;

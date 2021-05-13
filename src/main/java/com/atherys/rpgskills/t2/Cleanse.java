@@ -8,11 +8,6 @@ import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.util.Tuple;
-
-import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
-import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
-import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Cleanse extends TargetedRPGSkill implements PartySkill {
 

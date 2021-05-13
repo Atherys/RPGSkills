@@ -1,7 +1,5 @@
 package com.atherys.rpgskills.util.skill;
 
-import com.atherys.rpgskills.util.Effects;
-import com.atherys.skills.AtherysSkills;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.world.Location;

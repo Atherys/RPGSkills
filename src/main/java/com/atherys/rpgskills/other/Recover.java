@@ -9,18 +9,10 @@ import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.atherys.skills.api.util.LivingUtils;
-import com.flowpowered.math.vector.Vector3d;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.effect.particle.ParticleEffect;
-import org.spongepowered.api.effect.particle.ParticleType;
 import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.util.Tuple;
-import org.spongepowered.api.world.World;
-
-
-import java.util.Arrays;
-import java.util.List;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.HEALING;
