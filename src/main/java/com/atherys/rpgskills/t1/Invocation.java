@@ -49,7 +49,7 @@ public class Invocation extends TargetedRPGSkill implements PartySkill {
 
     @Override
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
-        double amount = asDouble(user, getProperty(HEALING, String.class, "50"));
+        double amount = asDouble(user, target, getProperty(HEALING, String.class, "50"));
 
         if (arePlayersInParty(user, target)) {
             LivingUtils.healLiving(target, amount);

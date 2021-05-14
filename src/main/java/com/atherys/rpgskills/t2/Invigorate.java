@@ -66,7 +66,7 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         if (!arePlayersInParty(user, target) && user != target) throw notInParty();
 
-        double healAmount = asDouble(user, getProperty(HEALING, String.class, DEFAULT_HEAL_EXPRESSION));
+        double healAmount = asDouble(user, target, getProperty(HEALING, String.class, DEFAULT_HEAL_EXPRESSION));
         LivingUtils.healLiving(target, healAmount);
 
         if (target != user) {
