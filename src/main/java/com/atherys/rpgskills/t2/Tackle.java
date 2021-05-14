@@ -40,7 +40,7 @@ public class Tackle extends RPGSkill {
         );
 
         setDescriptionArguments(
-                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "50")),
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "50"))
         );
     }
 
