@@ -53,7 +53,7 @@ public class IceBolt extends RPGSkill implements PartySkill {
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Launch a bolt of ice in the direction you are looking.",
                                 " It deals ", arg(DAMAGE), " magical damage to target and slows them by ",
-                                arg(AMPLIFIER), GOLD, "%", " for ", arg(TIME), " seconds.", arg(OTHER_TEXT)
+                                arg(AMPLIFIER), GOLD, "%", " for 3 seconds.", arg(OTHER_TEXT)
                         ))
                         .name("Ice Bolt")
                         .cooldown("0")
