@@ -56,7 +56,6 @@ public class HolyPresence extends RPGSkill implements PartySkill, RadiusSkill {
 
         setDescriptionArguments(
                 Tuple.of(RADIUS, ofProperty(this, RADIUS, DEFAULT_RADIUS)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_DURATION)),
                 Tuple.of(AMPLIFIER, ofSlowPercentProperty(this, AMPLIFIER, DEFAULT_AMPLIFIER))
         );
     }
