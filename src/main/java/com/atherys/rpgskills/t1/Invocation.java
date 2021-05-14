@@ -38,7 +38,7 @@ public class Invocation extends TargetedRPGSkill implements PartySkill {
                         .cooldown("0")
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Heal target for ", arg(HEALING), ". If they are an enemy, deal that much damage instead."
+                                "Heal target for 35+(0.4*WIS). If they are an enemy, deal that much damage instead."
                         ))
         );
 
