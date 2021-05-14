@@ -63,7 +63,6 @@ public class IceBolt extends RPGSkill implements PartySkill {
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE_EXPRESSION)),
                 Tuple.of(AMPLIFIER, ofSource("(1 +" + getProperty(AMPLIFIER, String.class, DEFAULT_SLOW_AMPLIFIER) + ")*15")),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_SLOW_DURATION)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
