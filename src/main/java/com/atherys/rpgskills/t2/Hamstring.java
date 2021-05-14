@@ -49,7 +49,7 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
                         "Your next melee attack within ", arg(PREPARED_DURATION),
                         " to hit an enemy will cripple them, dealing ", arg(DAMAGE),
                         " physical damage and reducing their movement speed by ", arg(AMPLIFIER),
-                        GOLD, "%", " for ", arg(TIME), ". ", arg(OTHER_TEXT)
+                        GOLD, "%", " for 3 seconds. ", arg(OTHER_TEXT)
                 ))
                 .cooldown("0")
                 .resourceCost("0")
