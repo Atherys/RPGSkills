@@ -48,7 +48,6 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
         );
 
         setDescriptionArguments(
-                Tuple.of(HEALING, ofProperty(this, HEALING, DEFAULT_HEAL_EXPRESSION)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
     }

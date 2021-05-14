@@ -41,10 +41,6 @@ public class Invocation extends TargetedRPGSkill implements PartySkill {
                                 "Heal target for 35+(0.4*WIS). If they are an enemy, deal that much damage instead."
                         ))
         );
-
-        setDescriptionArguments(
-                Tuple.of(HEALING, ofProperty(this, HEALING, "50"))
-        );
     }
 
     @Override
