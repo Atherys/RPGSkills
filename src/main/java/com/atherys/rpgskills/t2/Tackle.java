@@ -41,7 +41,6 @@ public class Tackle extends RPGSkill {
 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "50")),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, "3000"))
         );
     }
 
