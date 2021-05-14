@@ -41,7 +41,7 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
                         .id("pray")
                         .name("Pray")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Reinvigorate a target ally, healing them for ", arg(HEALING), ". ", arg(OTHER_TEXT)
+                                "Reinvigorate a target ally, healing them for 45+(2.4*WIS). ", arg(OTHER_TEXT)
                         ))
                         .cooldown("0")
                         .resourceCost("0")
