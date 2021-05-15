@@ -35,13 +35,12 @@ public class Tackle extends RPGSkill {
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Dash forward in the direction you are facing, dealing ",
-                                arg(DAMAGE), " physical damage to any enemy you collide with slowing both of you ", arg(TIME), " seconds."
+                                arg(DAMAGE), " physical damage to any enemy you collide with slowing both of you 2+(0.1*STR) seconds."
                         ))
         );
 
         setDescriptionArguments(
-                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "50")),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, "3000"))
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "50"))
         );
     }
 

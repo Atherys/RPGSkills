@@ -49,7 +49,7 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
                         "Your next melee attack within ", arg(PREPARED_DURATION),
                         " to hit an enemy will cripple them, dealing ", arg(DAMAGE),
                         " physical damage and reducing their movement speed by ", arg(AMPLIFIER),
-                        GOLD, "%", " for ", arg(TIME), ". ", arg(OTHER_TEXT)
+                        GOLD, "%", " for 3 seconds. ", arg(OTHER_TEXT)
                 ))
                 .cooldown("0")
                 .resourceCost("0")
@@ -59,7 +59,6 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(AMPLIFIER, ofSource(getProperty(AMPLIFIER, String.class, DEFAULT_AMPLIFIER) + "*15")),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
                 Tuple.of(PREPARED_DURATION, DescriptionArguments.timeProperty(this, PREPARED_DURATION, DEFAULT_PREPARED_DURATION)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );

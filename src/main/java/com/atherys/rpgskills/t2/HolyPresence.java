@@ -50,13 +50,12 @@ public class HolyPresence extends RPGSkill implements PartySkill, RadiusSkill {
                         .cooldown("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "You and all enemies within ", arg(RADIUS), " blocks are slowed by ",
-                                arg(AMPLIFIER), " for ", (TIME), " seconds."
+                                arg(AMPLIFIER), " for 4+(0.2*WIS) seconds."
                         ))
         );
 
         setDescriptionArguments(
                 Tuple.of(RADIUS, ofProperty(this, RADIUS, DEFAULT_RADIUS)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_DURATION)),
                 Tuple.of(AMPLIFIER, ofSlowPercentProperty(this, AMPLIFIER, DEFAULT_AMPLIFIER))
         );
     }
