@@ -76,10 +76,11 @@ public class Tackle extends RPGSkill {
                 target.damage(damage, source);
 
                 int duration = asInt(collider, (Living) target, getProperty(CommonProperties.TIME, String.class, "3000"));
-                Applyable slowness = Effects.ofSlowness("Slowness", "slowness", duration, 2);
+                Applyable targetSlowness = Effects.ofSlowness("Slowness", "slowness", duration, 2);
+                Applyable userSlowness = Effects.ofSlowness("Slowness", "slowness", duration, 2);
 
-                AtherysSkills.getInstance().getEffectService().applyEffect(collider, slowness);
-                AtherysSkills.getInstance().getEffectService().applyEffect((Living) target, slowness);
+                AtherysSkills.getInstance().getEffectService().applyEffect(collider, userSlowness);
+                AtherysSkills.getInstance().getEffectService().applyEffect((Living) target, targetSlowness);
             }
         }
     }
