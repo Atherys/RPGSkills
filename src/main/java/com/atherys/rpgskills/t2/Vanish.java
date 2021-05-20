@@ -24,12 +24,12 @@ import static com.atherys.rpgskills.util.CommonProperties.TIME;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Vanish extends RPGSkill implements AttackSkill {
-    private static ParticleEffect effect = ParticleEffect.builder()
+    private static final ParticleEffect effect = ParticleEffect.builder()
             .type(ParticleTypes.LARGE_SMOKE)
             .quantity(2)
             .build();
 
-    private static Sound sound = Sound.builder(SoundTypes.BLOCK_FIRE_EXTINGUISH, 1).pitch(0.5).build();
+    private static final Sound sound = Sound.builder(SoundTypes.BLOCK_FIRE_EXTINGUISH, 1).pitch(0.5).build();
 
     public Vanish() {
         super(
@@ -52,12 +52,16 @@ public class Vanish extends RPGSkill implements AttackSkill {
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         int duration = asInt(user, getProperty(TIME, String.class, "10000"));
+        playParticles(user);
+        AtherysSkills.getInstance().getEffectService().applyEffect(user, new VanishEffect(duration));
+        return CastResult.success();
+    }
+
+    private static void playParticles(Living user) {
         PhysicsUtils.spawnParticleCloud(effect, user.getLocation().add(0, -3, 0));
         PhysicsUtils.spawnParticleCloud(effect, user.getLocation().add(0, -2, 0));
         PhysicsUtils.spawnParticleCloud(effect, user.getLocation().add(0, -1, 0));
         Sound.playSound(sound, user.getWorld(), user.getLocation().getPosition());
-        AtherysSkills.getInstance().getEffectService().applyEffect(user, new VanishEffect(duration));
-        return CastResult.success();
     }
 
     @Override
@@ -92,6 +96,7 @@ public class Vanish extends RPGSkill implements AttackSkill {
         protected boolean remove(ApplyableCarrier<?> character) {
             character.getLiving().ifPresent(living -> {
                 living.offer(Keys.VANISH, false);
+                Vanish.playParticles(living);
             });
             return false;
         }
