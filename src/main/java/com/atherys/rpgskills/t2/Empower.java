@@ -33,7 +33,7 @@ public class Empower extends RPGSkill {
     private static Sound sound1 = Sound.builder(SoundTypes.BLOCK_ENDERCHEST_OPEN, 1).pitch(1.5).build();
     private static Sound sound2 = Sound.builder(SoundTypes.ENTITY_ELDER_GUARDIAN_HURT, 0.6).pitch(1.5).build();
 
-    private final AttributeType attributeType;
+    private AttributeType attributeType;
 
     public Empower() {
         super(
@@ -52,6 +52,11 @@ public class Empower extends RPGSkill {
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_AMPLIFIER)),
                 Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME))
         );
+    }
+
+    @Override
+    public void setProperties(Map<String, String> properties) {
+        super.setProperties(properties);
 
         String attributeId = getProperty(ATTRIBUTE, String.class, DEFAULT_ATTRIBUTE);
         this.attributeType = Sponge.getRegistry().getType(AttributeType.class, attributeId).get();

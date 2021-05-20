@@ -1,5 +1,6 @@
 package com.atherys.rpgskills.t2;
 
+import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
@@ -32,7 +33,7 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_TIME = "10000";
     private static final String DEFAULT_ATTRIBUTE = "atherys:constitution";
 
-    private final AttributeType attributeType;
+    private AttributeType attributeType;
 
     public VexingMark() {
         super(
@@ -52,6 +53,12 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
                 Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
+
+    }
+
+    @Override
+    public void setProperties(Map<String, String> properties) {
+        super.setProperties(properties);
 
         String attributeId = getProperty(ATTRIBUTE, String.class, DEFAULT_ATTRIBUTE);
         this.attributeType = Sponge.getRegistry().getType(AttributeType.class, attributeId).get();
