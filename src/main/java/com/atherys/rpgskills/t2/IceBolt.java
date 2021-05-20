@@ -1,5 +1,6 @@
 package com.atherys.rpgskills.t2;
 
+import com.atherys.core.utils.Sound;
 import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
@@ -14,6 +15,7 @@ import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.Item;
@@ -43,8 +45,17 @@ public class IceBolt extends RPGSkill implements PartySkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "10";
     private static final String DEFAULT_SLOW_AMPLIFIER = "0";
     private static final String DEFAULT_SLOW_DURATION = "10000";
+
     private final Map<UUID, UUID> projectileToItem = new WeakHashMap<>();
     private final Map<UUID, Living> iceBolts = new WeakHashMap<>();
+
+    private static final Sound glass = Sound.builder(SoundTypes.BLOCK_GLASS_BREAK, 1)
+            .pitch(0.8)
+            .build();
+
+    private static final Sound orb = Sound.builder(SoundTypes.ENTITY_EXPERIENCE_ORB_PICKUP, 1)
+            .pitch(1.5)
+            .build();
 
     public IceBolt() {
         super(
@@ -117,6 +128,11 @@ public class IceBolt extends RPGSkill implements PartySkill {
 
                     AtherysSkills.getInstance().getEffectService().applyEffect(target, slowness);
                 }
+
+                Vector3d position = target.getLocation().getPosition();
+
+                Sound.playSound(glass, target.getWorld(), position);
+                Sound.playSound(orb, target.getWorld(), position);
             }
         }
     }
