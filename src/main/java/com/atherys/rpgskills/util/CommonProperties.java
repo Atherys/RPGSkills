@@ -11,6 +11,8 @@ public final class CommonProperties {
     public static final String HEALING = "healing";
 
     public static final String AMPLIFIER = "amplifier";
+    
+    public static final String PERCENTAGE = "percent";
 
     public static final String PREPARED_DURATION = "prepared-duration";
 
