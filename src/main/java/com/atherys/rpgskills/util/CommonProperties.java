@@ -24,6 +24,8 @@ public final class CommonProperties {
 
     public static final String MAGICAL = "magic";
 
+    public static final String PERCENT = "percent";
+
     public static final String HORIZONTAL = "horizontal";
 
     public static final String VERTICAL = "vertical";

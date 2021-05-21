@@ -1,5 +1,6 @@
 package com.atherys.rpgskills.t2;
 
+import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
@@ -24,11 +25,10 @@ import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Bolster extends RPGSkill {
     private static final String DEFAULT_TIME = "10000";
-    private static final String DEFAULT_PHYS = "5.0";
-    private static final String DEFAULT_MAG = "5.0";
+    private static final String DEFAULT_PERCENT = "30";
 
-    private final AttributeType physAttributeType;
-    private final AttributeType magicAttributeType;
+    private AttributeType physAttributeType;
+    private AttributeType magicAttributeType;
 
     public Bolster() {
         super(
@@ -38,31 +38,36 @@ public class Bolster extends RPGSkill {
                         .cooldown("0")
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Bolster your defenses, gaining ", arg(PHYSICAL), " physical resistance and ", arg(MAGICAL),
-                                " magical resistance for ", arg(TIME), ". ", arg(OTHER_TEXT)
+                                "Bolster your defenses, increasing physical and magical resistances by ", arg(PERCENT),
+                                "% for ", arg(TIME), ". "
                         ))
         );
 
         setDescriptionArguments(
-                Tuple.of(PHYSICAL, ofProperty(this, PHYSICAL, DEFAULT_PHYS)),
-                Tuple.of(MAGICAL, ofProperty(this, MAGICAL, DEFAULT_MAG)),
+                Tuple.of(PERCENT, ofProperty(this, PERCENT, DEFAULT_PERCENT)),
                 Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
+    }
 
-        this.physAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:physres_multiplier").get();
-        this.magicAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:magicres_multiplier").get();
+    @Override
+    public void setProperties(Map<String, String> properties) {
+        super.setProperties(properties);
+
+        this.physAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:physical_resistance").get();
+        this.magicAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:magical_resistance").get();
     }
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         int duration = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
-        double physicalAmount = asDouble(user, getProperty(PHYSICAL, String.class, DEFAULT_PHYS));
-        double magicAmount = asDouble(user, getProperty(MAGICAL, String.class, DEFAULT_MAG));
+
+        double percent = asDouble(user, getProperty(PHYSICAL, String.class, DEFAULT_PERCENT)) / 100;
+        Map<AttributeType, Double> userAttributes = AtherysRPG.getInstance().getAttributeService().getAllAttributes(user);
 
         Map<AttributeType, Double> attributes = new HashMap<>(2);
-        attributes.put(physAttributeType, physicalAmount);
-        attributes.put(magicAttributeType, magicAmount);
+        attributes.put(physAttributeType, percent * userAttributes.get(physAttributeType));
+        attributes.put(magicAttributeType, percent * userAttributes.get(magicAttributeType));
         Applyable resistanceEffect = Effects.ofAttributes(getId(), getName(), duration, attributes, true);
 
         AtherysSkills.getInstance().getEffectService().applyEffect(user, resistanceEffect);
