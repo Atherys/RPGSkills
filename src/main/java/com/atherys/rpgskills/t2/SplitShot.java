@@ -24,6 +24,7 @@ import org.spongepowered.api.util.Tuple;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
@@ -36,6 +37,8 @@ public class SplitShot extends RPGSkill {
     public static final String DEFAULT_PREPARED_DURATION = "10000";
 
     private static final List<Double> angles = Arrays.asList(0.17, -0.17, 0.34, -0.34);
+
+    private String damageExpression;
 
     public SplitShot() {
         super(
@@ -57,12 +60,25 @@ public class SplitShot extends RPGSkill {
     }
 
     @Override
+    public void setProperties(Map<String, String> properties) {
+        super.setProperties(properties);
+
+        String arrowDmg = AtherysRPG.getInstance()
+                .getDamageService()
+                .getRangedDamageExpression(EntityTypes.TIPPED_ARROW);
+        damageExpression = "(" + arrowDmg + ")*" + getProperty(AMPLIFIER, String.class, DEFAULT_AMPLIFIER);
+    }
+
+    @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         AtherysSkills.getInstance().getEffectService().applyEffect(user,
                 Effects.blankTemporary(
-                        SPLITSHOT_EFFECT, "Split Shot User",
+                        SPLITSHOT_EFFECT,
+                        "Split Shot User",
                         asInt(user, getProperty(PREPARED_DURATION, String.class, DEFAULT_PREPARED_DURATION)),
-                        true));
+                        true
+                )
+        );
         return CastResult.success();
     }
 
@@ -80,12 +96,6 @@ public class SplitShot extends RPGSkill {
             AtherysSkills.getInstance().getEffectService().removeEffect(living, SPLITSHOT_EFFECT);
             Vector3d velocity = originalArrow.get().getVelocity();
 
-            // Workout the damage expression for the additional arrows
-            String arrowDmg = AtherysRPG
-                    .getInstance().getDamageService()
-                    .getRangedDamageExpression(originalArrow.get().getType());
-            String dmgExpression = "(" + arrowDmg + ")*" + getProperty(AMPLIFIER, String.class, DEFAULT_AMPLIFIER);
-
             angles.forEach(a -> {
                 double x = velocity.getX();
                 double z = velocity.getZ();
@@ -93,7 +103,7 @@ public class SplitShot extends RPGSkill {
 
                 living.launchProjectile(Arrow.class, newVelocity).ifPresent(arrow -> {
                     arrow.offer(Keys.PICKUP_RULE, PickupRules.DISALLOWED);
-                    arrow.offer(new DamageExpressionData(dmgExpression));
+                    arrow.offer(new DamageExpressionData(damageExpression));
                 });
             });
         }
