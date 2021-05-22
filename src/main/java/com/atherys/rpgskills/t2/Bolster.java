@@ -62,8 +62,8 @@ public class Bolster extends RPGSkill {
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         int duration = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
 
-        double percent = asDouble(user, getProperty(PHYSICAL, String.class, DEFAULT_PERCENT)) / 100;
         Map<AttributeType, Double> userAttributes = AtherysRPG.getInstance().getAttributeService().getAllAttributes(user);
+        double percent = asDouble(user, getProperty(PERCENT, String.class, DEFAULT_PERCENT)) / 100;
 
         Map<AttributeType, Double> attributes = new HashMap<>(2);
         attributes.put(physAttributeType, percent * userAttributes.get(physAttributeType));
