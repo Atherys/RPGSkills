@@ -1,6 +1,5 @@
 package com.atherys.rpgskills.util;
 
-import com.atherys.rpg.api.skill.RPGSkill;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.TextElement;
 import org.spongepowered.api.text.TextRepresentable;

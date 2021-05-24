@@ -1,7 +1,6 @@
 package com.atherys.rpgskills.t2;
 
 import com.atherys.core.utils.Sound;
-import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
@@ -37,7 +36,6 @@ import java.util.WeakHashMap;
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofSource;
 import static com.atherys.rpgskills.util.CommonProperties.*;
-import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 import static org.spongepowered.api.text.format.TextColors.GOLD;
 

@@ -13,11 +13,6 @@ import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.util.Tuple;
-
-import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
-import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
-import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Leap extends RPGSkill {
     private static final String HORIZONTAL = "horizontal";

@@ -28,7 +28,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
-import static com.atherys.rpgskills.util.CommonProperties.*;
+import static com.atherys.rpgskills.util.CommonProperties.AMPLIFIER;
+import static com.atherys.rpgskills.util.CommonProperties.PREPARED_DURATION;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class SplitShot extends RPGSkill {

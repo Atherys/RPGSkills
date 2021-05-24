@@ -12,11 +12,8 @@ import com.atherys.skills.api.util.LivingUtils;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.util.Tuple;
 
-import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.HEALING;
-import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Invocation extends TargetedRPGSkill implements PartySkill {
 

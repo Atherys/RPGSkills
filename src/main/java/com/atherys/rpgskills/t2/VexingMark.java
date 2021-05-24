@@ -1,7 +1,5 @@
 package com.atherys.rpgskills.t2;
 
-import com.atherys.rpg.AtherysRPG;
-import com.atherys.rpg.api.skill.DescriptionArguments;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpg.api.stat.AttributeType;
