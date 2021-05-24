@@ -15,13 +15,11 @@ import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
-import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Disarm extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_TIME = "10000";
     private static final String DEFAULT_DAMAGE = "5.0";
-    private static final String DEFAULT_OTHER_TEXT = "";
 
     public Disarm() {
         super(
@@ -30,7 +28,7 @@ public class Disarm extends TargetedRPGSkill implements PartySkill {
                         .name("Disarm")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Strike a target enemy’s weapon, dealing ",
-                                arg(DAMAGE), " physical damage and disarming them for ", arg(TIME), ". ", arg(OTHER_TEXT)
+                                arg(DAMAGE), " physical damage and disarming them for ", arg(TIME), "."
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -38,8 +36,7 @@ public class Disarm extends TargetedRPGSkill implements PartySkill {
 
         setDescriptionArguments(
             Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-            Tuple.of(TIME, DescriptionArguments.ofTimeProperty(this, TIME, DEFAULT_TIME)),
-            Tuple.of(OTHER_TEXT, otherText(this))
+            Tuple.of(TIME, DescriptionArguments.ofTimeProperty(this, TIME, DEFAULT_TIME))
         );
     }
 

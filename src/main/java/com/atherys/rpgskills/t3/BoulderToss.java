@@ -38,8 +38,6 @@ import java.util.WeakHashMap;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
-import static com.atherys.rpgskills.util.CommonProperties.OTHER_TEXT;
-import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class BoulderToss extends RPGSkill implements PartySkill {
@@ -49,7 +47,6 @@ public class BoulderToss extends RPGSkill implements PartySkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "5.0";
     private static final String DEFAULT_AOE_RANGE = "3";
     private static final String DEFAULT_AOE_DAMAGE_MODIFIER = "3";
-    private static final String DEFAULT_OTHER_TEXT = "";
 
     private static final Sound boulder = Sound.builder(SoundTypes.ENTITY_GENERIC_EXPLODE, 3)
             .pitch(1.2)
@@ -70,15 +67,14 @@ public class BoulderToss extends RPGSkill implements PartySkill {
                         .name("Boulder Toss")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Throw a boulder in the direction you’re facing. The first enemy hit takes ",
-                                arg(DAMAGE), " physical damage and is knocked back. ", arg(OTHER_TEXT)
+                                arg(DAMAGE), " physical damage and is knocked back."
                         ))
                         .cooldown("0")
                         .resourceCost("0")
         );
 
         setDescriptionArguments(
-                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE_EXPRESSION)),
-                Tuple.of(OTHER_TEXT, otherText(this))
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE_EXPRESSION))
         );
     }
 

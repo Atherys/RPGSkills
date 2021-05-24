@@ -19,7 +19,6 @@ import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.util.Tuple;
 
 import static com.atherys.rpgskills.util.CommonProperties.*;
-import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
@@ -28,7 +27,6 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
     private static final String DEFAULT_TIME = "10000";
     private static final String DEFAULT_PREPARED_DURATION = "10000";
     private static final String DEFAULT_DAMAGE = "10";
-    private static final String DEFAULT_OTHER_TEXT = "";
 
     public Envenom() {
         super(
@@ -38,7 +36,7 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Coat your weapon in a deadly venom, causing your next weapon attack within ",
                                 arg(PREPARED_DURATION), " to deal an additional ", arg(DAMAGE),
-                                "pure damage over ", arg(TIME), ". ", arg(OTHER_TEXT)
+                                "pure damage over ", arg(TIME), "."
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -47,8 +45,7 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
         setDescriptionArguments(
                 Tuple.of(DAMAGE, DescriptionArguments.ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(TIME, DescriptionArguments.ofTimeProperty(this, TIME, DEFAULT_TIME)),
-                Tuple.of(PREPARED_DURATION, DescriptionArguments.ofTimeProperty(this, PREPARED_DURATION, DEFAULT_PREPARED_DURATION)),
-                Tuple.of(OTHER_TEXT, otherText(this))
+                Tuple.of(PREPARED_DURATION, DescriptionArguments.ofTimeProperty(this, PREPARED_DURATION, DEFAULT_PREPARED_DURATION))
         );
     }
 

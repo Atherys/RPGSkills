@@ -25,7 +25,6 @@ import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Cleave extends RPGSkill implements PartySkill {
     private static String DEFAULT_DAMAGE = "5.0";
-    private static final String DEFAULT_OTHER_TEXT = "";
 
     private static final ParticleEffect particleEffect = ParticleEffect.builder()
             .type(ParticleTypes.SWEEP_ATTACK)

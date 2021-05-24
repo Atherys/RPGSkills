@@ -21,7 +21,6 @@ import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Invigorate extends TargetedRPGSkill implements PartySkill {
     private static final String DEFAULT_HEAL_EXPRESSION = "5.0";
-    private static final String DEFAULT_OTHER_TEXT = "";
 
     private static final ParticleEffect beamEffect = ParticleEffect.builder()
             .type(ParticleTypes.HAPPY_VILLAGER)

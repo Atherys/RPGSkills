@@ -32,7 +32,6 @@ import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class FireballSkill extends RPGSkill implements PartySkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_WIS * 1.5, 0.5, 10.0)";
-    private static final String DEFAULT_OTHER_TEXT = "";
 
     private Map<UUID, Living> fireballs = new WeakHashMap<>();
 

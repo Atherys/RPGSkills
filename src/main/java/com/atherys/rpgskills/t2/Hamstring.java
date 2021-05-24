@@ -37,7 +37,6 @@ public class Hamstring extends RPGSkill implements MeleeAttackSkill, PartySkill 
     private static final String DEFAULT_DAMAGE = "5.0";
 
     private static final String DEFAULT_PREPARED_DURATION = "5000";
-    private static final String DEFAULT_OTHER_TEXT = "";
 
     public Hamstring() {
         super(
