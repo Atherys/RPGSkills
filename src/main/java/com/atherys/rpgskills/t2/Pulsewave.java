@@ -25,7 +25,7 @@ import org.spongepowered.api.world.World;
 import java.util.Collection;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
-import static com.atherys.rpg.api.skill.DescriptionArguments.timeProperty;
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofTimeProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
@@ -57,7 +57,7 @@ public class Pulsewave extends RPGSkill implements PartySkill {
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
                 Tuple.of(RADIUS, ofProperty(this, RADIUS, DEFAULT_RADIUS)),
-                Tuple.of(TIME, timeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(TIME, ofTimeProperty(this, TIME, DEFAULT_TIME)),
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_DOT))
         );
     }

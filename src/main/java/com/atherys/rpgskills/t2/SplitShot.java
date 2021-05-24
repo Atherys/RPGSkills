@@ -55,7 +55,7 @@ public class SplitShot extends RPGSkill {
 
         setDescriptionArguments(
             Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_AMPLIFIER)),
-            Tuple.of(PREPARED_DURATION, DescriptionArguments.timeProperty(this, PREPARED_DURATION, DEFAULT_PREPARED_DURATION))
+            Tuple.of(PREPARED_DURATION, DescriptionArguments.ofTimeProperty(this, PREPARED_DURATION, DEFAULT_PREPARED_DURATION))
         );
     }
 

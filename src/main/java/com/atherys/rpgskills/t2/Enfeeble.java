@@ -43,7 +43,7 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Weaken your target, dealing ", arg(DAMAGE), " magical damage over ",
                                 arg(TIME), " and reducing their physical and magic resistances by ",
-                                arg(PERCENT), "% for the duration.", arg(OTHER_TEXT)
+                                arg(PERCENT), "% for the duration."
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -51,9 +51,8 @@ public class Enfeeble extends TargetedRPGSkill implements PartySkill {
 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
-                Tuple.of(PERCENT, ofProperty(this, PERCENT, DEFAULT_PERCENT)),
-                Tuple.of(OTHER_TEXT, otherText(this))
+                Tuple.of(TIME, DescriptionArguments.ofTimeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(PERCENT, ofProperty(this, PERCENT, DEFAULT_PERCENT))
         );
     }
 

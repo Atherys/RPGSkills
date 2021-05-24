@@ -41,14 +41,14 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
                         .id("pray")
                         .name("Pray")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Reinvigorate a target ally, healing them for 45+(2.4*WIS). ", arg(OTHER_TEXT)
+                                "Reinvigorate a target ally, healing them for ", arg(HEALING), "."
                         ))
                         .cooldown("0")
                         .resourceCost("0")
         );
 
         setDescriptionArguments(
-                Tuple.of(OTHER_TEXT, otherText(this))
+                Tuple.of(HEALING, ofProperty(this, HEALING, DEFAULT_HEAL_EXPRESSION))
         );
     }
 

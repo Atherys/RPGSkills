@@ -46,8 +46,8 @@ public class Envenom extends RPGSkill implements AttackSkill, PartySkill {
 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, DescriptionArguments.ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
-                Tuple.of(PREPARED_DURATION, DescriptionArguments.timeProperty(this, PREPARED_DURATION, DEFAULT_PREPARED_DURATION)),
+                Tuple.of(TIME, DescriptionArguments.ofTimeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(PREPARED_DURATION, DescriptionArguments.ofTimeProperty(this, PREPARED_DURATION, DEFAULT_PREPARED_DURATION)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
     }

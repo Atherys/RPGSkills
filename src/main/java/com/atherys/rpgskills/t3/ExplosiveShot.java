@@ -37,7 +37,7 @@ public class ExplosiveShot extends RPGSkill {
 
         setDescriptionArguments(
                 Tuple.of(RADIUS, ofProperty(this, RADIUS, "3")),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, "10000")),
+                Tuple.of(TIME, DescriptionArguments.ofTimeProperty(this, TIME, "10000")),
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, "100"))
         );
     }

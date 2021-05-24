@@ -39,14 +39,13 @@ public class Bolster extends RPGSkill {
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Bolster your defenses, increasing physical and magical resistances by ", arg(PERCENT),
-                                "% for ", arg(TIME), ". "
+                                "% for ", arg(TIME), "."
                         ))
         );
 
         setDescriptionArguments(
                 Tuple.of(PERCENT, ofProperty(this, PERCENT, DEFAULT_PERCENT)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
-                Tuple.of(OTHER_TEXT, otherText(this))
+                Tuple.of(TIME, DescriptionArguments.ofTimeProperty(this, TIME, DEFAULT_TIME))
         );
     }
 

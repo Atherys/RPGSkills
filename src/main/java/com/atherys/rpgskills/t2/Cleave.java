@@ -41,15 +41,14 @@ public class Cleave extends RPGSkill implements PartySkill {
                         .name("Cleave")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Make a wide sweeping melee attack in front of you, dealing ",
-                                arg(DAMAGE), " physical damage to all enemies in the area. ", arg(OTHER_TEXT)
+                                arg(DAMAGE), " physical damage to all enemies in the area. "
                         ))
                         .cooldown("0")
                         .resourceCost("0")
         );
 
         setDescriptionArguments(
-                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-                Tuple.of(OTHER_TEXT, otherText(this))
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE))
         );
     }
 

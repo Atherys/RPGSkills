@@ -33,7 +33,7 @@ public class Shield extends RPGSkill {
 
         setDescriptionArguments(
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, "50")),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, "10000"))
+                Tuple.of(TIME, DescriptionArguments.ofTimeProperty(this, TIME, "10000"))
         );
     }
 

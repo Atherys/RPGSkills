@@ -22,8 +22,8 @@ import java.util.Collections;
 import java.util.Map;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofTimeProperty;
 import static com.atherys.rpgskills.util.CommonProperties.*;
-import static com.atherys.rpgskills.util.DescriptionUtils.otherText;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class VexingMark extends TargetedRPGSkill implements PartySkill {
@@ -42,7 +42,7 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
                         .name("Vexing Mark")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
                                 "Mark your target, making them standout for ", arg(TIME), ". All healing they receive is reduced by ",
-                                arg(AMPLIFIER), "% for the duration. ", arg(OTHER_TEXT)
+                                arg(AMPLIFIER), "% for the duration. "
                         ))
                         .cooldown("0")
                         .resourceCost("0")
@@ -50,10 +50,8 @@ public class VexingMark extends TargetedRPGSkill implements PartySkill {
 
         setDescriptionArguments(
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_DECREASE)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
-                Tuple.of(OTHER_TEXT, otherText(this))
+                Tuple.of(TIME, ofTimeProperty(this, TIME, DEFAULT_TIME))
         );
-
     }
 
     @Override

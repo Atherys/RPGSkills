@@ -68,7 +68,7 @@ public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
 
         setDescriptionArguments(
                 Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_TIME)),
+                Tuple.of(TIME, DescriptionArguments.ofTimeProperty(this, TIME, DEFAULT_TIME)),
                 Tuple.of(OTHER_TEXT, otherText(this))
         );
 

@@ -24,7 +24,6 @@ public class Leap extends RPGSkill {
     private static final String VERTICAL = "vertical";
 
     private static final String DEFAULT_HORIZONTAL = "1";
-    private static final String DEFAULT_OTHER_TEXT = "";
 
     private static ParticleEffect particleEffect = ParticleEffect.builder()
             .type(ParticleTypes.CLOUD)
@@ -40,14 +39,10 @@ public class Leap extends RPGSkill {
                         .id("leap")
                         .name("Leap")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Jump forward in the direction you're facing. ", arg(OTHER_TEXT)
+                                "Jump forward in the direction you're facing. "
                         ))
                         .cooldown("0")
                         .resourceCost("0")
-        );
-
-        setDescriptionArguments(
-                Tuple.of(OTHER_TEXT, otherText(this))
         );
     }
 

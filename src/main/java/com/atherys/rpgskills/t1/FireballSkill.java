@@ -57,15 +57,14 @@ public class FireballSkill extends RPGSkill implements PartySkill {
                 .name("Fireball")
                 .descriptionTemplate(DescriptionUtils.buildTemplate(
                         "Launch a fireball in the direction you’re facing, dealing ", arg(DAMAGE),
-                        " magical damage to any enemy hit. ", arg(OTHER_TEXT)
+                        " magical damage to any enemy hit. "
                 ))
                 .resourceCost("0")
                 .cooldown("0")
         );
 
         setDescriptionArguments(
-                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE_EXPRESSION)),
-                Tuple.of(OTHER_TEXT, otherText(this))
+                Tuple.of(DAMAGE, ofProperty(this, DAMAGE, DEFAULT_DAMAGE_EXPRESSION))
         );
     }
 

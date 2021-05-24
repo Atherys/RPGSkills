@@ -20,6 +20,7 @@ import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.util.Tuple;
 
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofTimeProperty;
 import static com.atherys.rpgskills.util.CommonProperties.TIME;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
@@ -45,7 +46,7 @@ public class Vanish extends RPGSkill implements AttackSkill {
         );
 
         setDescriptionArguments(
-            Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, "10000"))
+            Tuple.of(TIME, ofTimeProperty(this, TIME, "10000"))
         );
     }
 

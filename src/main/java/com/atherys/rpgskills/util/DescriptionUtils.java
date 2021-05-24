@@ -41,8 +41,4 @@ public class DescriptionUtils {
         }
         return TextTemplate.of(finalElements.toArray());
     }
-
-    public static OtherTextDescriptionArgument otherText(RPGSkill skill) {
-        return new OtherTextDescriptionArgument(() -> skill.getProperty(CommonProperties.OTHER_TEXT, String.class, ""));
-    }
 }

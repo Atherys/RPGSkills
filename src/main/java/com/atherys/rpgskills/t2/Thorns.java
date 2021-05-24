@@ -28,6 +28,7 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofTimeProperty;
 import static com.atherys.rpgskills.util.CommonProperties.AMPLIFIER;
 import static com.atherys.rpgskills.util.CommonProperties.TIME;
 import static org.spongepowered.api.text.TextTemplate.arg;
@@ -60,7 +61,7 @@ public class Thorns extends RPGSkill implements AttackSkill {
 
         setDescriptionArguments(
                 Tuple.of(AMPLIFIER, ofProperty(this, AMPLIFIER, DEFAULT_AMPLIFIER)),
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, DEFAULT_DURATION))
+                Tuple.of(TIME, ofTimeProperty(this, TIME, DEFAULT_DURATION))
         );
     }
 

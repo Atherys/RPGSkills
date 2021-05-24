@@ -11,7 +11,6 @@ import com.atherys.skills.api.skill.CastResult;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.util.Tuple;
 
-import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.TIME;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
@@ -29,7 +28,7 @@ public class Sprint extends RPGSkill {
         );
 
         setDescriptionArguments(
-                Tuple.of(TIME, DescriptionArguments.timeProperty(this, TIME, "10000"))
+                Tuple.of(TIME, DescriptionArguments.ofTimeProperty(this, TIME, "10000"))
         );
     }
 
