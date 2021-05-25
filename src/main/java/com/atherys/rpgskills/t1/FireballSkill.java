@@ -67,8 +67,8 @@ public class FireballSkill extends RPGSkill implements PartySkill {
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        Vector3d spawnPosition = user.getLocation().getPosition().add(0.1, 1.5, 0.1);
-        Snowball fireball = (Snowball) user.getWorld().createEntity(EntityTypes.SNOWBALL, spawnPosition);
+        Vector3d spawnPosition = user.getLocation().getPosition().add(0.0, 1.5, 0.0);
+        Snowball fireball = (Snowball) user.getWorld().createEntity(EntityTypes.TIPPED_ARROW, spawnPosition);
 
         fireball.setShooter(user);
         fireball.offer(Keys.FIRE_TICKS, Integer.MAX_VALUE);
