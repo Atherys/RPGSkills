@@ -17,7 +17,6 @@ import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.projectile.DamagingProjectile;
-import org.spongepowered.api.entity.projectile.arrow
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
@@ -69,7 +68,7 @@ public class FireballSkill extends RPGSkill implements PartySkill {
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         Vector3d spawnPosition = user.getLocation().getPosition().add(0.0, 1.5, 0.0);
-        Arrow fireball = (Arrow) user.getWorld().createEntity(EntityTypes.TIPPED_ARROW, spawnPosition);
+        DamagingProjectile fireball = (DamagingProjectile) user.getWorld().createEntity(EntityTypes.TIPPED_ARROW, spawnPosition);
 
         fireball.setShooter(user);
         fireball.offer(Keys.FIRE_TICKS, Integer.MAX_VALUE);
@@ -87,7 +86,7 @@ public class FireballSkill extends RPGSkill implements PartySkill {
     }
 
     @Listener
-    public void onFireballCollide(CollideEntityEvent event, @Getter("getSource") Arrow fireball) {
+    public void onFireballCollide(CollideEntityEvent event, @Getter("getSource") DamagingProjectile fireball) {
         Living user = fireballs.get(fireball.getUniqueId());
 
         if (user != null && event.getEntities().get(0) instanceof Living) {
