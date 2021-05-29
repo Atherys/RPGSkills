@@ -16,6 +16,7 @@ import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Living;
+import org.spongepowered.api.entity.projectile.DamagingProjectile;
 import org.spongepowered.api.entity.projectile.Snowball;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
@@ -67,7 +68,7 @@ public class FireballSkill extends RPGSkill implements PartySkill {
 
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
-        Vector3d spawnPosition = user.getLocation().getPosition().add(0, 1.5, 0);
+        Vector3d spawnPosition = user.getLocation().getPosition().add(0.0, 1.5, 0.0);
         Snowball fireball = (Snowball) user.getWorld().createEntity(EntityTypes.SNOWBALL, spawnPosition);
 
         fireball.setShooter(user);
