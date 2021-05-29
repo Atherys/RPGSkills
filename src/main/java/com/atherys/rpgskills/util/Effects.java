@@ -84,10 +84,9 @@ public final class Effects {
     }
 
     public static class DamageOverTimeEffect extends PeriodicEffect {
-
-        private double damagePerTick;
-        private Cause source;
-        private boolean keepInventory;
+        private final double damagePerTick;
+        private final Cause source;
+        private final boolean keepInventory;
 
         public DamageOverTimeEffect(String id, String name, long duration, double totalDamage, EntityDamageSource source) {
             super(id, name, 1000, (int) (duration / 1000), false);
@@ -226,9 +225,9 @@ public final class Effects {
     }
 
     private static class AuraEffect extends PeriodicEffect {
-        private boolean includeSelf;
-        private BiConsumer<Living, List<Living>> aura;
-        private double range;
+        private final boolean includeSelf;
+        private final BiConsumer<Living, List<Living>> aura;
+        private final double range;
 
         protected AuraEffect(String id, String name, int ticks, boolean isPositive, double range, boolean includeSelf, BiConsumer<Living, List<Living>> aura) {
             super(id, name, 2, ticks, isPositive);
@@ -240,7 +239,7 @@ public final class Effects {
         @Override
         protected boolean apply(ApplyableCarrier<?> applyableCarrier) {
             applyableCarrier.getLiving().ifPresent(user -> {
-                List<Living> nearby = PhysicsUtils.getNearbyLiving(user, range, false);
+                List<Living> nearby = PhysicsUtils.getNearbyLiving(user, range, includeSelf);
                 if (!nearby.isEmpty()) {
                     aura.accept(user, nearby);
                 }
@@ -250,7 +249,7 @@ public final class Effects {
 
         @Override
         protected boolean remove(ApplyableCarrier<?> applyableCarrier) {
-            return false;
+            return true;
         }
     }
 

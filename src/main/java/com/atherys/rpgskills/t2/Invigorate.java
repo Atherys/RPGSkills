@@ -62,10 +62,13 @@ public class Invigorate extends TargetedRPGSkill implements PartySkill {
     public CastResult cast(Living user, Living target, long timestamp, String... args) throws CastException {
         if (!arePlayersInParty(user, target) && user != target) throw notInParty();
 
+        boolean targetIsUser = user == target;
+
         double healAmount = asDouble(user, target, getProperty(HEALING, String.class, DEFAULT_HEAL_EXPRESSION));
+        if (targetIsUser) healAmount *= 0.5;
         LivingUtils.healLiving(target, healAmount);
 
-        if (target != user) {
+        if (!targetIsUser) {
             PhysicsUtils.spawnParticleBeam(beamEffect, user.getLocation(), target.getLocation());
         }
 
