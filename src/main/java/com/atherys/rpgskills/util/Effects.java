@@ -28,8 +28,10 @@ import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.world.gamerule.DefaultGameRules;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 public final class Effects {
 
@@ -75,6 +77,10 @@ public final class Effects {
 
     public static Applyable disarm(int duration) {
         return new DisarmEffect(duration);
+    }
+
+    public static Applyable aura(String id, String name, int duration, boolean isPositive, double range, boolean includeSelf, BiConsumer<Living, List<Living>> aura) {
+        return new AuraEffect(id, name, duration, isPositive, range, includeSelf, aura);
     }
 
     public static class DamageOverTimeEffect extends PeriodicEffect {
@@ -204,7 +210,6 @@ public final class Effects {
     }
 
     private static class BlankTemporaryEffect extends TemporaryEffect {
-
         protected BlankTemporaryEffect(String id, String name, long duration, boolean isPositive) {
             super(id, name, duration, isPositive);
         }
@@ -217,6 +222,35 @@ public final class Effects {
         @Override
         protected boolean remove(ApplyableCarrier<?> character) {
             return true;
+        }
+    }
+
+    private static class AuraEffect extends PeriodicEffect {
+        private boolean includeSelf;
+        private BiConsumer<Living, List<Living>> aura;
+        private double range;
+
+        protected AuraEffect(String id, String name, int ticks, boolean isPositive, double range, boolean includeSelf, BiConsumer<Living, List<Living>> aura) {
+            super(id, name, 2, ticks, isPositive);
+            this.includeSelf = includeSelf;
+            this.aura = aura;
+            this.range = range;
+        }
+
+        @Override
+        protected boolean apply(ApplyableCarrier<?> applyableCarrier) {
+            applyableCarrier.getLiving().ifPresent(user -> {
+                List<Living> nearby = PhysicsUtils.getNearbyLiving(user, range, false);
+                if (!nearby.isEmpty()) {
+                    aura.accept(user, nearby);
+                }
+            });
+            return true;
+        }
+
+        @Override
+        protected boolean remove(ApplyableCarrier<?> applyableCarrier) {
+            return false;
         }
     }
 

@@ -6,6 +6,8 @@ import com.atherys.rpgskills.util.CommonProperties;
 import com.atherys.rpgskills.util.DamageUtils;
 import com.atherys.rpgskills.util.DescriptionUtils;
 import com.atherys.rpgskills.util.PhysicsUtils;
+import com.atherys.skills.AtherysSkills;
+import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
@@ -18,6 +20,7 @@ import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.util.Tuple;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -53,27 +56,29 @@ public class Kick extends TargetedRPGSkill {
         double vertical = asDouble(user, getProperty(VERTICAL, String.class, "0.5"));
 
         target.setVelocity(Vector3d.from(direction.getX() * horizontal, vertical, direction.getZ() * horizontal));
-        kickers.put(target.getUniqueId(), user);
+
+        double damage = asDouble(user, getProperty(CommonProperties.DAMAGE, String.class, "50"));
+        DamageSource source = DamageUtils.directPhysical(user);
+        target.damage(damage, source);
+
         return CastResult.success();
     }
 
     @Listener
     public void onLand(CollideBlockEvent event, @Root Living entity) {
+        AtherysSkills.getInstance().getEffectService().removeEffect(entity, getId());
         kickers.remove(entity.getUniqueId());
     }
 
-    @Listener
-    public void onCollide(CollideEntityEvent event, @Root Living collider) {
-        if (kickers.containsKey(collider.getUniqueId())) {
-            Living user = kickers.get(collider.getUniqueId());
-            kickers.remove(collider.getUniqueId());
+    private void applyKick(Living kicked, List<Living> nearby) {
+        Living user = kickers.get(kicked.getUniqueId());
+        kickers.remove(kicked.getUniqueId());
+        AtherysSkills.getInstance().getEffectService().removeEffect(user, getId());
 
-            double damage = asDouble(user, getProperty(CommonProperties.DAMAGE, String.class, "50"));
-            DamageSource source = DamageUtils.directPhysical(user);
+        double damage = asDouble(user, getProperty(CommonProperties.DAMAGE, String.class, "50"));
+        DamageSource source = DamageUtils.directPhysical(user);
 
-            collider.damage(damage, source);
-            event.getEntities().get(0).damage(damage, source);
-
-        }
+        kicked.damage(damage, source);
+        nearby.get(0).damage(damage, source);
     }
 }

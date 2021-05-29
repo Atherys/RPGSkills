@@ -10,7 +10,9 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class PhysicsUtils {
 
@@ -80,5 +82,12 @@ public final class PhysicsUtils {
 
             center.getExtent().spawnParticles(particleEffect, Vector3d.from(x, y, z));
         }
+    }
+
+    public static List<Living> getNearbyLiving(Living living, double range, boolean includeSelf) {
+        return living.getNearbyEntities(range).stream()
+                .filter(entity -> entity instanceof Living && (includeSelf || entity != living))
+                .map(entity -> (Living) entity)
+                .collect(Collectors.toList());
     }
 }

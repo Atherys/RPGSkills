@@ -5,6 +5,9 @@ import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.*;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
+import com.atherys.skills.api.effect.ApplyableCarrier;
+import com.atherys.skills.api.effect.PeriodicEffect;
+import com.atherys.skills.api.effect.TemporaryEffect;
 import com.atherys.skills.api.exception.CastException;
 import com.atherys.skills.api.skill.CastResult;
 import com.flowpowered.math.vector.Vector3d;
@@ -16,6 +19,9 @@ import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.util.Tuple;
+
+import java.util.Collection;
+import java.util.List;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
@@ -48,7 +54,17 @@ public class Tackle extends RPGSkill {
         double vertical = asDouble(user, getProperty(CommonProperties.VERTICAL, String.class, "0.5"));
         Vector3d direction = PhysicsUtils.getUnitDirection(user);
 
-        AtherysSkills.getInstance().getEffectService().applyEffect(user, TACKLE_EFFECT);
+        Applyable tackleEffect = Effects.aura(
+                getId(),
+                getName(),
+                Integer.MAX_VALUE,
+                true,
+                1.5,
+                false,
+                this::applyTackle
+        );
+
+        AtherysSkills.getInstance().getEffectService().applyEffect(user, tackleEffect);
         user.setVelocity(Vector3d.from(direction.getX() * horizontal, vertical, direction.getZ() * horizontal));
         return CastResult.success();
     }
@@ -58,28 +74,22 @@ public class Tackle extends RPGSkill {
         AtherysSkills.getInstance().getEffectService().removeEffect(entity, TACKLE_EFFECT);
     }
 
-    @Listener
-    public void onCollide(CollideEntityEvent event, @Root Living collider) {
-        if (AtherysSkills.getInstance().getEffectService().hasEffect(collider, TACKLE_EFFECT)) {
-            Entity target = event.getEntities().get(0);
+    private void applyTackle(Living user, List<Living> nearby) {
+        AtherysSkills.getInstance().getEffectService().removeEffect(user, TACKLE_EFFECT);
+        user.setVelocity(Vector3d.ZERO);
 
-            if (target instanceof Living) {
-                event.setCancelled(true);
-                AtherysSkills.getInstance().getEffectService().removeEffect(collider, TACKLE_EFFECT);
-                collider.setVelocity(Vector3d.ZERO);
+        double damage = asDouble(user, getProperty(DAMAGE, String.class, "50"));
+        DamageSource source = DamageUtils.directPhysical(user);
 
-                double damage = asDouble(collider, getProperty(DAMAGE, String.class, "50"));
-                DamageSource source = DamageUtils.directPhysical(collider);
+        Living target = nearby.get(0);
 
-                target.damage(damage, source);
+        target.damage(damage, source);
 
-                int duration = asInt(collider, (Living) target, getProperty(CommonProperties.TIME, String.class, "3000"));
-                Applyable targetSlowness = Effects.ofSlowness("Slowness", "slowness", duration, 2);
-                Applyable userSlowness = Effects.ofSlowness("Slowness", "slowness", duration, 2);
+        int duration = asInt(user, target, getProperty(CommonProperties.TIME, String.class, "3000"));
+        Applyable targetSlowness = Effects.ofSlowness("Slowness", "slowness", duration, 2);
+        Applyable userSlowness = Effects.ofSlowness("Slowness", "slowness", duration, 2);
 
-                AtherysSkills.getInstance().getEffectService().applyEffect(collider, userSlowness);
-                AtherysSkills.getInstance().getEffectService().applyEffect((Living) target, targetSlowness);
-            }
-        }
+        AtherysSkills.getInstance().getEffectService().applyEffect(user, userSlowness);
+        AtherysSkills.getInstance().getEffectService().applyEffect(target, targetSlowness);
     }
 }
