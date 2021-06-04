@@ -2,10 +2,7 @@ package com.atherys.rpgskills.t2;
 
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
-import com.atherys.rpgskills.util.CommonProperties;
-import com.atherys.rpgskills.util.DamageUtils;
-import com.atherys.rpgskills.util.DescriptionUtils;
-import com.atherys.rpgskills.util.PhysicsUtils;
+import com.atherys.rpgskills.util.*;
 import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.api.effect.Applyable;
 import com.atherys.skills.api.exception.CastException;
@@ -61,6 +58,17 @@ public class Kick extends TargetedRPGSkill {
         DamageSource source = DamageUtils.directPhysical(user);
         target.damage(damage, source);
 
+        Applyable kickEffect = Effects.aura(
+                getId(),
+                getName(),
+                Integer.MAX_VALUE,
+                false,
+                1.5,
+                false,
+                this::applyKick
+        );
+        AtherysSkills.getInstance().getEffectService().applyEffect(target, kickEffect);
+
         return CastResult.success();
     }
 
@@ -71,8 +79,7 @@ public class Kick extends TargetedRPGSkill {
     }
 
     private void applyKick(Living kicked, List<Living> nearby) {
-        Living user = kickers.get(kicked.getUniqueId());
-        kickers.remove(kicked.getUniqueId());
+        Living user = kickers.remove(kicked.getUniqueId());
         AtherysSkills.getInstance().getEffectService().removeEffect(user, getId());
 
         double damage = asDouble(user, getProperty(CommonProperties.DAMAGE, String.class, "50"));
