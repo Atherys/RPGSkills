@@ -28,7 +28,6 @@ import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
 public class Tackle extends RPGSkill {
-    public static final String TACKLE_EFFECT = "tackle-user-effect";
 
     public Tackle() {
         super(
@@ -71,11 +70,11 @@ public class Tackle extends RPGSkill {
 
     @Listener
     public void onLand(CollideBlockEvent event, @Root Living entity) {
-        AtherysSkills.getInstance().getEffectService().removeEffect(entity, TACKLE_EFFECT);
+        AtherysSkills.getInstance().getEffectService().removeEffect(entity, getId());
     }
 
     private void applyTackle(Living user, List<Living> nearby) {
-        AtherysSkills.getInstance().getEffectService().removeEffect(user, TACKLE_EFFECT);
+        AtherysSkills.getInstance().getEffectService().removeEffect(user, getId());
         user.setVelocity(Vector3d.ZERO);
 
         double damage = asDouble(user, getProperty(DAMAGE, String.class, "50"));
