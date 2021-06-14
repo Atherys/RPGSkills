@@ -58,6 +58,8 @@ public class Kick extends TargetedRPGSkill {
         DamageSource source = DamageUtils.directPhysical(user);
         target.damage(damage, source);
 
+        kickers.put(target.getUniqueId(), user);
+
         Applyable kickEffect = Effects.aura(
                 getId(),
                 getName(),

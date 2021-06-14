@@ -238,10 +238,10 @@ public final class Effects {
 
         @Override
         protected boolean apply(ApplyableCarrier<?> applyableCarrier) {
-            applyableCarrier.getLiving().ifPresent(user -> {
-                List<Living> nearby = PhysicsUtils.getNearbyLiving(user, range, includeSelf);
+            applyableCarrier.getLiving().ifPresent(carrier -> {
+                List<Living> nearby = PhysicsUtils.getNearbyLiving(carrier, range, includeSelf);
                 if (!nearby.isEmpty()) {
-                    aura.accept(user, nearby);
+                    aura.accept(carrier, nearby);
                 }
             });
             return true;
