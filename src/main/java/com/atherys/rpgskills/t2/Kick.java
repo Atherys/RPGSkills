@@ -36,8 +36,8 @@ public class Kick extends TargetedRPGSkill {
                         .cooldown("0")
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Deliver a heavy kick to a target enemy, knocking them back. If they collide with an enemy, they both take ",
-                                arg(DAMAGE), " physical damage."
+                                "Deliver a heavy kick to a target enemy, dealing ", arg(DAMAGE), " physical damage and knocking them back.
+                             "  If they collide with an enemy, they both take an additional ", arg(DAMAGE), " physical damage."
                         ))
         );
 
