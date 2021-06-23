@@ -8,6 +8,7 @@ import com.atherys.rpgskills.t3.*;
 import com.atherys.rpgskills.util.BlankEffect;
 import com.atherys.rpgskills.util.Effects;
 import com.atherys.rpgskills.util.skill.BlankSkill;
+import com.atherys.skills.AtherysSkills;
 import com.atherys.skills.event.EffectRegistrationEvent;
 import com.atherys.skills.event.SkillRegistrationEvent;
 import org.spongepowered.api.Sponge;
@@ -42,6 +43,7 @@ public class RpgSkills {
 
     @Listener
     public void onRegisterSkills(SkillRegistrationEvent event) {
+        AtherysSkills.getInstance().getLogger().info("Registering skills.");
         event.registerSkills(
                 // Tier 1
                 new FireballSkill(),

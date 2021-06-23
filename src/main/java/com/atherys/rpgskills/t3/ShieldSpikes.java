@@ -85,7 +85,7 @@ public class ShieldSpikes extends RPGSkill implements MeleeAttackSkill {
                     });
                 })
                 .interval(500, TimeUnit.MILLISECONDS)
-                .submit(RpgSkills.getInstance());
+                .submit(AtherysSkills.getInstance());
     }
 
     @Override

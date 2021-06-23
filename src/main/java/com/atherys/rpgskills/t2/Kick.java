@@ -1,5 +1,6 @@
 package com.atherys.rpgskills.t2;
 
+import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpg.api.skill.TargetedRPGSkill;
 import com.atherys.rpgskills.util.*;
@@ -82,6 +83,8 @@ public class Kick extends TargetedRPGSkill {
 
     private void applyKick(Living kicked, List<Living> nearby) {
         Living user = kickers.remove(kicked.getUniqueId());
+        if (user == null) return;
+
         AtherysSkills.getInstance().getEffectService().removeEffect(user, getId());
 
         double damage = asDouble(user, getProperty(CommonProperties.DAMAGE, String.class, "50"));
