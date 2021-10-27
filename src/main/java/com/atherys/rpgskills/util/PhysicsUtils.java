@@ -4,13 +4,13 @@ import com.flowpowered.math.imaginary.Quaterniond;
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.sound.SoundType;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,7 +84,7 @@ public final class PhysicsUtils {
         }
     }
 
-    public static List<Living> getNearbyLiving(Living living, double range, boolean includeSelf) {
+    public static List<Living> getNearbyLiving(Entity living, double range, boolean includeSelf) {
         return living.getNearbyEntities(range).stream()
                 .filter(entity -> entity instanceof Living && (includeSelf || entity != living))
                 .map(entity -> (Living) entity)
