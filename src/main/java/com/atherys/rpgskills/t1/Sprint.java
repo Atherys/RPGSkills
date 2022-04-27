@@ -17,6 +17,13 @@ import org.spongepowered.api.util.Tuple;
 import static com.atherys.rpgskills.util.CommonProperties.TIME;
 import static org.spongepowered.api.text.TextTemplate.arg;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
+import static com.atherys.rpgskills.util.CommonProperties.*;
+import static org.spongepowered.api.text.TextTemplate.arg;
+
 public class Sprint extends RPGSkill {
     private static final String DEFAULT_AMPLIFIER = "0.4";
     private static final String DEFAULT_TIME = "10000";
