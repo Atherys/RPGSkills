@@ -1,6 +1,7 @@
 package com.atherys.rpgskills.t1;
 
 import com.atherys.core.utils.Sound;
+import com.atherys.rpg.AtherysRPG;
 import com.atherys.rpg.api.skill.RPGSkill;
 import com.atherys.rpg.api.skill.SkillSpec;
 import com.atherys.rpgskills.util.DamageUtils;
@@ -16,16 +17,19 @@ import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.Living;
-import org.spongepowered.api.entity.projectile.DamagingProjectile;
-import org.spongepowered.api.entity.projectile.Snowball;
+import org.spongepowered.api.entity.projectile.explosive.fireball.SmallFireball;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.entity.CollideEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
+import org.spongepowered.api.event.filter.cause.Root;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.util.Tuple;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
+import java.util.concurrent.TimeUnit;
 
 import static com.atherys.rpg.api.skill.DescriptionArguments.ofProperty;
 import static com.atherys.rpgskills.util.CommonProperties.DAMAGE;
@@ -34,7 +38,7 @@ import static org.spongepowered.api.text.TextTemplate.arg;
 public class FireballSkill extends RPGSkill implements PartySkill {
     private static final String DEFAULT_DAMAGE_EXPRESSION = "CLAMP(SOURCE_WIS * 1.5, 0.5, 10.0)";
 
-    private Map<UUID, Living> fireballs = new WeakHashMap<>();
+    private final Map<UUID, Living> fireballs = new WeakHashMap<>();
 
     private static final ParticleEffect particleEffect = ParticleEffect.builder()
             .type(ParticleTypes.FLAME)
@@ -69,25 +73,28 @@ public class FireballSkill extends RPGSkill implements PartySkill {
     @Override
     public CastResult cast(Living user, long timestamp, String... args) throws CastException {
         Vector3d spawnPosition = user.getLocation().getPosition().add(0.0, 1.5, 0.0);
-        Snowball fireball = (Snowball) user.getWorld().createEntity(EntityTypes.SNOWBALL, spawnPosition);
+        SmallFireball fireball = (SmallFireball) user.getWorld().createEntity(EntityTypes.SMALL_FIREBALL, spawnPosition);
 
         fireball.setShooter(user);
-        fireball.offer(Keys.FIRE_TICKS, Integer.MAX_VALUE);
         Vector3d velocity = PhysicsUtils.getUnitDirection(user).mul(2.5);
         fireball.setVelocity(velocity);
         fireball.offer(Keys.ACCELERATION, velocity.mul(0.05));
 
         fireballs.put(fireball.getUniqueId(), user);
 
-
         user.getWorld().spawnEntity(fireball);
         Sound.playSound(blaze, user.getWorld(), spawnPosition);
+
+        Task.builder()
+                .delay(500, TimeUnit.MILLISECONDS)
+                .execute(task -> fireball.remove())
+                .submit(AtherysRPG.getInstance());
 
         return CastResult.success();
     }
 
     @Listener
-    public void onFireballCollide(CollideEntityEvent event, @Getter("getSource") Snowball fireball) {
+    public void onFireballCollide(CollideEntityEvent event, @Getter("getSource") SmallFireball fireball) {
         Living user = fireballs.get(fireball.getUniqueId());
 
         if (user != null && event.getEntities().get(0) instanceof Living) {
@@ -103,5 +110,10 @@ public class FireballSkill extends RPGSkill implements PartySkill {
                 Sound.playSound(extinguish, user.getWorld(), target.getLocation().getPosition());
             }
         }
+    }
+
+    @Listener
+    public void onFire(ChangeBlockEvent event, @Root SmallFireball fireball) {
+        event.setCancelled(true);
     }
 }
