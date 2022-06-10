@@ -49,7 +49,7 @@ public class FireballSkill extends RPGSkill implements PartySkill {
     private static final Sound blaze = Sound.builder(SoundTypes.ENTITY_BLAZE_SHOOT, 1)
             .build();
 
-    private static final Sound extinguish = Sound.builder(SoundTypes.ENTITY_GENERIC_EXTINGUISH_FIRE, 1)
+    private static final Sound extinguish = Sound.builder(SoundTypes.ENTITY_GENERIC_EXTINGUISH_FIRE, 0.6)
             .build();
 
     public FireballSkill() {

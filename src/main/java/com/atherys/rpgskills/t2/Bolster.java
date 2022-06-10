@@ -38,7 +38,7 @@ public class Bolster extends RPGSkill {
                         .cooldown("0")
                         .resourceCost("0")
                         .descriptionTemplate(DescriptionUtils.buildTemplate(
-                                "Bolster your defenses, increasing physical and magical resistances by ", arg(PERCENT),
+                                "Bolster your defenses, reducing all incoming physical and magical damage you take by ", arg(PERCENT),
                                 "% for ", arg(TIME), "."
                         ))
         );
@@ -53,8 +53,8 @@ public class Bolster extends RPGSkill {
     public void setProperties(Map<String, String> properties) {
         super.setProperties(properties);
 
-        this.physAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:physical_resistance").get();
-        this.magicAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:magical_resistance").get();
+        this.physAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:physical_defense").get();
+        this.magicAttributeType = Sponge.getRegistry().getType(AttributeType.class, "atherys:magical_defense").get();
     }
 
     @Override
@@ -62,11 +62,11 @@ public class Bolster extends RPGSkill {
         int duration = asInt(user, getProperty(TIME, String.class, DEFAULT_TIME));
 
         Map<AttributeType, Double> userAttributes = AtherysRPG.getInstance().getAttributeService().getAllAttributes(user);
-        double percent = asDouble(user, getProperty(PERCENT, String.class, DEFAULT_PERCENT)) / 100;
+        double percent = asDouble(user, getProperty(PERCENT, String.class, DEFAULT_PERCENT));
 
         Map<AttributeType, Double> attributes = new HashMap<>(2);
-        attributes.put(physAttributeType, percent * userAttributes.get(physAttributeType));
-        attributes.put(magicAttributeType, percent * userAttributes.get(magicAttributeType));
+        attributes.put(physAttributeType, percent + userAttributes.get(physAttributeType));
+        attributes.put(magicAttributeType, percent + userAttributes.get(magicAttributeType));
         Applyable resistanceEffect = Effects.ofAttributes(getId(), getName(), duration, attributes, true);
 
         AtherysSkills.getInstance().getEffectService().applyEffect(user, resistanceEffect);
